@@ -1,16 +1,18 @@
-package com.paytakcode.inventorymanager.service.impl;
+package com.paytakcode.inventorymanager.api.v1.service.impl;
 
-import com.paytakcode.inventorymanager.data.dao.MySqlTestDao;
-import com.paytakcode.inventorymanager.data.dto.MySqlTestDto;
-import com.paytakcode.inventorymanager.data.entity.MySqlTest;
-import com.paytakcode.inventorymanager.service.MySqlTestService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import com.paytakcode.inventorymanager.api.v1.service.MySqlTestService;
+import com.paytakcode.inventorymanager.api.v1.data.dao.MySqlTestDao;
+import com.paytakcode.inventorymanager.api.v1.data.dto.MySqlTestDto;
+import com.paytakcode.inventorymanager.api.v1.data.entity.MySqlTest;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * MySql 연동 테스트를 위한 Service 구현체입니다.
  * @Author 김태산
- * @Version 0.0.1
+ * @Version 0.1.0
  * @Since 2023-05-17
  */
 @Service

@@ -1,4 +1,4 @@
-package com.paytakcode.inventorymanager.data.entity;
+package com.paytakcode.inventorymanager.api.v1.data.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import javax.persistence.*;
 /**
  * MySql 연동 테스트를 위한 Entity입니다.
  * @Author 김태산
- * @Version 0.0.1
+ * @Version 0.1.0
  * @Since 2023-05-17
  */
 @Entity

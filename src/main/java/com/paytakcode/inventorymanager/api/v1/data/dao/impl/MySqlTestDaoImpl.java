@@ -1,16 +1,18 @@
-package com.paytakcode.inventorymanager.data.dao.impl;
+package com.paytakcode.inventorymanager.api.v1.data.dao.impl;
 
-import com.paytakcode.inventorymanager.data.dao.MySqlTestDao;
-import com.paytakcode.inventorymanager.data.dto.MySqlTestDto;
-import com.paytakcode.inventorymanager.data.entity.MySqlTest;
-import com.paytakcode.inventorymanager.data.repository.MySqlTestRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import com.paytakcode.inventorymanager.api.v1.data.dao.MySqlTestDao;
+import com.paytakcode.inventorymanager.api.v1.data.dto.MySqlTestDto;
+import com.paytakcode.inventorymanager.api.v1.data.entity.MySqlTest;
+import com.paytakcode.inventorymanager.api.v1.data.repository.MySqlTestRepository;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * MySql 연동 테스트를 위한 DAO 구현체입니다.
  * @Author 김태산
- * @Version 0.0.1
+ * @Version 0.1.0
  * @Since 2023-05-17
  */
 @Repository
