@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paytakcode.inventorymanager.api.v1.data.entity.BaseEntity;
 import com.paytakcode.inventorymanager.api.v1.service.MySqlTestService;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MySqlTestDto;
 
@@ -13,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * MySql 연동 테스트를 위한 Controller입니다.
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.1.2
  * @Since 2023-05-17
  */
 @RestController
@@ -29,8 +30,8 @@ public class MySqlTestController {
      * @return 저장된 MySqlTestDto 정보
      */
     @PostMapping("/mysql-test")
-    public String mySqlTestInsert(@RequestParam String name){
-        MySqlTestDto insertedMySqlTestDto = mySqlTestService.saveMySqlTest(name);
+    public String mySqlTestAdd(@RequestParam String name){
+        MySqlTestDto insertedMySqlTestDto = mySqlTestService.addMySqlTest(name);
         return insertedMySqlTestDto.toString();
     }
 

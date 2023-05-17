@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * MySql 연동 테스트를 위한 Service 구현체입니다.
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-17
  */
 @Service
@@ -27,7 +27,7 @@ public class MySqlTestServiceImpl implements MySqlTestService {
      * @return 저장에 성공한 DTO
      */
     @Override
-    public MySqlTestDto saveMySqlTest(String name){
+    public MySqlTestDto addMySqlTest(String name){
         MySqlTestDto mySqlTestDto = new MySqlTestDto();
         mySqlTestDto.setName(name);
         MySqlTest savedMySqlTest = mySqlTestDao.saveMySqlTest(mySqlTestDto);
