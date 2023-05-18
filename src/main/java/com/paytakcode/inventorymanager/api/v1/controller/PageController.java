@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Page Controller
  *
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-18 오후 1:27
  */
 
 @Slf4j
 @Controller
 @RequestMapping("/api/v1")
-public class pageController {
+public class PageController {
 
 	@GetMapping("/intro")
 	public String introPage() {
