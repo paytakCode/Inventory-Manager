@@ -1,7 +1,8 @@
 package com.paytakcode.inventorymanager.api.v1.service;
 
-import com.paytakcode.inventorymanager.api.v1.data.dto.RegisterDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.UserDto;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * User Service
@@ -10,5 +11,7 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.UserDto;
  * @Since 2023-05-18 오후 3:43
  */
 public interface UserService {
-	UserDto addUser(RegisterDto registerDto);
+	UserDto addUser(UserDto userDto);
+
+	boolean login(String email, String password, HttpServletRequest request);
 }

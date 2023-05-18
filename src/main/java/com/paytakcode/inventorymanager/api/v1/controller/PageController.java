@@ -1,22 +1,44 @@
 package com.paytakcode.inventorymanager.api.v1.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * Page 이동을 위한 Controller
+ * Page Controller
+ *
  * @Author 김태산
  * @Version 0.1.0
- * @Since 2023-05-17 오후 11:58
+ * @Since 2023-05-18 오후 1:27
  */
 
+@Slf4j
 @Controller
 @RequestMapping("/api/v1")
-public class PageController {
+public class pageController {
+
+	@GetMapping("/intro")
+	public String introPage() {
+		log.info("[introPage] page Load");
+		return "intro";
+	}
+
+	@GetMapping("/main")
+	public String mainPage() {
+		log.info("[mainPage] page Load");
+		return "main";
+	}
 
 	@GetMapping("/login")
-	public String loginPage(){
+	public String loginPage() {
+		log.info("[loginPage] page Load");
 		return "login";
+	}
+
+	@GetMapping("/register")
+	public String registerPage() {
+		log.info("[registerPage] page Load");
+		return "register";
 	}
 }

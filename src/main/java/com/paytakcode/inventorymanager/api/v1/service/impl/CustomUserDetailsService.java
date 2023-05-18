@@ -33,14 +33,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		UserEntity user = userRepository.findByEmail(email)
+		log.info("[loadUserByUsername] param - email: {}", email);
+		UserEntity foundUser = userRepository.findByEmail(email)
 			.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-		log.info("found UserEntity {}", user.toString());
-		return new User(user.getEmail(), user.getPassword(), getAuthorities(user.getRole()));
+		log.info("[loadUserByUsername] result - foundUser: {}", foundUser.toString());
+		return new User(foundUser.getEmail(), foundUser.getPassword(), getAuthorities(foundUser.getRole()));
 	}
 
 	private Collection<? extends GrantedAuthority> getAuthorities(Role role) {
-		return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
+		log.info("[getAuthorities] param - role {}", role.toString());
+		return Collections.singleton(new SimpleGrantedAuthority(role.name()));
 	}
 
 }

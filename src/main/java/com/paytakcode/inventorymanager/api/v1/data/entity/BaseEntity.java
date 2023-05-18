@@ -13,7 +13,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Audit을 이용한 생성, 수정 이력을 위한 공용 Entity
+ * Auditing을 이용한 생성, 수정 이력을 위한 공용 Entity
  * @Author 김태산
  * @Version 0.1.0
  * @Since 2023-05-17 오후 10:11
