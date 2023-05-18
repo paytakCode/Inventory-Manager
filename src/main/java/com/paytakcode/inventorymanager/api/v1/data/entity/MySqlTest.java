@@ -1,10 +1,13 @@
 package com.paytakcode.inventorymanager.api.v1.data.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
 
 /**
  * MySql 연동 테스트를 위한 Entity입니다.
@@ -16,7 +19,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class MySqlTest extends BaseEntity{
+public class MySqlTest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

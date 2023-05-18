@@ -5,9 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.paytakcode.inventorymanager.api.v1.data.entity.BaseEntity;
-import com.paytakcode.inventorymanager.api.v1.service.MySqlTestService;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MySqlTestDto;
+import com.paytakcode.inventorymanager.api.v1.service.MySqlTestService;
 
 import lombok.RequiredArgsConstructor;
 

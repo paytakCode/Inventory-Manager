@@ -10,3 +10,8 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create
+
+logging:
+  level:
+    com.paytakcode.inventorymanager.api.v1: DEBUG
+
