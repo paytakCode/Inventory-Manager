@@ -8,10 +8,13 @@ spring:
     password: code
   jpa:
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
     hibernate:
       ddl-auto: create
 
 logging:
   level:
-    com.paytakcode.inventorymanager.api.v1: DEBUG
+    com.paytakcode.inventorymanager.api.v1: info
 
