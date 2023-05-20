@@ -1,18 +1,18 @@
 package com.paytakcode.inventorymanager.api.v1.util;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 /**
  * Login User AuditorAware
  *
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-19 오전 1:36
  */
 @Component
@@ -23,7 +23,12 @@ public class LoginUserAuditorAware implements AuditorAware<String> {
         if (authentication == null || !authentication.isAuthenticated()) {
             return Optional.empty();
         }
-        User user = (User) authentication.getPrincipal();
-        return Optional.of(user.getUsername()); // UserDetailsService의 username을 email로 사용하고 있으므로 email 정보를 반환함
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof UserDetails) {
+            UserDetails user = (UserDetails)principal;
+            return Optional.of(user.getUsername()); // CustomUserDetailsService에서 email로 변경하였으므로 email이 반환됨
+        }
+        return Optional.of("anonymous"); // 로그인 하지 않은 상태
     }
 }
+

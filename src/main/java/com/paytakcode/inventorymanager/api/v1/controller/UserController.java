@@ -1,21 +1,23 @@
 package com.paytakcode.inventorymanager.api.v1.controller;
 
-import com.paytakcode.inventorymanager.api.v1.data.dto.UserDto;
-import com.paytakcode.inventorymanager.api.v1.service.UserService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
+import com.paytakcode.inventorymanager.api.v1.data.dto.UserDto;
+import com.paytakcode.inventorymanager.api.v1.service.UserService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * User Controller
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-18 오후 3:40
  */
 
@@ -43,10 +45,10 @@ public class UserController {
 	}
 
 	@PostMapping("/user")
-	public String userAdd(@RequestBody UserDto userDto) {
+	public String userAdd(@ModelAttribute UserDto userDto) {
 		log.info("[userAdd] param - userDto: {}", userDto.toString());
 
-		UserDto AddeduserDto = userService.addUser(userDto); // 회원 가입 결과에 따른 로직 미구현
+		UserDto addedUserDto = userService.addUser(userDto); // 회원 가입 결과에 따른 로직 미구현
 
 		return "redirect:login";
 	}

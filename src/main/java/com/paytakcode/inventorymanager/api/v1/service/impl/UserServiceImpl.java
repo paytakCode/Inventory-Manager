@@ -1,6 +1,8 @@
 package com.paytakcode.inventorymanager.api.v1.service.impl;
 
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,14 +19,12 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 import com.paytakcode.inventorymanager.api.v1.service.UserService;
 
 import lombok.RequiredArgsConstructor;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * User Service 구현체
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-18 오후 3:43
  */
 @Service
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 			.email(userDto.getEmail())
 			.name(userDto.getName())
 			.password(passwordEncoder.encode(userDto.getPassword()))
-			.role(Role.ROLE_USER)
+			.role(Role.ROLE_WAIT)
 			.build());
 
 		return UserDto.builder()
