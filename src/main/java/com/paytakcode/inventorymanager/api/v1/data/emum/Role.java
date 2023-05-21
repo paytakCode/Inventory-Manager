@@ -1,4 +1,4 @@
-package com.paytakcode.inventorymanager.api.v1.data.dto;
+package com.paytakcode.inventorymanager.api.v1.data.emum;
 
 /**
  * Role Enum

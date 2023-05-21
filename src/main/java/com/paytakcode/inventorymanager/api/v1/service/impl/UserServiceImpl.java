@@ -13,8 +13,8 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.stereotype.Service;
 
 import com.paytakcode.inventorymanager.api.v1.data.dao.UserDao;
-import com.paytakcode.inventorymanager.api.v1.data.dto.Role;
 import com.paytakcode.inventorymanager.api.v1.data.dto.UserDto;
+import com.paytakcode.inventorymanager.api.v1.data.emum.Role;
 import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 import com.paytakcode.inventorymanager.api.v1.service.UserService;
 
@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
 		UserEntity user = userDao.saveUser(UserEntity.builder()
 			.email(userDto.getEmail())
 			.name(userDto.getName())
+			.tel(userDto.getTel())
 			.password(passwordEncoder.encode(userDto.getPassword()))
 			.role(Role.ROLE_WAIT)
 			.build());
@@ -49,6 +50,7 @@ public class UserServiceImpl implements UserService {
 		return UserDto.builder()
 			.email(user.getEmail())
 			.name(user.getName())
+			.tel(user.getTel())
 			.password(user.getPassword())
 			.role(user.getRole())
 			.build();
