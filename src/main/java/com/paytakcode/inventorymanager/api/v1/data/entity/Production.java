@@ -24,7 +24,7 @@ import lombok.ToString;
  * Production Entity
  * 생산 내역 Table
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-21 오후 11:34
  */
 @Entity
@@ -39,6 +39,8 @@ public class Production extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	private String lotNo;
 
 	@NotNull
 	@ManyToOne
