@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * UserDetailsService 구현체
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-18 오후 2:47
  */
 @Service
@@ -35,7 +35,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		log.info("[loadUserByUsername] param - email: {}", email);
 		UserEntity foundUser = userRepository.findByEmail(email)
-			.orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+			.orElseThrow(
+				() -> new UsernameNotFoundException("[loadUserByUsername] User not found with email: " + email));
 		log.info("[loadUserByUsername] result - foundUser: {}", foundUser.toString());
 		return new User(foundUser.getEmail(), foundUser.getPassword(), getAuthorities(foundUser.getRole()));
 	}

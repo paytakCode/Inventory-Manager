@@ -20,7 +20,7 @@ import lombok.ToString;
  * Material Purchase Entity
  * 자재 구매 Table
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-21 오후 11:00
  */
 @Entity
@@ -30,7 +30,7 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-public class MaterialPurchase {
+public class MaterialPurchase extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +43,8 @@ public class MaterialPurchase {
 	@NotNull
 	@OneToOne(mappedBy = "materialPurchase")
 	private MaterialRequest request;
+
+	private String lotNo;
 
 	@NotNull
 	private Integer purchaseQuantity;
