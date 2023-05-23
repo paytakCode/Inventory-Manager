@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User DAO Implementation
  * @Author 김태산
- * @Version 0.1.2
+ * @Version 0.1.3
  * @Since 2023-05-18 오후 3:45
  */
 
@@ -46,5 +46,16 @@ public class UserDaoImpl implements UserDao {
 		userEntity.setRole(role);
 
 		userRepository.save(userEntity);
+	}
+
+	@Override
+	public UserEntity findByEmail(String email) {
+		log.info("[findByEmail] param - email: {}", email);
+
+		UserEntity foundUserEntity = userRepository.findByEmail(email)
+			.orElseThrow(() -> new UsernameNotFoundException("[findByEmail] User not found with email: " + email));
+
+		log.info("[findByEmail] return - foundUserEntity: {}", foundUserEntity);
+		return foundUserEntity;
 	}
 }

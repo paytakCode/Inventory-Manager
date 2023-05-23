@@ -3,6 +3,7 @@ package com.paytakcode.inventorymanager.api.v1.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User Controller
  * @Author 김태산
- * @Version 0.1.3
+ * @Version 0.1.4
  * @Since 2023-05-18 오후 3:40
  */
 
@@ -51,15 +52,18 @@ public class UserController {
 	public ResponseEntity<String> login(@RequestBody @Valid LoginDto loginDto, HttpServletRequest request) {
 		log.info("[login] param - loginDTO: {}, request: {}", loginDto.toString(), request);
 
-		String loginEmail = userService.login(loginDto, request);
+		String jwt = userService.login(loginDto, request);
 
-		log.info("[login] return - HttpStatus.OK(200), loginEmail: {}", loginEmail);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", "Bearer " + jwt);
+		log.info("[login] return - HttpStatus.OK(200), jwt: {}", jwt);
 		return ResponseEntity
 			.status(HttpStatus.OK)
-			.body(loginEmail);
+			.headers(headers)
+			.body("Login successful");
 	}
 
-	@PutMapping("/user/{userId}/role")
+	@PutMapping("/users/{userId}/role")
 	public ResponseEntity<Void> userRoleModify(@PathVariable Long userId, @RequestBody @Valid RoleDto roleDto) {
 		log.info("[userRoleModify] param - userId: {}, role: {}", userId, roleDto.getRole());
 
