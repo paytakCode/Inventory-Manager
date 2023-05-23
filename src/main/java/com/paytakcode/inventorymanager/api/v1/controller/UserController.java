@@ -1,18 +1,19 @@
 package com.paytakcode.inventorymanager.api.v1.controller;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paytakcode.inventorymanager.api.v1.data.dto.LoginDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.RoleDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.UserDto;
 import com.paytakcode.inventorymanager.api.v1.service.UserService;
 
@@ -22,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User Controller
  * @Author 김태산
- * @Version 0.1.2
+ * @Version 0.1.3
  * @Since 2023-05-18 오후 3:40
  */
 
@@ -34,56 +35,40 @@ public class UserController {
 
 	private final UserService userService;
 
-	@PostMapping("/login")
-	public ResponseEntity<Void> login(@RequestBody @Valid UserDto userDto, HttpServletRequest request) {
-
-		log.info("[login] param - email: {}, password: {}, request: {}", userDto.getEmail(), userDto.getPassword(),
-			request);
-
-		boolean result = userService.login(userDto.getEmail(), userDto.getPassword(), request);
-
-		HttpStatus httpStatus = null;
-
-		if (result) {
-			httpStatus = HttpStatus.OK;
-		} else {
-			httpStatus = HttpStatus.UNAUTHORIZED;
-		}
-
-		log.info("[login] return - HttpStatus: {}", httpStatus);
-		return ResponseEntity.status(httpStatus).build();
-	}
-
 	@PostMapping("/user")
-	public ResponseEntity<Void> userAdd(@RequestBody UserDto userDto) {
-
+	public ResponseEntity<String> userAdd(@RequestBody @Valid UserDto userDto) {
 		log.info("[userAdd] param - userDto: {}", userDto.toString());
 
-		boolean result = userService.addUser(userDto);
+		String savedUserEmail = userService.addUser(userDto);
 
-		HttpStatus httpStatus = null;
-
-		if (result) {
-			httpStatus = HttpStatus.CREATED;
-		} else {
-			httpStatus = HttpStatus.BAD_REQUEST;
-		}
-
-		log.info("[userAdd] return - HttpStatus: {}", httpStatus);
-		return ResponseEntity.status(httpStatus).build();
+		log.info("[userAdd] return - HttpStatus.CREATED(201), savedUserEmail: {}", savedUserEmail);
+		return ResponseEntity
+			.status(HttpStatus.CREATED)
+			.body(savedUserEmail);
 	}
 
-	@PutMapping("/user/role")
-	public ResponseEntity<Void> userRoleModify(@RequestBody Map<String, Object> paramMap) {
+	@PostMapping("/login")
+	public ResponseEntity<String> login(@RequestBody @Valid LoginDto loginDto, HttpServletRequest request) {
+		log.info("[login] param - loginDTO: {}, request: {}", loginDto.toString(), request);
 
-		String email = (String)paramMap.get("email");
-		String role = (String)paramMap.get("role");
-		log.info("[userRoleModify] param - email: {}, role: {}", email, role);
+		String loginEmail = userService.login(loginDto, request);
 
-		boolean result = userService.modifyRole(email, role);
+		log.info("[login] return - HttpStatus.OK(200), loginEmail: {}", loginEmail);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(loginEmail);
+	}
 
-		log.info("[userRoleModify] return - result: {}", result);
-		return result;
+	@PutMapping("/user/{userId}/role")
+	public ResponseEntity<Void> userRoleModify(@PathVariable Long userId, @RequestBody @Valid RoleDto roleDto) {
+		log.info("[userRoleModify] param - userId: {}, role: {}", userId, roleDto.getRole());
+
+		userService.modifyRole(userId, roleDto.getRole());
+
+		log.info("[userRoleModify] return - HttpStatus.NO_CONTENT(204)");
+		return ResponseEntity
+			.status(HttpStatus.NO_CONTENT)
+			.build();
 	}
 
 }

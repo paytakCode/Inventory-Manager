@@ -6,23 +6,17 @@ import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * User DTO
+ * Login DTO
  * @Author 김태산
- * @Version 0.1.2
- * @Since 2023-05-18 오후 3:54
+ * @Version 0.1.0
+ * @Since 2023-05-22 오후 11:19
  */
 @Data
-public class UserDto {
+public class LoginDto {
 
 	@NotBlank
 	@Email
 	private String email;
-
-	@NotBlank
-	private String name;
-
-	@NotBlank
-	private String tel;
 
 	@NotBlank
 	private String password;

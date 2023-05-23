@@ -2,7 +2,6 @@ package com.paytakcode.inventorymanager.api.v1.data.dao.impl;
 
 import javax.transaction.Transactional;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User DAO Implementation
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.1.2
  * @Since 2023-05-18 오후 3:45
  */
 
@@ -29,32 +28,23 @@ public class UserDaoImpl implements UserDao {
 
 	private final UserRepository userRepository;
 
-	public boolean saveUser(UserEntity userEntity) {
-
+	public UserEntity saveUser(UserEntity userEntity) {
 		log.info("[saveUser] param - userEntity: {}", userEntity.toString());
 
-		try {
-			userRepository.save(userEntity);
-			return true;
-		} catch (DataAccessException e) {
-			log.error("[saveUser] return - false, DataAccessException - Failed to save user: {}", e.getMessage());
-			return false;
-		}
+		UserEntity savedUserEntity = userRepository.save(userEntity);
+
+		log.info("[saveUser] return - savedUserEntity: {}", savedUserEntity);
+		return savedUserEntity;
 	}
 
-	public boolean updateRole(String email, Role role) {
-		log.info("[updateRole] param - email: {}, role: {}", email, role);
-		UserEntity userEntity = userRepository.findByEmail(email)
-			.orElseThrow(() -> new UsernameNotFoundException("[updateRole] User not found with email: " + email));
+	public void updateRole(Long userId, Role role) {
+		log.info("[updateRole] param - userId: {}, role: {}", userId, role);
+
+		UserEntity userEntity = userRepository.findById(userId)
+			.orElseThrow(() -> new UsernameNotFoundException("[updateRole] User not found with userId: " + userId));
 
 		userEntity.setRole(role);
-		try {
-			userRepository.save(userEntity);
-			log.info("[updateRole] return - true");
-			return true;
-		} catch (DataAccessException e) {
-			log.error("[updateRole] return - false, DataAccessException - Failed to save user: {}", e.getMessage());
-			return false;
-		}
+
+		userRepository.save(userEntity);
 	}
 }
