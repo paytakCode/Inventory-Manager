@@ -1,5 +1,7 @@
 package com.paytakcode.inventorymanager.api.v1.data.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,7 +20,7 @@ import lombok.ToString;
 /**
  * Material Entity
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-21 오후 9:02
  */
 @Entity
@@ -28,7 +30,7 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-public class Material extends BaseEntity {
+public class Material extends BaseEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
