@@ -2,11 +2,9 @@ package com.paytakcode.inventorymanager.api.v1.service.impl;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User Service 구현체
  * @Author 김태산
- * @Version 0.1.4
+ * @Version 0.2.0
  * @Since 2023-05-18 오후 3:43
  */
 @Service
@@ -79,12 +77,7 @@ public class UserServiceImpl implements UserService {
 	public void modifyRole(Long userId, Role role) {
 		log.info("[modifyRole] param - userId: {}, role: {}", userId, role);
 
-		if (isAdminUser()) {
-			userDao.updateRole(userId, role);
-		} else {
-			throw new AccessDeniedException("Access Denied");
-		}
-
+		userDao.updateRole(userId, role);
 	}
 
 	/**
@@ -96,23 +89,6 @@ public class UserServiceImpl implements UserService {
 		} else {
 			return Role.ROLE_WAIT;
 		}
-	}
-
-	/**
-	 * 접근하는 유저가 ROLE_ADMIN 권한을 가지고 있는지 확인하는 메서드
-	 */
-	public boolean isAdminUser() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null) {
-			for (GrantedAuthority authority : authentication.getAuthorities()) {
-				String grantedAuthority = authority.getAuthority();
-				log.info("[isAdminUser] grantedAuthority: {}", grantedAuthority);
-				if ("ROLE_ADMIN".equals(grantedAuthority)) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 }

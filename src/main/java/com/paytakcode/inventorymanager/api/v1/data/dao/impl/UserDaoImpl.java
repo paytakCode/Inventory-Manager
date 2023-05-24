@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User DAO Implementation
  * @Author 김태산
- * @Version 0.1.3
+ * @Version 0.1.4
  * @Since 2023-05-18 오후 3:45
  */
 
@@ -45,7 +45,8 @@ public class UserDaoImpl implements UserDao {
 
 		userEntity.setRole(role);
 
-		userRepository.save(userEntity);
+		UserEntity updatedUserEntity = userRepository.save(userEntity);
+		log.info("[updateRole] result - updatedUserEntity: {}", updatedUserEntity);
 	}
 
 	@Override

@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User Controller
  * @Author 김태산
- * @Version 0.1.4
+ * @Version 0.2.0
  * @Since 2023-05-18 오후 3:40
  */
 
@@ -36,7 +36,7 @@ public class UserController {
 
 	private final UserService userService;
 
-	@PostMapping("/user")
+	@PostMapping("/users")
 	public ResponseEntity<String> userAdd(@RequestBody @Valid UserDto userDto) {
 		log.info("[userAdd] param - userDto: {}", userDto.toString());
 
@@ -63,7 +63,7 @@ public class UserController {
 			.body("Login successful");
 	}
 
-	@PutMapping("/users/{userId}/role")
+	@PutMapping("/admin/users/{userId}/role")
 	public ResponseEntity<Void> userRoleModify(@PathVariable Long userId, @RequestBody @Valid RoleDto roleDto) {
 		log.info("[userRoleModify] param - userId: {}, role: {}", userId, roleDto.getRole());
 

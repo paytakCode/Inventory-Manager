@@ -11,9 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
-import com.paytakcode.inventorymanager.api.v1.util.JwtUtil;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +19,7 @@ import lombok.RequiredArgsConstructor;
  * Security Config
  * Security 세팅은 버전별로 매우 상이함
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.2.0
  * @Since 2023-05-18 오후 2:45
  */
 
@@ -30,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final JwtUtil jwtUtil;
+	private final JwtFilter jwtFilter;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -40,7 +38,11 @@ public class SecurityConfig {
 			.cors().and()
 			.authorizeRequests()
 			.antMatchers(HttpMethod.GET, "/api/v1/login", "/api/v1/intro", "/api/v1/register").permitAll()
-			.antMatchers(HttpMethod.POST, "/api/v1/user", "/api/v1/login").permitAll()
+			.antMatchers(HttpMethod.POST, "/api/v1/users", "/api/v1/login").permitAll()
+			.antMatchers("/api/v1/admin/**").hasRole("ADMIN")
+			.antMatchers("/api/v1/production/**").hasAnyRole("PRODUCTION", "ADMIN")
+			.antMatchers("/api/v1/sales/**").hasAnyRole("SALES", "ADMIN")
+			.antMatchers("/api/v1/material/**").hasAnyRole("MATERIAL", "ADMIN")
 			.anyRequest().authenticated()
 			.and()
 			.sessionManagement()
@@ -55,7 +57,7 @@ public class SecurityConfig {
 			.logoutUrl("/api/v1/logout")
 			.logoutSuccessUrl("/api/v1/intro")
 			.and()
-			.addFilterBefore(new JwtFilter(jwtUtil), BasicAuthenticationFilter.class);
+			.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
@@ -70,6 +72,4 @@ public class SecurityConfig {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
-
 }
