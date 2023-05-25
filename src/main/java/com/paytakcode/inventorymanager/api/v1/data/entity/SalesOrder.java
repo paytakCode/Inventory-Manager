@@ -1,6 +1,6 @@
 package com.paytakcode.inventorymanager.api.v1.data.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,7 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import com.paytakcode.inventorymanager.api.v1.data.emum.SalesStatus;
+import org.springframework.lang.Nullable;
+
+import com.paytakcode.inventorymanager.api.v1.data.emum.OrderStatus;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -34,7 +36,7 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-public class Sales extends BaseEntity {
+public class SalesOrder extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,13 +58,13 @@ public class Sales extends BaseEntity {
 	private Integer quantity;
 
 	@NotNull
-	private Date regDate;
+	private LocalDateTime dueDate;
 
-	@NotNull
-	private Date dueDate;
+	@Nullable
+	private LocalDateTime completionDate;
 
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	private SalesStatus status;
+	private OrderStatus status;
 
 }

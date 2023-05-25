@@ -13,6 +13,7 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
  * @Since 2023-05-18 오후 2:54
  */
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
-	Optional<UserEntity> findByEmail(String email);
+	Optional<UserEntity> findUserByEmail(String email);
 
+	UserEntity getReferenceByEmail(String email);
 }

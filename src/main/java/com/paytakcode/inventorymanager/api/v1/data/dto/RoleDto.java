@@ -4,7 +4,9 @@ import javax.validation.constraints.NotNull;
 
 import com.paytakcode.inventorymanager.api.v1.data.emum.Role;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Role DTO
@@ -13,7 +15,9 @@ import lombok.Data;
  * @Since 2023-05-23 오전 12:54
  */
 
-@Data
+@Getter
+@Setter
+@ToString
 public class RoleDto {
 
 	@NotNull

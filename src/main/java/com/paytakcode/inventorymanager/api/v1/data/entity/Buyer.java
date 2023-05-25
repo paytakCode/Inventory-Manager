@@ -37,7 +37,7 @@ public class Buyer extends BaseEntity {
 	private String companyName;
 
 	@NotNull
-	private String manager;
+	private String managerName;
 
 	@NotNull
 	private String tel;

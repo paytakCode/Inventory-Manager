@@ -1,15 +1,14 @@
 package com.paytakcode.inventorymanager.api.v1.data.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import com.paytakcode.inventorymanager.api.v1.data.emum.RequestStatus;
+import org.springframework.lang.Nullable;
+
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -48,15 +47,12 @@ public class MaterialRequest extends BaseEntity {
 	private UserEntity requester;
 
 	@NotNull
-	private Integer requestQuantity;
+	private Integer quantity;
 
-	private String requestInfo;
+	@Nullable
+	private String details;
 
-	@OneToOne
+	@Nullable
+	@OneToOne(mappedBy = "materialRequest")
 	private MaterialPurchase materialPurchase;
-
-	@NotNull
-	@Enumerated(EnumType.STRING)
-	private RequestStatus status;
-
 }

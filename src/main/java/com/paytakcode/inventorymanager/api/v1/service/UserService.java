@@ -1,9 +1,8 @@
 package com.paytakcode.inventorymanager.api.v1.service;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.paytakcode.inventorymanager.api.v1.data.dto.LoginDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.UserDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.UserInfoDto;
 import com.paytakcode.inventorymanager.api.v1.data.emum.Role;
 
 /**
@@ -13,9 +12,9 @@ import com.paytakcode.inventorymanager.api.v1.data.emum.Role;
  * @Since 2023-05-18 오후 3:43
  */
 public interface UserService {
-	String addUser(UserDto userDto);
+	UserInfoDto addUser(UserDto userDto);
 
-	String login(LoginDto loginDto, HttpServletRequest request);
+	String login(LoginDto loginDto);
 
-	void modifyRole(Long userId, Role role);
+	void updateUserRole(Long userId, Role role);
 }

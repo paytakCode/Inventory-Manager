@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.lang.Nullable;
+
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -42,6 +44,7 @@ public class Product extends BaseEntity implements Serializable {
 	@NotNull
 	private String spec;
 
-	private String description;
+	@Nullable
+	private String details;
 
 }

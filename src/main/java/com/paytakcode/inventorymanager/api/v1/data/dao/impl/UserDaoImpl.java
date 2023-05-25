@@ -1,12 +1,10 @@
 package com.paytakcode.inventorymanager.api.v1.data.dao.impl;
 
-import javax.transaction.Transactional;
+import java.util.Optional;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import com.paytakcode.inventorymanager.api.v1.data.dao.UserDao;
-import com.paytakcode.inventorymanager.api.v1.data.emum.Role;
 import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 import com.paytakcode.inventorymanager.api.v1.data.repository.UserRepository;
 
@@ -20,9 +18,8 @@ import lombok.extern.slf4j.Slf4j;
  * @Since 2023-05-18 오후 3:45
  */
 
-@Slf4j
 @Repository
-@Transactional
+@Slf4j
 @RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
 
@@ -37,26 +34,43 @@ public class UserDaoImpl implements UserDao {
 		return savedUserEntity;
 	}
 
-	public void updateRole(Long userId, Role role) {
-		log.info("[updateRole] param - userId: {}, role: {}", userId, role);
+	@Override
+	public Optional<UserEntity> findUserByEmail(String email) {
+		log.info("[findUserByEmail] param - email: {}", email);
 
-		UserEntity userEntity = userRepository.findById(userId)
-			.orElseThrow(() -> new UsernameNotFoundException("[updateRole] User not found with userId: " + userId));
+		Optional<UserEntity> foundUserEntity = userRepository.findUserByEmail(email);
 
-		userEntity.setRole(role);
-
-		UserEntity updatedUserEntity = userRepository.save(userEntity);
-		log.info("[updateRole] result - updatedUserEntity: {}", updatedUserEntity);
+		log.info("[findUserByEmail] return - foundUserEntity: {}", foundUserEntity);
+		return foundUserEntity;
 	}
 
 	@Override
-	public UserEntity findByEmail(String email) {
-		log.info("[findByEmail] param - email: {}", email);
+	public UserEntity getUserReferenceByEmail(String email) {
+		log.info("[getUserReferenceByEmail] param - email: {}", email);
 
-		UserEntity foundUserEntity = userRepository.findByEmail(email)
-			.orElseThrow(() -> new UsernameNotFoundException("[findByEmail] User not found with email: " + email));
+		UserEntity gotUserEntity = userRepository.getReferenceByEmail(email);
 
-		log.info("[findByEmail] return - foundUserEntity: {}", foundUserEntity);
-		return foundUserEntity;
+		log.info("[getUserReferenceByEmail] return - gotUserEntity: {}", gotUserEntity);
+		return gotUserEntity;
+	}
+
+	@Override
+	public UserEntity getUserReferenceById(Long managerId) {
+		log.info("[getUserReferenceById] param - managerId: {}", managerId);
+
+		UserEntity gotUserEntity = userRepository.getReferenceById(managerId);
+
+		log.info("[getUserReferenceById] return - gotUserEntity: {}", gotUserEntity);
+		return gotUserEntity;
+	}
+
+	@Override
+	public Optional<UserEntity> findUserById(Long userId) {
+		log.info("[findUserById] param - userId: {}", userId);
+
+		Optional<UserEntity> foundUser = userRepository.findById(userId);
+
+		log.info("[findUserById] return - foundUser: {}", foundUser);
+		return foundUser;
 	}
 }

@@ -16,8 +16,9 @@ spring:
 
 logging:
   level:
-    com.paytakcode.inventorymanager.api.v1: info
+    com.paytakcode.inventorymanager.api.v1: DEBUG
 
 
 jwt:
   secret: paytak.code.first.personal.project
+  duration: 3600000 # 1 hour

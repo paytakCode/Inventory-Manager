@@ -1,6 +1,6 @@
 package com.paytakcode.inventorymanager.api.v1.data.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import org.springframework.lang.Nullable;
 
 import com.paytakcode.inventorymanager.api.v1.data.emum.ProductionStatus;
 import com.sun.istack.NotNull;
@@ -40,6 +42,7 @@ public class Production extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Nullable
 	private String lotNo;
 
 	@NotNull
@@ -58,9 +61,11 @@ public class Production extends BaseEntity {
 	private ProductionStatus status;
 
 	@NotNull
-	private Date targetDate;
+	private LocalDateTime targetDate;
 
-	private Date completionDate;
+	@Nullable
+	private LocalDateTime completionDate;
 
-	private String description;
+	@Nullable
+	private String details;
 }

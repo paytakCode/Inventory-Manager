@@ -1,6 +1,7 @@
 package com.paytakcode.inventorymanager.api.v1.data.dao;
 
-import com.paytakcode.inventorymanager.api.v1.data.emum.Role;
+import java.util.Optional;
+
 import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 
 /**
@@ -12,7 +13,11 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 public interface UserDao {
 	UserEntity saveUser(UserEntity userEntity);
 
-	void updateRole(Long userId, Role role);
+	Optional<UserEntity> findUserByEmail(String email);
 
-	UserEntity findByEmail(String email);
+	UserEntity getUserReferenceByEmail(String email);
+
+	UserEntity getUserReferenceById(Long managerId);
+
+	Optional<UserEntity> findUserById(Long userId);
 }

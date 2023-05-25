@@ -54,6 +54,12 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
+	@ExceptionHandler(NullPointerException.class)
+	public ResponseEntity<Void> handleNullPointerException(NullPointerException e) {
+		log.error("[handleNullPointerException] {}", e.getMessage());
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Void> handleUnExpectedException(Exception e) {
 		log.error("[handleUnExpectedException] {}", e.getMessage());

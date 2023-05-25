@@ -9,11 +9,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 import org.hibernate.Hibernate;
 
 import com.paytakcode.inventorymanager.api.v1.data.emum.Role;
+import com.paytakcode.inventorymanager.api.v1.util.PasswordMaskingUtil;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -21,7 +23,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * UserEntity
@@ -35,11 +36,10 @@ import lombok.ToString;
 @Entity
 @Getter
 @Setter
-@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-@Table(name = "user")
+@Table(name = "user", indexes = {@Index(columnList = "email")})
 public class UserEntity extends BaseEntity {
 
 	@Id
@@ -76,5 +76,10 @@ public class UserEntity extends BaseEntity {
 	@Override
 	public int hashCode() {
 		return getClass().hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return PasswordMaskingUtil.maskedToString(this);
 	}
 }

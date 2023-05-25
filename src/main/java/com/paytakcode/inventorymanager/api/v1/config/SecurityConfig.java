@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -35,10 +37,13 @@ public class SecurityConfig {
 		http
 			.httpBasic().disable()
 			.csrf().disable()
-			.cors().and()
+			.cors()
+			.and()
 			.authorizeRequests()
+			.antMatchers("/css/**", "/js/**", "/images/**").authenticated()
 			.antMatchers(HttpMethod.GET, "/api/v1/login", "/api/v1/intro", "/api/v1/register").permitAll()
 			.antMatchers(HttpMethod.POST, "/api/v1/users", "/api/v1/login").permitAll()
+			.antMatchers(HttpMethod.POST, "/api/v1/materials").hasAnyRole("MATERIAL", "PRODUCTION", "ADMIN")
 			.antMatchers("/api/v1/admin/**").hasRole("ADMIN")
 			.antMatchers("/api/v1/production/**").hasAnyRole("PRODUCTION", "ADMIN")
 			.antMatchers("/api/v1/sales/**").hasAnyRole("SALES", "ADMIN")
@@ -48,16 +53,10 @@ public class SecurityConfig {
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
-			.formLogin()
-			.loginPage("/api/v1/login")
-			.loginProcessingUrl("/api/v1/loginProc")
-			.defaultSuccessUrl("/api/v1/main")
-			.and()
-			.logout()
-			.logoutUrl("/api/v1/logout")
-			.logoutSuccessUrl("/api/v1/intro")
-			.and()
-			.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+			.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+			.headers()
+			.defaultsDisabled()
+			.contentTypeOptions();
 
 		return http.build();
 	}

@@ -1,6 +1,5 @@
 package com.paytakcode.inventorymanager.api.v1.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpHeaders;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paytakcode.inventorymanager.api.v1.data.dto.LoginDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.RoleDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.UserDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.UserInfoDto;
 import com.paytakcode.inventorymanager.api.v1.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -37,26 +37,27 @@ public class UserController {
 	private final UserService userService;
 
 	@PostMapping("/users")
-	public ResponseEntity<String> userAdd(@RequestBody @Valid UserDto userDto) {
+	public ResponseEntity<UserInfoDto> userAdd(@RequestBody @Valid UserDto userDto) {
 		log.info("[userAdd] param - userDto: {}", userDto.toString());
 
-		String savedUserEmail = userService.addUser(userDto);
+		UserInfoDto addedUserInfoDto = userService.addUser(userDto);
 
-		log.info("[userAdd] return - HttpStatus.CREATED(201), savedUserEmail: {}", savedUserEmail);
+		log.info("[userAdd] return - HttpStatus.CREATED(201), addedUserInfoDto: {}", addedUserInfoDto);
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
-			.body(savedUserEmail);
+			.body(addedUserInfoDto);
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody @Valid LoginDto loginDto, HttpServletRequest request) {
-		log.info("[login] param - loginDTO: {}, request: {}", loginDto.toString(), request);
+	public ResponseEntity<String> login(@RequestBody @Valid LoginDto loginDto) {
+		log.info("[login] param - loginDTO: {}", loginDto);
 
-		String jwt = userService.login(loginDto, request);
+		String jwt = userService.login(loginDto);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", "Bearer " + jwt);
-		log.info("[login] return - HttpStatus.OK(200), jwt: {}", jwt);
+		log.info("[login] return - HttpStatus.OK(200), jwt: [PROTECTED]");
+		log.debug("[login] jwt: {}", jwt);
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.headers(headers)
@@ -64,12 +65,12 @@ public class UserController {
 	}
 
 	@PutMapping("/admin/users/{userId}/role")
-	public ResponseEntity<Void> userRoleModify(@PathVariable Long userId, @RequestBody @Valid RoleDto roleDto) {
-		log.info("[userRoleModify] param - userId: {}, role: {}", userId, roleDto.getRole());
+	public ResponseEntity<Void> userRoleUpdate(@PathVariable Long userId, @RequestBody @Valid RoleDto roleDto) {
+		log.info("[userRoleUpdate] param - userId: {}, role: {}", userId, roleDto.getRole());
 
-		userService.modifyRole(userId, roleDto.getRole());
+		userService.updateUserRole(userId, roleDto.getRole());
 
-		log.info("[userRoleModify] return - HttpStatus.NO_CONTENT(204)");
+		log.info("[userRoleUpdate] return - HttpStatus.NO_CONTENT(204)");
 		return ResponseEntity
 			.status(HttpStatus.NO_CONTENT)
 			.build();

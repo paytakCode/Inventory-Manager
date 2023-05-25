@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.springframework.lang.Nullable;
+
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -42,9 +44,10 @@ public class Material extends BaseEntity implements Serializable {
 	@NotNull
 	private String spec;
 
-	private String description;
+	@Nullable
+	private String details;
 
-	@NotNull
+	@Nullable
 	@ManyToOne
 	private Supplier supplier;
 }

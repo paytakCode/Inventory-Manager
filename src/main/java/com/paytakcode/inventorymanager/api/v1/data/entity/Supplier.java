@@ -39,7 +39,7 @@ public class Supplier extends BaseEntity implements Serializable {
 	private String companyName;
 
 	@NotNull
-	private String manager;
+	private String managerName;
 
 	@NotNull
 	private String tel;

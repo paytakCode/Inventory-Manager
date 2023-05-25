@@ -26,25 +26,26 @@ public class JwtUtil {
 
 	@Getter
 	private final String secretKey;
-	private static final Long VALID_DURATION = 1000 * 60 * 60L;
+	private final Long validDuration;
 
-	public JwtUtil(@Value("${jwt.secret}") String secretKey) {
+	public JwtUtil(@Value("${jwt.secret}") String secretKey, @Value("${jwt.duration}") Long validDuration) {
 		this.secretKey = secretKey;
+		this.validDuration = validDuration;
 	}
 
 	public String createJwt(UserEntity userEntity) {
 		Claims claims = Jwts.claims();
+		claims.put("id", userEntity.getId());
 		claims.put("email", userEntity.getEmail());
 		claims.put("name", userEntity.getName());
+		claims.put("tel", userEntity.getTel());
 		claims.put("role", userEntity.getRole());
-		log.info("[createJwt] userEntity: {}, secretKey: {}", userEntity, secretKey);
 		return Jwts.builder()
 			.setClaims(claims)
 			.setIssuedAt(new Date(System.currentTimeMillis()))
-			.setExpiration(new Date(System.currentTimeMillis() + VALID_DURATION))
+			.setExpiration(new Date(System.currentTimeMillis() + validDuration))
 			.signWith(SignatureAlgorithm.HS256, secretKey)
 			.compact();
-
 	}
 
 	public boolean isExpired(String token) {
@@ -56,16 +57,49 @@ public class JwtUtil {
 			.before(new Date());
 	}
 
+	public Long getId(String token) {
+		return Long.valueOf(Jwts.parser()
+			.setSigningKey(secretKey)
+			.parseClaimsJws(token)
+			.getBody()
+			.get("id")
+			.toString());
+	}
+
 	public String getName(String token) {
-		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("name").toString();
+		return Jwts.parser()
+			.setSigningKey(secretKey)
+			.parseClaimsJws(token)
+			.getBody()
+			.get("name")
+			.toString();
 	}
 
 	public String getEmail(String token) {
-		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("email").toString();
+		return Jwts.parser()
+			.setSigningKey(secretKey)
+			.parseClaimsJws(token)
+			.getBody()
+			.get("email")
+			.toString();
+	}
+
+	public String getTel(String token) {
+		return Jwts.parser()
+			.setSigningKey(secretKey)
+			.parseClaimsJws(token)
+			.getBody()
+			.get("tel")
+			.toString();
 	}
 
 	public Role getRole(String token) {
-		return Role.from(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("role").toString());
+		return Role.from(Jwts.parser()
+			.setSigningKey(secretKey)
+			.parseClaimsJws(token)
+			.getBody()
+			.get("role")
+			.toString());
 	}
 
 }
