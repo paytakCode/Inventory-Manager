@@ -4,6 +4,8 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,7 +17,6 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierDto;
-import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierIdDto;
 import com.paytakcode.inventorymanager.api.v1.service.MaterialService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Controller
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.2.0
  * @Since 2023-05-24 오전 11:30
  */
 
@@ -48,17 +49,16 @@ public class MaterialController {
 			.body(addedMaterialDto.toString());
 	}
 
-	@PostMapping("/production/material-requests")
-	public ResponseEntity<String> materialRequestAdd(@RequestBody @Valid MaterialRequestDto materialRequestDto) {
-		log.info("[materialRequestAdd] param - materialRequestDto: {}", materialRequestDto);
+	@GetMapping("/materials/{materialId}")
+	public ResponseEntity<MaterialDto> materialById(@PathVariable Long materialId) {
+		log.info("[material] param - materialId: {}", materialId);
 
-		MaterialRequestDto addedMaterialRequestDto = materialService.addMaterialRequest(materialRequestDto);
+		MaterialDto material = materialService.getMaterialById(materialId);
 
-		log.info("[materialRequestAdd] return - HttpStatus.CREATED(201), addedMaterialRequestDto: {}",
-			addedMaterialRequestDto);
+		log.info("[material] return - HttpStatus.OK(200), material: {}", material);
 		return ResponseEntity
-			.status(HttpStatus.CREATED)
-			.body(addedMaterialRequestDto.toString());
+			.status(HttpStatus.OK)
+			.body(material);
 	}
 
 	@PutMapping("/material/materials/{materialId}")
@@ -72,6 +72,31 @@ public class MaterialController {
 		return ResponseEntity
 			.status(HttpStatus.NO_CONTENT)
 			.build();
+	}
+
+	@DeleteMapping("/material/materials/{materialId}")
+	public ResponseEntity<Void> materialDeleteById(@PathVariable Long materialId) {
+		log.info("[materialDeleteById] param - materialId: {}", materialId);
+
+		materialService.deleteMaterialById(materialId);
+
+		log.info("[materialDeleteById] return - HttpStatus.NO_CONTENT(204)");
+		return ResponseEntity
+			.status(HttpStatus.NO_CONTENT)
+			.build();
+	}
+
+	@PostMapping("/production/material-requests")
+	public ResponseEntity<String> materialRequestAdd(@RequestBody @Valid MaterialRequestDto materialRequestDto) {
+		log.info("[materialRequestAdd] param - materialRequestDto: {}", materialRequestDto);
+
+		MaterialRequestDto addedMaterialRequestDto = materialService.addMaterialRequest(materialRequestDto);
+
+		log.info("[materialRequestAdd] return - HttpStatus.CREATED(201), addedMaterialRequestDto: {}",
+			addedMaterialRequestDto);
+		return ResponseEntity
+			.status(HttpStatus.CREATED)
+			.body(addedMaterialRequestDto.toString());
 	}
 
 	@PostMapping("/material/material-purchases")

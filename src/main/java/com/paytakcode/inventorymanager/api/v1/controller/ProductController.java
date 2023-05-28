@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product Controller
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-25 오전 8:59
  */
 
@@ -68,7 +68,8 @@ public class ProductController {
 
 		List<ProductMaterialDto> productMaterialList = productService.getProductMaterialListByProductId(productId);
 
-		log.info("[productMaterialListByProductId] return - productMaterialList: {}", productMaterialList);
+		log.info("[productMaterialListByProductId] return - HttpStatus.OK(200) , productMaterialList: {}",
+			productMaterialList);
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.body(productMaterialList);

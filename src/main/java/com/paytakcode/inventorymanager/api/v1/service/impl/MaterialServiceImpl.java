@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Service Implementation
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.2.0
  * @Since 2023-05-24 오전 11:46
  */
 
@@ -48,6 +48,47 @@ public class MaterialServiceImpl implements MaterialService {
 
 		log.info("[addMaterial] return - savedMaterialDto: {}", savedMaterialDto);
 		return savedMaterialDto;
+	}
+
+	@Override
+	public MaterialDto getMaterialById(Long materialId) {
+		log.info("[getMaterialById] param - materialId: {}", materialId);
+
+		Material foundMaterial = materialDao.findMaterialById(materialId);
+
+		MaterialDto foundMaterialDto = EntityToDtoMapper.convertMaterialToDto(foundMaterial);
+
+		log.info("[getMaterialById] return - foundMaterialDto: {}", foundMaterialDto);
+		return foundMaterialDto;
+	}
+
+	@Override
+	public void updateMaterial(Long materialId, MaterialDto materialDto) {
+		log.info("[updateMaterial] param - materialId: {}, materialDto: {}", materialId, materialDto);
+
+		Material material = materialDao.findMaterialById(materialId);
+
+		material.setName(materialDto.getName());
+		material.setSpec(materialDto.getSpec());
+		material.setDetails(materialDto.getDetails());
+
+		Supplier newSupplier = materialDto.getSupplierId() != null ?
+			materialDao.getSupplierReferenceById(materialDto.getSupplierId()) : null;
+
+		material.setSupplier(newSupplier);
+
+		Material updatedMaterial = materialDao.saveMaterial(material);
+
+		MaterialDto updatedMaterialDto = EntityToDtoMapper.convertMaterialToDto(updatedMaterial);
+
+		log.info("[updateMaterial] result - updatedMaterialDto: {}", updatedMaterialDto);
+	}
+
+	@Override
+	public void deleteMaterialById(Long materialId) {
+		log.info("[deleteMaterialById] param - materialId: {}", materialId);
+
+		materialDao.deleteMaterialById(materialId);
 	}
 
 	@Override
@@ -92,27 +133,5 @@ public class MaterialServiceImpl implements MaterialService {
 
 		log.info("[addSupplier] return - savedSupplierDto: {}", savedSupplierDto);
 		return savedSupplierDto;
-	}
-
-	@Override
-	public void updateMaterial(Long materialId, MaterialDto materialDto) {
-		log.info("[updateMaterial] param - materialId: {}, materialDto: {}", materialId, materialDto);
-
-		Material material = materialDao.findMaterialById(materialId);
-
-		material.setName(materialDto.getName());
-		material.setSpec(materialDto.getSpec());
-		material.setDetails(materialDto.getDetails());
-
-		Supplier newSupplier = materialDto.getSupplierId() != null ?
-			materialDao.getSupplierReferenceById(materialDto.getSupplierId()) : null;
-
-		material.setSupplier(newSupplier);
-
-		Material updatedMaterial = materialDao.saveMaterial(material);
-
-		MaterialDto updatedMaterialDto = EntityToDtoMapper.convertMaterialToDto(updatedMaterial);
-
-		log.info("[updateMaterial] result - updatedMaterialDto: {}", updatedMaterialDto);
 	}
 }

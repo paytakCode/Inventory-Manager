@@ -8,11 +8,18 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierDto;
 /**
  * Material Service
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.2.0
  * @Since 2023-05-24 오전 11:46
  */
 public interface MaterialService {
+
 	MaterialDto addMaterial(MaterialDto materialDto);
+
+	MaterialDto getMaterialById(Long materialId);
+
+	void updateMaterial(Long materialId, MaterialDto materialDto);
+
+	void deleteMaterialById(Long materialId);
 
 	MaterialRequestDto addMaterialRequest(MaterialRequestDto materialRequestDto);
 
@@ -20,5 +27,4 @@ public interface MaterialService {
 
 	SupplierDto addSupplier(SupplierDto supplierDto);
 
-	void updateMaterial(Long materialId, MaterialDto materialDto);
 }

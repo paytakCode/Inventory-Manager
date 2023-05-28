@@ -10,13 +10,15 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.Supplier;
 /**
  * Material DAO
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.2.0
  * @Since 2023-05-24 오전 11:52
  */
 public interface MaterialDao {
 	Material saveMaterial(Material material);
 
 	Material findMaterialById(Long materialId);
+
+	void deleteMaterialById(Long materialId);
 
 	MaterialRequest saveMaterialRequest(MaterialRequest materialRequest);
 
@@ -31,4 +33,5 @@ public interface MaterialDao {
 	Optional<Supplier> findSupplierById(Long supplierId);
 
 	Supplier getSupplierReferenceById(Long supplierId);
+
 }
