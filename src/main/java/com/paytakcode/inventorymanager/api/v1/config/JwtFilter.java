@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * JwtFilter
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.2.0
  * @Since 2023-05-23 오후 4:35
  */
 
@@ -47,17 +47,23 @@ public class JwtFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		final String token = authorization.split(" ")[1];
+		final String jwt = authorization.split(" ")[1];
 
-		if (jwtUtil.isExpired(token)) {
-			log.error("[doFilterInternal] expired Token");
+		if (jwtUtil.isExpired(jwt)) {
+			log.error("[doFilterInternal] Expired Token");
+			filterChain.doFilter(request, response);
+			return;
+		}
+
+		if (jwtUtil.isInvalidated(jwt)) {
+			log.error("[doFilterInternal] Invalidated Token");
 			filterChain.doFilter(request, response);
 			return;
 		}
 
 		UsernamePasswordAuthenticationToken authenticationToken =
-			new UsernamePasswordAuthenticationToken(jwtUtil.getEmail(token), null,
-				Collections.singleton(new SimpleGrantedAuthority(jwtUtil.getRole(token).name())));
+			new UsernamePasswordAuthenticationToken(jwtUtil.getEmail(jwt), null,
+				Collections.singleton(new SimpleGrantedAuthority(jwtUtil.getRole(jwt).name())));
 
 		authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 		SecurityContextHolder.getContext().setAuthentication(authenticationToken);

@@ -1,6 +1,7 @@
 package com.paytakcode.inventorymanager.api.v1.util;
 
 import java.util.Date;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * JSON Web Token Util
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.2.0
  * @Since 2023-05-23 오후 2:42
  */
 @Slf4j
@@ -28,9 +29,16 @@ public class JwtUtil {
 	private final String secretKey;
 	private final Long validDuration;
 
+	@Getter
+	private final CopyOnWriteArrayList<String> invalidatedJwtList = new CopyOnWriteArrayList<>();
+
 	public JwtUtil(@Value("${jwt.secret}") String secretKey, @Value("${jwt.duration}") Long validDuration) {
 		this.secretKey = secretKey;
 		this.validDuration = validDuration;
+	}
+
+	public void invalidateToken(String jwt) {
+		invalidatedJwtList.add(jwt);
 	}
 
 	public String createJwt(UserEntity userEntity) {
@@ -48,55 +56,59 @@ public class JwtUtil {
 			.compact();
 	}
 
-	public boolean isExpired(String token) {
+	public boolean isExpired(String jwt) {
 		return Jwts.parser()
 			.setSigningKey(secretKey)
-			.parseClaimsJws(token)
+			.parseClaimsJws(jwt)
 			.getBody()
 			.getExpiration()
 			.before(new Date());
 	}
 
-	public Long getId(String token) {
+	public boolean isInvalidated(String jwt){
+		return invalidatedJwtList.contains(jwt);
+	}
+
+	public Long getId(String jwt) {
 		return Long.valueOf(Jwts.parser()
 			.setSigningKey(secretKey)
-			.parseClaimsJws(token)
+			.parseClaimsJws(jwt)
 			.getBody()
 			.get("id")
 			.toString());
 	}
 
-	public String getName(String token) {
+	public String getName(String jwt) {
 		return Jwts.parser()
 			.setSigningKey(secretKey)
-			.parseClaimsJws(token)
+			.parseClaimsJws(jwt)
 			.getBody()
 			.get("name")
 			.toString();
 	}
 
-	public String getEmail(String token) {
+	public String getEmail(String jwt) {
 		return Jwts.parser()
 			.setSigningKey(secretKey)
-			.parseClaimsJws(token)
+			.parseClaimsJws(jwt)
 			.getBody()
 			.get("email")
 			.toString();
 	}
 
-	public String getTel(String token) {
+	public String getTel(String jwt) {
 		return Jwts.parser()
 			.setSigningKey(secretKey)
-			.parseClaimsJws(token)
+			.parseClaimsJws(jwt)
 			.getBody()
 			.get("tel")
 			.toString();
 	}
 
-	public Role getRole(String token) {
+	public Role getRole(String jwt) {
 		return Role.from(Jwts.parser()
 			.setSigningKey(secretKey)
-			.parseClaimsJws(token)
+			.parseClaimsJws(jwt)
 			.getBody()
 			.get("role")
 			.toString());

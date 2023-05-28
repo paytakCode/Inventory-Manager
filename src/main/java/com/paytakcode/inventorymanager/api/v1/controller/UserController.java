@@ -1,5 +1,6 @@
 package com.paytakcode.inventorymanager.api.v1.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpHeaders;
@@ -24,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User Controller
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.3.0
  * @Since 2023-05-18 오후 3:40
  */
 
@@ -49,7 +50,7 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody @Valid LoginDto loginDto) {
+	public ResponseEntity<Void> login(@RequestBody @Valid LoginDto loginDto) {
 		log.info("[login] param - loginDTO: {}", loginDto);
 
 		String jwt = userService.login(loginDto);
@@ -61,7 +62,19 @@ public class UserController {
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.headers(headers)
-			.body("Login successful");
+			.build();
+	}
+
+	@PostMapping("/logout")
+	public ResponseEntity<Void> logout(HttpServletRequest request) {
+		log.info("[logout] param - request: [PROTECTED]");
+
+		userService.logout(request);
+
+		log.info("[logout] return - HttpStatus.OK(200)");
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.build();
 	}
 
 	@PutMapping("/admin/users/{userId}/role")
@@ -75,5 +88,4 @@ public class UserController {
 			.status(HttpStatus.NO_CONTENT)
 			.build();
 	}
-
 }

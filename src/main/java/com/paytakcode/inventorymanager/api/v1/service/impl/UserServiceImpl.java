@@ -1,5 +1,8 @@
 package com.paytakcode.inventorymanager.api.v1.service.impl;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User Service 구현체
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.3.0
  * @Since 2023-05-18 오후 3:43
  */
 @Service
@@ -78,6 +81,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public void logout(HttpServletRequest request) {
+		log.info("[logout] param - request: [PROTECTED]");
+
+		final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+		final String jwt = authorization.split(" ")[1];
+
+		jwtUtil.invalidateToken(jwt);
+
+		log.info("[logout] result - JWT invalidated");
+	}
+
+	@Override
 	public void updateUserRole(Long userId, Role role) {
 		log.info("[updateUserRole] param - userId: {}, role: {}", userId, role);
 
@@ -86,11 +101,10 @@ public class UserServiceImpl implements UserService {
 
 		user.setRole(role);
 
-		UserEntity savedUser = userDao.saveUser(user);
+		UserEntity updatedUser = userDao.saveUser(user);
 
-		UserInfoDto savedUserInfoDto = EntityToDtoMapper.convertUserToUserInfoDto(savedUser);
+		UserInfoDto updatedUserInfoDto = EntityToDtoMapper.convertUserToUserInfoDto(updatedUser);
 
-		log.info("[updateUserRole] result - savedUserInfoDto: {}", savedUserInfoDto);
+		log.info("[updateUserRole] result - updatedUserInfoDto: {}", updatedUserInfoDto);
 	}
-
 }
