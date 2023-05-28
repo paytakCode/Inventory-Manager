@@ -4,27 +4,27 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.BuyerDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestDto;
-import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.UserInfoDto;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Buyer;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Material;
 import com.paytakcode.inventorymanager.api.v1.data.entity.MaterialPurchase;
 import com.paytakcode.inventorymanager.api.v1.data.entity.MaterialRequest;
-import com.paytakcode.inventorymanager.api.v1.data.entity.SalesOrder;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Product;
 import com.paytakcode.inventorymanager.api.v1.data.entity.ProductMaterial;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Production;
+import com.paytakcode.inventorymanager.api.v1.data.entity.SalesOrder;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Supplier;
 import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 
 /**
  * Entity to DTO Mapper
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-26 오후 3:39
  */
 public class EntityToDtoMapper {
@@ -78,6 +78,7 @@ public class EntityToDtoMapper {
             .requesterId(materialRequest.getRequester().getId())
             .quantity(materialRequest.getQuantity())
             .details(materialRequest.getDetails())
+            .materialPurchaseId(materialRequest.getId())
             .build();
     }
 

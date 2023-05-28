@@ -4,17 +4,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.paytakcode.inventorymanager.api.v1.data.dao.MaterialDao;
-import com.paytakcode.inventorymanager.api.v1.data.dao.SalesDao;
 import com.paytakcode.inventorymanager.api.v1.data.dao.ProductDao;
+import com.paytakcode.inventorymanager.api.v1.data.dao.SalesDao;
 import com.paytakcode.inventorymanager.api.v1.data.dao.UserDao;
 import com.paytakcode.inventorymanager.api.v1.data.dto.BuyerDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestDto;
-import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.UserDto;
 import com.paytakcode.inventorymanager.api.v1.data.emum.OrderStatus;
@@ -25,11 +25,11 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.Buyer;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Material;
 import com.paytakcode.inventorymanager.api.v1.data.entity.MaterialPurchase;
 import com.paytakcode.inventorymanager.api.v1.data.entity.MaterialRequest;
-import com.paytakcode.inventorymanager.api.v1.data.entity.SalesOrder;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Product;
 import com.paytakcode.inventorymanager.api.v1.data.entity.ProductMaterial;
 import com.paytakcode.inventorymanager.api.v1.data.entity.ProductMaterialId;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Production;
+import com.paytakcode.inventorymanager.api.v1.data.entity.SalesOrder;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Supplier;
 import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 
@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * DTO to Entity Mapper
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-26 오후 4:50
  */
 
@@ -104,7 +104,7 @@ public class DtoToEntityMapper {
 
     public MaterialRequest convertMaterialRequestDtoToEntity(MaterialRequestDto materialRequestDto) {
         Material requestMaterial = materialDao.getMaterialReferenceById(materialRequestDto.getMaterialId());
-        UserEntity requester = userDao.getUserReferenceByEmail(UserUtil.getCurrentUserEmail());
+        UserEntity requester = userDao.getUserReferenceById(materialRequestDto.getRequesterId());
 
         return MaterialRequest.builder()
             .requester(requester)

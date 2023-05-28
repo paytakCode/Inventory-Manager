@@ -12,7 +12,7 @@ import lombok.ToString;
 /**
  * Material Request DTO
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.2.0
  * @Since 2023-05-24 오후 12:28
  */
 
@@ -25,7 +25,7 @@ public class MaterialRequestDto {
 	@NotNull
 	private Long materialId;
 
-	@Nullable
+	@NotNull
 	private Long requesterId;
 
 	@NotNull
@@ -33,4 +33,7 @@ public class MaterialRequestDto {
 
 	@Nullable
 	private String details;
+
+	@Nullable
+	private Long materialPurchaseId;
 }

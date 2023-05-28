@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Controller
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.3.0
  * @Since 2023-05-24 오전 11:30
  */
 
@@ -53,12 +53,12 @@ public class MaterialController {
 	public ResponseEntity<MaterialDto> materialById(@PathVariable Long materialId) {
 		log.info("[material] param - materialId: {}", materialId);
 
-		MaterialDto material = materialService.getMaterialById(materialId);
+		MaterialDto materialDto = materialService.getMaterialById(materialId);
 
-		log.info("[material] return - HttpStatus.OK(200), material: {}", material);
+		log.info("[material] return - HttpStatus.OK(200), materialDto: {}", materialDto);
 		return ResponseEntity
 			.status(HttpStatus.OK)
-			.body(material);
+			.body(materialDto);
 	}
 
 	@PutMapping("/material/materials/{materialId}")
@@ -97,6 +97,44 @@ public class MaterialController {
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
 			.body(addedMaterialRequestDto.toString());
+	}
+
+	@GetMapping("/production/material-requests/{materialRequestId}")
+	public ResponseEntity<MaterialRequestDto> materialRequestById(@PathVariable Long materialRequestId) {
+		log.info("[materialRequestById] param - materialRequestId: {}", materialRequestId);
+
+		MaterialRequestDto materialRequestDto = materialService.getMaterialRequestById(materialRequestId);
+
+		log.info("[materialRequestById] return - HttpStatus.OK(200), materialRequestDto: {}", materialRequestDto);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(materialRequestDto);
+	}
+
+	@PutMapping("/production/material-requests/{materialRequestId}")
+	public ResponseEntity<Void> materialRequestUpdate(@PathVariable Long materialRequestId,
+		@Valid @RequestBody MaterialRequestDto materialRequestDto) {
+		log.info("[materialRequestUpdate] param - materialRequestId: {}, materialRequestDto: {}", materialRequestId,
+			materialRequestDto);
+
+		materialService.updateMaterialRequest(materialRequestId, materialRequestDto);
+
+		log.info("[materialRequestUpdate] return - HttpStatus.NO_CONTENT(204)");
+		return ResponseEntity
+			.status(HttpStatus.NO_CONTENT)
+			.build();
+	}
+
+	@DeleteMapping("/production/material-requests/{materialRequestId}")
+	public ResponseEntity<Void> materialRequestDeleteById(@PathVariable Long materialRequestId) {
+		log.info("[materialRequestDeleteById] param - materialRequestId: {}", materialRequestId);
+
+		materialService.deleteMaterialRequestById(materialRequestId);
+
+		log.info("[materialRequestDeleteById] return - HttpStatus.NO_CONTENT(204)");
+		return ResponseEntity
+			.status(HttpStatus.NO_CONTENT)
+			.build();
 	}
 
 	@PostMapping("/material/material-purchases")
