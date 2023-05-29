@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Controller
  * @Author 김태산
- * @Version 0.5.0
+ * @Version 0.5.1
  * @Since 2023-05-24 오전 11:30
  */
 
@@ -51,11 +51,11 @@ public class MaterialController {
 
 	@GetMapping("/materials/{materialId}")
 	public ResponseEntity<MaterialDto> materialById(@PathVariable Long materialId) {
-		log.info("[material] param - materialId: {}", materialId);
+		log.info("[materialById] param - materialId: {}", materialId);
 
 		MaterialDto materialDto = materialService.getMaterialById(materialId);
 
-		log.info("[material] return - HttpStatus.OK(200), materialDto: {}", materialDto);
+		log.info("[materialById] return - HttpStatus.OK(200), materialDto: {}", materialDto);
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.body(materialDto);

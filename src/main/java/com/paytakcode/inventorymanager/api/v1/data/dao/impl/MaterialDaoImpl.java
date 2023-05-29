@@ -2,7 +2,6 @@ package com.paytakcode.inventorymanager.api.v1.data.dao.impl;
 
 import java.util.Optional;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.paytakcode.inventorymanager.api.v1.data.dao.MaterialDao;
@@ -46,11 +45,10 @@ public class MaterialDaoImpl implements MaterialDao {
 	}
 
 	@Override
-	public Material findMaterialById(Long materialId) {
+	public Optional<Material> findMaterialById(Long materialId) {
 		log.info("[findMaterialById] param - materialId: {}", materialId);
 
-		Material foundMaterial = materialRepository.findById(materialId)
-			.orElseThrow(() -> new EmptyResultDataAccessException(1));
+		Optional<Material> foundMaterial = materialRepository.findById(materialId);
 
 		log.info("[findMaterialById] return - foundMaterial: {}", foundMaterial);
 		return foundMaterial;

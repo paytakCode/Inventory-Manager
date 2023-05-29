@@ -16,7 +16,7 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.Supplier;
 public interface MaterialDao {
 	Material saveMaterial(Material material);
 
-	Material findMaterialById(Long materialId);
+	Optional<Material> findMaterialById(Long materialId);
 
 	void deleteMaterialById(Long materialId);
 

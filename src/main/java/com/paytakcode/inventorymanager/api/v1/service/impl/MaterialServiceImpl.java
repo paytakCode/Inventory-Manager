@@ -58,7 +58,8 @@ public class MaterialServiceImpl implements MaterialService {
 	public MaterialDto getMaterialById(Long materialId) {
 		log.info("[getMaterialById] param - materialId: {}", materialId);
 
-		Material foundMaterial = materialDao.findMaterialById(materialId);
+		Material foundMaterial = materialDao.findMaterialById(materialId)
+			.orElseThrow();
 
 		MaterialDto foundMaterialDto = EntityToDtoMapper.convertMaterialToDto(foundMaterial);
 
@@ -70,7 +71,8 @@ public class MaterialServiceImpl implements MaterialService {
 	public void updateMaterial(Long materialId, MaterialDto materialDto) {
 		log.info("[updateMaterial] param - materialId: {}, materialDto: {}", materialId, materialDto);
 
-		Material material = materialDao.findMaterialById(materialId);
+		Material material = materialDao.findMaterialById(materialId)
+			.orElseThrow();
 
 		material.setName(materialDto.getName());
 		material.setSpec(materialDto.getSpec());
@@ -131,7 +133,8 @@ public class MaterialServiceImpl implements MaterialService {
 
 		MaterialRequest materialRequest = materialDao.findMaterialRequestById(materialRequestId)
 			.orElseThrow();
-		Material material = materialDao.findMaterialById(materialRequestDto.getMaterialId());
+		Material material = materialDao.findMaterialById(materialRequestDto.getMaterialId())
+			.orElseThrow();
 		UserEntity requester = userDao.getUserReferenceById(materialRequestDto.getRequesterId());
 
 		materialRequest.setMaterial(material);
@@ -190,7 +193,8 @@ public class MaterialServiceImpl implements MaterialService {
 
 		MaterialPurchase materialPurchase = materialDao.findMaterialPurchaseById(materialPurchaseId)
 			.orElseThrow();
-		Material material = materialDao.findMaterialById(materialPurchaseDto.getMaterialId());
+		Material material = materialDao.findMaterialById(materialPurchaseDto.getMaterialId())
+			.orElseThrow();
 		UserEntity manager = userDao.getUserReferenceById(materialPurchaseDto.getManagerId());
 		PurchaseStatus status =
 			materialPurchaseDto.getStatus() == null ? PurchaseStatus.ACCEPTED : materialPurchaseDto.getStatus();
