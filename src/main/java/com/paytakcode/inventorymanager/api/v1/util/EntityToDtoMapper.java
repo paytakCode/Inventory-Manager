@@ -6,6 +6,7 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialIdDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierDto;
@@ -24,7 +25,7 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 /**
  * Entity to DTO Mapper
  * @Author 김태산
- * @Version 0.1.2
+ * @Version 0.1.3
  * @Since 2023-05-26 오후 3:39
  */
 public class EntityToDtoMapper {
@@ -99,9 +100,13 @@ public class EntityToDtoMapper {
     }
 
     public static ProductMaterialDto convertProductMaterialToDto(ProductMaterial productMaterial) {
-        return ProductMaterialDto.builder()
+        ProductMaterialIdDto productMaterialIdDto = ProductMaterialIdDto.builder()
             .materialId(productMaterial.getId().getMaterial().getId())
             .productId(productMaterial.getId().getProduct().getId())
+            .build();
+
+        return ProductMaterialDto.builder()
+            .productMaterialIdDto(productMaterialIdDto)
             .requiredQuantity(productMaterial.getRequiredQuantity())
             .build();
     }

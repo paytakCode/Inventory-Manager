@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialIdDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.RequiredQuantityDto;
 import com.paytakcode.inventorymanager.api.v1.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product Controller
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.2.0
  * @Since 2023-05-25 오전 8:59
  */
 
@@ -99,6 +101,65 @@ public class ProductController {
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
 			.body(addedProductMaterialDto.toString());
+	}
+
+	@GetMapping("/production/product-materials/{productId}/{materialId}")
+	public ResponseEntity<ProductMaterialDto> productMaterialById(@PathVariable Long productId,
+		@PathVariable Long materialId) {
+		log.info("[productMaterialById] param - productId: {}, materialId: {}", productId, materialId);
+
+		ProductMaterialIdDto productMaterialIdDto = ProductMaterialIdDto.builder()
+			.productId(productId)
+			.materialId(materialId)
+			.build();
+
+		ProductMaterialDto productMaterialDto = productService.getProductMaterialById(productMaterialIdDto);
+
+		log.info("[productMaterialById] return - HttpStatus.OK(200), productMaterialDto: {}", productMaterialDto);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(productMaterialDto);
+	}
+
+	@PutMapping("/production/product-materials/{productId}/{materialId}")
+	public ResponseEntity<Void> productMaterialUpdate(@PathVariable Long productId, @PathVariable Long materialId,
+		@RequestBody @Valid RequiredQuantityDto requiredQuantityDto) {
+		log.info("[productMaterialUpdate] param - productId: {}, materialId: {}, requiredQuantityDto: {}", productId,
+			materialId, requiredQuantityDto);
+
+		ProductMaterialIdDto productMaterialIdDto = ProductMaterialIdDto.builder()
+			.productId(productId)
+			.materialId(materialId)
+			.build();
+
+		ProductMaterialDto productMaterialDto = ProductMaterialDto.builder()
+			.productMaterialIdDto(productMaterialIdDto)
+			.requiredQuantity(requiredQuantityDto.getRequiredQuantity())
+			.build();
+
+		productService.updateProductMaterial(productMaterialIdDto, productMaterialDto);
+
+		log.info("[productMaterialUpdate] return - HttpStatus.NO_CONTENT(204)");
+		return ResponseEntity
+			.status(HttpStatus.NO_CONTENT)
+			.build();
+	}
+
+	@DeleteMapping("/production/product-materials/{productId}/{materialId}")
+	public ResponseEntity<Void> productMaterialDeleteById(@PathVariable Long productId, @PathVariable Long materialId) {
+		log.info("[productMaterialDeleteById] param - productId: {}, materialId: {}", productId, materialId);
+
+		ProductMaterialIdDto productMaterialIdDto = ProductMaterialIdDto.builder()
+			.productId(productId)
+			.materialId(materialId)
+			.build();
+
+		productService.deleteProductMaterialById(productMaterialIdDto);
+
+		log.info("[productMaterialDeleteById] return - HttpStatus.NO_CONTENT(204)");
+		return ResponseEntity
+			.status(HttpStatus.NO_CONTENT)
+			.build();
 	}
 
 	@GetMapping("/products/{productId}/product-materials")

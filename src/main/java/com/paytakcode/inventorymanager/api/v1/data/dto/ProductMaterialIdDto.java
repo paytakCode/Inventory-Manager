@@ -8,22 +8,21 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * Product Material DTO
+ * Product Material Id Dto
  * @Author 김태산
- * @Version 0.2.0
- * @Since 2023-05-25 오전 9:05
+ * @Version 0.1.0
+ * @Since 2023-05-29 오후 9:42
  */
 
 @Getter
 @Setter
 @Builder
 @ToString
-public class ProductMaterialDto {
+public class ProductMaterialIdDto {
 
 	@NotNull
-	private ProductMaterialIdDto productMaterialIdDto;
+	private Long productId;
 
 	@NotNull
-	private Integer requiredQuantity;
-
+	private Long materialId;
 }

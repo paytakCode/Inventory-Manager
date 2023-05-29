@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.paytakcode.inventorymanager.api.v1.data.dao.ProductDao;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Product;
 import com.paytakcode.inventorymanager.api.v1.data.entity.ProductMaterial;
+import com.paytakcode.inventorymanager.api.v1.data.entity.ProductMaterialId;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Production;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Supplier;
 import com.paytakcode.inventorymanager.api.v1.data.repository.ProductMaterialRepository;
@@ -21,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product DAO Implementation
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.2.0
  * @Since 2023-05-25 오전 9:10
  */
 
@@ -82,6 +83,27 @@ public class ProductDaoImpl implements ProductDao {
 
 		log.info("[saveProductMaterial] param - savedProductMaterial: {}", savedProductMaterial);
 		return savedProductMaterial;
+	}
+
+	@Override
+	public Optional<ProductMaterial> findProductMaterialById(ProductMaterialId productMaterialId) {
+		log.info("[findProductMaterialById] param - productMaterialId: {}", productMaterialId);
+
+		Optional<ProductMaterial> foundProductMaterial = productMaterialRepository.findByIdProductAndIdMaterial(
+			productMaterialId.getProduct(), productMaterialId.getMaterial());
+
+		log.info("[findProductMaterialById] return - foundProductMaterial: {}", foundProductMaterial);
+		return foundProductMaterial;
+	}
+
+	@Override
+	public void deleteProductMaterialById(ProductMaterialId productMaterialId) {
+		log.info("[deleteProductMaterialById] param - productMaterialId: {}", productMaterialId);
+
+		productMaterialRepository.deleteByIdProductAndIdMaterial(productMaterialId.getProduct(),
+			productMaterialId.getMaterial());
+
+		log.info("[deleteProductMaterialById] result - productMaterial Deleted: {}", productMaterialId);
 	}
 
 	@Override

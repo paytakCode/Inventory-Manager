@@ -5,13 +5,14 @@ import java.util.Optional;
 
 import com.paytakcode.inventorymanager.api.v1.data.entity.Product;
 import com.paytakcode.inventorymanager.api.v1.data.entity.ProductMaterial;
+import com.paytakcode.inventorymanager.api.v1.data.entity.ProductMaterialId;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Production;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Supplier;
 
 /**
  * Product DAO
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.2.0
  * @Since 2023-05-25 오전 9:10
  */
 
@@ -27,6 +28,10 @@ public interface ProductDao {
 
 	ProductMaterial saveProductMaterial(ProductMaterial productMaterial);
 
+	Optional<ProductMaterial> findProductMaterialById(ProductMaterialId productMaterialId);
+
+	void deleteProductMaterialById(ProductMaterialId productMaterialId);
+
 	List<ProductMaterial> findProductMaterialListByProductId(Long productId);
 
 	Production saveProduction(Production production);
@@ -36,5 +41,4 @@ public interface ProductDao {
 	Optional<Production> findProductionById(Long productionId);
 
 	Supplier getSupplierReferenceById(Long supplierId);
-
 }

@@ -13,6 +13,7 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialIdDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierDto;
@@ -38,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * DTO to Entity Mapper
  * @Author 김태산
- * @Version 0.1.2
+ * @Version 0.1.3
  * @Since 2023-05-26 오후 4:50
  */
 
@@ -129,21 +130,6 @@ public class DtoToEntityMapper {
             .build();
     }
 
-    public ProductMaterial convertProductMaterialDtoToEntity(ProductMaterialDto productMaterialDto) {
-        Product product = productDao.getProductReferenceById(productMaterialDto.getProductId());
-        Material material = materialDao.getMaterialReferenceById(productMaterialDto.getMaterialId());
-
-        ProductMaterialId productMaterialId = ProductMaterialId.builder()
-            .material(material)
-            .product(product)
-            .build();
-
-        return ProductMaterial.builder()
-            .id(productMaterialId)
-            .requiredQuantity(productMaterialDto.getRequiredQuantity())
-            .build();
-    }
-
     public Supplier convertSupplierDtoToEntity(SupplierDto supplierDto) {
         return Supplier.builder()
             .companyName(supplierDto.getCompanyName())
@@ -177,6 +163,26 @@ public class DtoToEntityMapper {
             .build();
     }
 
+    public ProductMaterialId convertProductMaterialIdDtoToEntity(ProductMaterialIdDto productMaterialIdDto) {
+        Product product = productDao.getProductReferenceById(productMaterialIdDto.getProductId());
+        Material material = materialDao.getMaterialReferenceById(productMaterialIdDto.getMaterialId());
+
+        return ProductMaterialId.builder()
+            .product(product)
+            .material(material)
+            .build();
+    }
+
+    public ProductMaterial convertProductMaterialDtoToEntity(ProductMaterialDto productMaterialDto) {
+        ProductMaterialId productMaterialId = convertProductMaterialIdDtoToEntity(
+            productMaterialDto.getProductMaterialIdDto());
+
+        return ProductMaterial.builder()
+            .id(productMaterialId)
+            .requiredQuantity(productMaterialDto.getRequiredQuantity())
+            .build();
+    }
+
     /**
      * Admin Role 자동으로 부여하기 위한 임시 메서드
      */
@@ -187,5 +193,4 @@ public class DtoToEntityMapper {
             return Role.ROLE_WAIT;
         }
     }
-
 }

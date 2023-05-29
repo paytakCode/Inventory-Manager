@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,10 +12,12 @@ import com.paytakcode.inventorymanager.api.v1.data.dao.ProductDao;
 import com.paytakcode.inventorymanager.api.v1.data.dao.SalesDao;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialIdDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
 import com.paytakcode.inventorymanager.api.v1.data.emum.ProductionStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Product;
 import com.paytakcode.inventorymanager.api.v1.data.entity.ProductMaterial;
+import com.paytakcode.inventorymanager.api.v1.data.entity.ProductMaterialId;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Production;
 import com.paytakcode.inventorymanager.api.v1.service.ProductService;
 import com.paytakcode.inventorymanager.api.v1.util.DtoToEntityMapper;
@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product Service Implementation
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.2.0
  * @Since 2023-05-25 오전 9:02
  */
 @Service
@@ -98,7 +98,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ProductMaterialDto addProductMaterial(@Valid ProductMaterialDto productMaterialDto) {
+	public ProductMaterialDto addProductMaterial(ProductMaterialDto productMaterialDto) {
 		log.info("[addProductMaterial] param - productMaterialDto: {}", productMaterialDto);
 
 		ProductMaterial productMaterial = dtoToEntityMapper.convertProductMaterialDtoToEntity(productMaterialDto);
@@ -110,6 +110,57 @@ public class ProductServiceImpl implements ProductService {
 
 		log.info("[addProductMaterial] return - savedProductMaterialDto: {}", savedProductMaterialDto);
 		return savedProductMaterialDto;
+	}
+
+	@Override
+	public ProductMaterialDto getProductMaterialById(ProductMaterialIdDto productMaterialIdDto) {
+		log.info("[getProductMaterialByProductIdAndMaterialId] param - ProductMaterialIdDto: {}", productMaterialIdDto);
+
+		ProductMaterialId productMaterialId = dtoToEntityMapper.convertProductMaterialIdDtoToEntity(
+			productMaterialIdDto);
+
+		ProductMaterial foundProductMaterial = productDao.findProductMaterialById(productMaterialId)
+			.orElseThrow();
+
+		ProductMaterialDto foundProductMaterialDto = EntityToDtoMapper.convertProductMaterialToDto(
+			foundProductMaterial);
+
+		log.info("[getProductMaterialByProductIdAndMaterialId] return - foundProductMaterialDto: {}",
+			foundProductMaterialDto);
+		return foundProductMaterialDto;
+	}
+
+	@Override
+	public void updateProductMaterial(ProductMaterialIdDto productMaterialIdDto,
+		ProductMaterialDto productMaterialDto) {
+		log.info("[updateProductMaterial] param - productMaterialIdDto: {}, productMaterialDto: {}",
+			productMaterialIdDto,
+			productMaterialDto);
+
+		ProductMaterialId productMaterialId = dtoToEntityMapper.convertProductMaterialIdDtoToEntity(
+			productMaterialIdDto);
+
+		ProductMaterial productMaterial = productDao.findProductMaterialById(productMaterialId)
+			.orElseThrow();
+
+		productMaterial.setRequiredQuantity(productMaterialDto.getRequiredQuantity());
+
+		ProductMaterial updatedProductMaterial = productDao.saveProductMaterial(productMaterial);
+
+		ProductMaterialDto updatedProductMaterialDto = EntityToDtoMapper.convertProductMaterialToDto(
+			updatedProductMaterial);
+
+		log.info("[updateProductMaterial] result - updatedProductMaterialDto: {}", updatedProductMaterialDto);
+	}
+
+	@Override
+	public void deleteProductMaterialById(ProductMaterialIdDto productMaterialIdDto) {
+		log.info("[deleteProductMaterialById] param - productMaterialIdDto: {}", productMaterialIdDto);
+
+		ProductMaterialId productMaterialId = dtoToEntityMapper.convertProductMaterialIdDtoToEntity(
+			productMaterialIdDto);
+
+		productDao.deleteProductMaterialById(productMaterialId);
 	}
 
 	@Override
