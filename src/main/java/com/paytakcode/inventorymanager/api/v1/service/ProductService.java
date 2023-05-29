@@ -16,9 +16,15 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
  */
 public interface ProductService {
 
-	ProductMaterialDto addProductMaterial(@Valid ProductMaterialDto productMaterialDto);
-
 	ProductDto addProduct(ProductDto productDto);
+
+	ProductDto getProductById(Long productId);
+
+	void updateProduct(Long productId, ProductDto productDto);
+
+	void deleteProductById(Long productId);
+
+	ProductMaterialDto addProductMaterial(@Valid ProductMaterialDto productMaterialDto);
 
 	List<ProductMaterialDto> getProductMaterialListByProductId(Long productId);
 

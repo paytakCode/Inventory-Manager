@@ -43,6 +43,61 @@ public class ProductServiceImpl implements ProductService {
 	private final SalesDao salesDao;
 
 	@Override
+	public ProductDto addProduct(ProductDto productDto) {
+		log.info("[addProduct] param - productDto: {}", productDto);
+
+		Product product = dtoToEntityMapper.convertProductDtoToEntity(productDto);
+
+		Product savedProduct = productDao.saveProduct(product);
+
+		ProductDto savedProductDto = EntityToDtoMapper.convertProductToDto(savedProduct);
+
+		log.info("[addProduct] return - savedProductDto: {}", savedProductDto);
+		return savedProductDto;
+	}
+
+	@Override
+	public ProductDto getProductById(Long productId) {
+		log.info("[getProductById] param - productId: {}", productId);
+
+		Product foundProduct = productDao.findProductById(productId)
+			.orElseThrow();
+
+		ProductDto foundProductDto = EntityToDtoMapper.convertProductToDto(
+			foundProduct);
+
+		log.info("[getProductById] return - foundProductDto: {}", foundProductDto);
+		return foundProductDto;
+	}
+
+	@Override
+	public void updateProduct(Long productId, ProductDto productDto) {
+		log.info("[updateProduct] param - productId: {}, productDto: {}", productId,
+			productDto);
+
+		Product product = productDao.findProductById(productId)
+			.orElseThrow();
+
+		product.setName(productDto.getName());
+		product.setSpec(productDto.getSpec());
+		product.setDetails(productDto.getDetails());
+
+		Product updatedProduct = productDao.saveProduct(product);
+
+		ProductDto updatedProductDto = EntityToDtoMapper.convertProductToDto(
+			updatedProduct);
+
+		log.info("[updateProduct] result - updatedProductDto: {}", updatedProductDto);
+	}
+
+	@Override
+	public void deleteProductById(Long productId) {
+		log.info("[deleteProductById] param - productId: {}", productId);
+
+		productDao.deleteProductById(productId);
+	}
+
+	@Override
 	public ProductMaterialDto addProductMaterial(@Valid ProductMaterialDto productMaterialDto) {
 		log.info("[addProductMaterial] param - productMaterialDto: {}", productMaterialDto);
 
@@ -55,20 +110,6 @@ public class ProductServiceImpl implements ProductService {
 
 		log.info("[addProductMaterial] return - savedProductMaterialDto: {}", savedProductMaterialDto);
 		return savedProductMaterialDto;
-	}
-
-	@Override
-	public ProductDto addProduct(ProductDto productDto) {
-		log.info("[addProduct] param - productDto: {}", productDto);
-
-		Product product = dtoToEntityMapper.convertProductDtoToEntity(productDto);
-
-		Product savedProduct = productDao.saveProduct(product);
-
-		ProductDto savedProductDto = EntityToDtoMapper.convertProductToDto(savedProduct);
-
-		log.info("[addProduct] return - savedProductDto: {}", savedProductDto);
-		return savedProductDto;
 	}
 
 	@Override

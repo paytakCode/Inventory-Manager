@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,6 +48,44 @@ public class ProductController {
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
 			.body(addedProductDto.toString());
+	}
+
+	@GetMapping("/production/products/{productId}")
+	public ResponseEntity<ProductDto> productById(@PathVariable Long productId) {
+		log.info("[productById] param - productId: {}", productId);
+
+		ProductDto productDto = productService.getProductById(productId);
+
+		log.info("[productById] return - HttpStatus.OK(200), productDto: {}", productDto);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(productDto);
+	}
+
+	@PutMapping("/production/products/{productId}")
+	public ResponseEntity<Void> productUpdate(@PathVariable Long productId,
+		@Valid @RequestBody ProductDto productDto) {
+		log.info("[productUpdate] param - productId: {}, productDto: {}", productId,
+			productDto);
+
+		productService.updateProduct(productId, productDto);
+
+		log.info("[productUpdate] return - HttpStatus.NO_CONTENT(204)");
+		return ResponseEntity
+			.status(HttpStatus.NO_CONTENT)
+			.build();
+	}
+
+	@DeleteMapping("/production/products/{productId}")
+	public ResponseEntity<Void> productDeleteById(@PathVariable Long productId) {
+		log.info("[productDeleteById] param - productId: {}", productId);
+
+		productService.deleteProductById(productId);
+
+		log.info("[productDeleteById] return - HttpStatus.NO_CONTENT(204)");
+		return ResponseEntity
+			.status(HttpStatus.NO_CONTENT)
+			.build();
 	}
 
 	@PostMapping("/production/product-materials")

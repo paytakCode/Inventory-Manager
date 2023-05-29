@@ -36,13 +36,13 @@ public class ProductDaoImpl implements ProductDao {
 	private final SupplierRepository supplierRepository;
 
 	@Override
-	public ProductMaterial saveProductMaterial(ProductMaterial productMaterial) {
-		log.info("[saveProductMaterial] param - productMaterial: {}", productMaterial);
+	public Product saveProduct(Product product) {
+		log.info("[saveProduct] param - product: {}", product);
 
-		ProductMaterial savedProductMaterial = productMaterialRepository.save(productMaterial);
+		Product savedProduct = productRepository.save(product);
 
-		log.info("[saveProductMaterial] param - savedProductMaterial: {}", savedProductMaterial);
-		return savedProductMaterial;
+		log.info("[saveProduct] param - savedProduct: {}", savedProduct);
+		return savedProduct;
 	}
 
 	@Override
@@ -56,16 +56,6 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public Product saveProduct(Product product) {
-		log.info("[saveProduct] param - product: {}", product);
-
-		Product savedProduct = productRepository.save(product);
-
-		log.info("[saveProduct] param - savedProduct: {}", savedProduct);
-		return savedProduct;
-	}
-
-	@Override
 	public Product getProductReferenceById(Long productId) {
 		log.info("[getProductReferenceById] param - productId: {}", productId);
 
@@ -73,6 +63,25 @@ public class ProductDaoImpl implements ProductDao {
 
 		log.info("[getProductReferenceById] return - gotProductReference: {}", gotProductReference);
 		return gotProductReference;
+	}
+
+	@Override
+	public void deleteProductById(Long productId) {
+		log.info("[deleteProductById] param - productId: {}", productId);
+
+		productRepository.deleteById(productId);
+
+		log.info("[deleteProductById] result - product Deleted: {}", productId);
+	}
+
+	@Override
+	public ProductMaterial saveProductMaterial(ProductMaterial productMaterial) {
+		log.info("[saveProductMaterial] param - productMaterial: {}", productMaterial);
+
+		ProductMaterial savedProductMaterial = productMaterialRepository.save(productMaterial);
+
+		log.info("[saveProductMaterial] param - savedProductMaterial: {}", savedProductMaterial);
+		return savedProductMaterial;
 	}
 
 	@Override

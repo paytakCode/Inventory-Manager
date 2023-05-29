@@ -17,14 +17,15 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.Supplier;
 
 public interface ProductDao {
 
-
-	ProductMaterial saveProductMaterial(ProductMaterial productMaterial);
+	Product saveProduct(Product product);
 
 	Optional<Product> findProductById(Long productId);
 
-	Product saveProduct(Product product);
-
 	Product getProductReferenceById(Long productId);
+
+	void deleteProductById(Long productId);
+
+	ProductMaterial saveProductMaterial(ProductMaterial productMaterial);
 
 	List<ProductMaterial> findProductMaterialListByProductId(Long productId);
 
@@ -35,4 +36,5 @@ public interface ProductDao {
 	Optional<Production> findProductionById(Long productionId);
 
 	Supplier getSupplierReferenceById(Long supplierId);
+
 }
