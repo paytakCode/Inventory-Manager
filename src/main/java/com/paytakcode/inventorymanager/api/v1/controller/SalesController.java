@@ -4,6 +4,8 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Sales Controller
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.2.0
  * @Since 2023-05-26 오후 3:12
  */
 
@@ -43,6 +45,43 @@ public class SalesController {
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(addedBuyerDto.toString());
+    }
+
+    @GetMapping("/sales/buyers/{buyerId}")
+    public ResponseEntity<BuyerDto> buyerById(@PathVariable Long buyerId) {
+        log.info("[buyerById] param - buyerId: {}", buyerId);
+
+        BuyerDto buyerDto = salesService.getBuyerById(buyerId);
+
+        log.info("[buyerById] return - HttpStatus.OK(200), buyerDto: {}", buyerDto);
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(buyerDto);
+    }
+
+    @PutMapping("/sales/buyers/{buyerId}")
+    public ResponseEntity<Void> buyerUpdate(@PathVariable Long buyerId,
+        @Valid @RequestBody BuyerDto buyerDto) {
+        log.info("[buyerUpdate] param - buyerId: {}, buyerDto: {}", buyerId, buyerDto);
+
+        salesService.updateBuyer(buyerId, buyerDto);
+
+        log.info("[buyerUpdate] return - HttpStatus.NO_CONTENT(204)");
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .build();
+    }
+
+    @DeleteMapping("/sales/buyers/{buyerId}")
+    public ResponseEntity<Void> buyerDeleteById(@PathVariable Long buyerId) {
+        log.info("[buyerDeleteById] param - buyerId: {}", buyerId);
+
+        salesService.deleteBuyerById(buyerId);
+
+        log.info("[buyerDeleteById] return - HttpStatus.NO_CONTENT(204)");
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .build();
     }
 
     @PostMapping("/sales/sales-orders")

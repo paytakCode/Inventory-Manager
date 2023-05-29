@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.paytakcode.inventorymanager.api.v1.data.dao.SalesDao;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Buyer;
 import com.paytakcode.inventorymanager.api.v1.data.entity.SalesOrder;
-import com.paytakcode.inventorymanager.api.v1.data.entity.Supplier;
 import com.paytakcode.inventorymanager.api.v1.data.repository.BuyerRepository;
 import com.paytakcode.inventorymanager.api.v1.data.repository.SalesOrderRepository;
 
@@ -17,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  *
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.2.0
  * @Since 2023-05-26 오후 3:17
  */
 
@@ -29,25 +28,45 @@ public class SalesDaoImpl implements SalesDao {
     private final BuyerRepository buyerRepository;
     private final SalesOrderRepository salesOrderRepository;
 
-    @Override
-    public Buyer saveBuyer(Buyer buyer) {
-        log.info("[saveBuyer] param - buyer: {}", buyer);
+	@Override
+	public Buyer saveBuyer(Buyer buyer) {
+		log.info("[saveBuyer] param - buyer: {}", buyer);
 
-        Buyer savedBuyer = buyerRepository.save(buyer);
+		Buyer savedBuyer = buyerRepository.save(buyer);
 
-        log.info("[saveBuyer] param - savedBuyer: {}", savedBuyer);
-        return savedBuyer;
-    }
+		log.info("[saveBuyer] param - savedBuyer: {}", savedBuyer);
+		return savedBuyer;
+	}
 
-    @Override
-    public Integer findTotalSalesOrderQuantityByProductId(Long productId) {
-        log.info("[findTotalSalesOrderQuantityByProductId] param - productId: {}", productId);
+	@Override
+	public Optional<Buyer> findBuyerById(Long buyerId) {
+		log.info("[findBuyerById] param - buyerId: {}", buyerId);
 
-        Integer totalSalesOrderQuantity = salesOrderRepository.findTotalSalesOrderQuantityByProductId(productId);
+		Optional<Buyer> foundBuyer = buyerRepository.findById(buyerId);
 
-        log.info("[findTotalSalesOrderQuantityByProductId] param - totalSalesOrderQuantity: {}", totalSalesOrderQuantity);
-        return totalSalesOrderQuantity;
-    }
+		log.info("[findBuyerById] return - foundBuyer: {}", foundBuyer);
+		return foundBuyer;
+	}
+
+	@Override
+	public void deleteBuyerById(Long buyerId) {
+		log.info("[deleteBuyerById] param - buyerId: {}", buyerId);
+
+		buyerRepository.deleteById(buyerId);
+
+		log.info("[deleteBuyerById] result - buyer Deleted: {}", buyerId);
+	}
+
+	@Override
+	public Integer findTotalSalesOrderQuantityByProductId(Long productId) {
+		log.info("[findTotalSalesOrderQuantityByProductId] param - productId: {}", productId);
+
+		Integer totalSalesOrderQuantity = salesOrderRepository.findTotalSalesOrderQuantityByProductId(productId);
+
+		log.info("[findTotalSalesOrderQuantityByProductId] param - totalSalesOrderQuantity: {}",
+			totalSalesOrderQuantity);
+		return totalSalesOrderQuantity;
+	}
 
     @Override
     public Buyer getBuyerReferenceById(Long buyerId) {

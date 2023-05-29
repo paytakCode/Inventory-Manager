@@ -8,13 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.paytakcode.inventorymanager.api.v1.data.dao.ProductDao;
 import com.paytakcode.inventorymanager.api.v1.data.dao.SalesDao;
 import com.paytakcode.inventorymanager.api.v1.data.dto.BuyerDto;
-import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
 import com.paytakcode.inventorymanager.api.v1.data.emum.OrderStatus;
-import com.paytakcode.inventorymanager.api.v1.data.emum.ProductionStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Buyer;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Product;
-import com.paytakcode.inventorymanager.api.v1.data.entity.Production;
 import com.paytakcode.inventorymanager.api.v1.data.entity.SalesOrder;
 import com.paytakcode.inventorymanager.api.v1.service.SalesService;
 import com.paytakcode.inventorymanager.api.v1.util.DtoToEntityMapper;
@@ -26,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Sales Service Implementation
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.2.0
  * @Since 2023-05-26 오후 3:15
  */
 
@@ -44,25 +41,64 @@ public class SalesServiceImpl implements SalesService {
     public BuyerDto addBuyer(BuyerDto buyerDto) {
         log.info("[addBuyer] param - buyerDto: {}", buyerDto);
 
-        Buyer buyer = dtoToEntityMapper.convertBuyerDtoToEntity(buyerDto);
+		Buyer buyer = dtoToEntityMapper.convertBuyerDtoToEntity(buyerDto);
 
-        Buyer savedBuyer = salesDao.saveBuyer(buyer);
+		Buyer savedBuyer = salesDao.saveBuyer(buyer);
 
-        BuyerDto savedBuyerDto = EntityToDtoMapper.convertBuyerToDto(savedBuyer);
+		BuyerDto savedBuyerDto = EntityToDtoMapper.convertBuyerToDto(savedBuyer);
 
-        log.info("[addBuyer] param - savedBuyerDto: {}", savedBuyerDto);
-        return savedBuyerDto;
-    }
+		log.info("[addBuyer] param - savedBuyerDto: {}", savedBuyerDto);
+		return savedBuyerDto;
+	}
 
-    @Override
-    public SalesOrderDto addSalesOrder(SalesOrderDto salesOrderDto) {
-        log.info("[addSalesOrder] param - orderDto: {}", salesOrderDto);
+	@Override
+	public BuyerDto getBuyerById(Long buyerId) {
+		log.info("[getBuyerById] param - buyerId: {}", buyerId);
 
-        SalesOrder salesOrder = dtoToEntityMapper.convertSalesOrderDtoToEntity(salesOrderDto);
+		Buyer foundBuyer = salesDao.findBuyerById(buyerId)
+			.orElseThrow();
 
-        SalesOrder savedSalesOrder = salesDao.saveSalesOrder(salesOrder);
+		BuyerDto foundBuyerDto = EntityToDtoMapper.convertBuyerToDto(foundBuyer);
 
-        SalesOrderDto savedSalesOrderDto = EntityToDtoMapper.convertSalesOrderToDto(savedSalesOrder);
+		log.info("[getBuyerById] return - foundBuyerDto: {}", foundBuyerDto);
+		return foundBuyerDto;
+	}
+
+	@Override
+	public void updateBuyer(Long buyerId, BuyerDto buyerDto) {
+		log.info("[updateBuyer] param - buyerId: {}, buyerDto: {}", buyerId, buyerDto);
+
+		Buyer buyer = salesDao.findBuyerById(buyerId)
+			.orElseThrow();
+
+		buyer.setCompanyName(buyerDto.getCompanyName());
+		buyer.setManagerName(buyerDto.getManagerName());
+		buyer.setTel(buyerDto.getTel());
+		buyer.setLoc(buyerDto.getLoc());
+
+		Buyer updatedBuyer = salesDao.saveBuyer(buyer);
+
+		BuyerDto updatedBuyerDto = EntityToDtoMapper.convertBuyerToDto(updatedBuyer);
+
+		log.info("[updateBuyer] result - updatedBuyerDto: {}", updatedBuyerDto);
+	}
+
+	@Override
+	public void deleteBuyerById(Long buyerId) {
+		log.info("[deleteBuyerById] param - buyerId: {}", buyerId);
+
+		salesDao.deleteBuyerById(buyerId);
+	}
+
+	@Override
+	public SalesOrderDto addSalesOrder(SalesOrderDto salesOrderDto) {
+		log.info("[addSalesOrder] param - orderDto: {}", salesOrderDto);
+
+		SalesOrder salesOrder = dtoToEntityMapper.convertSalesOrderDtoToEntity(salesOrderDto);
+
+		SalesOrder savedSalesOrder = salesDao.saveSalesOrder(salesOrder);
+
+		SalesOrderDto savedSalesOrderDto = EntityToDtoMapper.convertSalesOrderToDto(savedSalesOrder);
 
         log.info("[addSalesOrder] param - savedSalesOrderDto: {}", savedSalesOrderDto);
         return savedSalesOrderDto;
