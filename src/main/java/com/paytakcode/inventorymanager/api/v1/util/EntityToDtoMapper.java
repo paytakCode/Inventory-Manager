@@ -10,6 +10,7 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialIdDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.UserDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.UserInfoDto;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Buyer;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Material;
@@ -25,7 +26,7 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 /**
  * Entity to DTO Mapper
  * @Author 김태산
- * @Version 0.1.3
+ * @Version 0.2.0
  * @Since 2023-05-26 오후 3:39
  */
 public class EntityToDtoMapper {
@@ -139,6 +140,15 @@ public class EntityToDtoMapper {
             .quantity(salesOrder.getQuantity())
             .completionDate(salesOrder.getCompletionDate())
             .status(salesOrder.getStatus())
+            .build();
+    }
+
+    public static UserDto convertUserToUserDto(UserEntity userEntity) {
+        return UserDto.builder()
+            .email(userEntity.getEmail())
+            .password(userEntity.getPassword())
+            .name(userEntity.getName())
+            .tel(userEntity.getTel())
             .build();
     }
 }

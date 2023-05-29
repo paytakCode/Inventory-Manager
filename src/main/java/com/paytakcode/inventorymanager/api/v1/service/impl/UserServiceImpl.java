@@ -1,12 +1,15 @@
 package com.paytakcode.inventorymanager.api.v1.service.impl;
 
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,14 +23,15 @@ import com.paytakcode.inventorymanager.api.v1.service.UserService;
 import com.paytakcode.inventorymanager.api.v1.util.DtoToEntityMapper;
 import com.paytakcode.inventorymanager.api.v1.util.EntityToDtoMapper;
 import com.paytakcode.inventorymanager.api.v1.util.JwtUtil;
+import com.paytakcode.inventorymanager.api.v1.util.UserUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * User Service 구현체
+ * User Service Implementation
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.4.0
  * @Since 2023-05-18 오후 3:43
  */
 @Service
@@ -40,6 +44,7 @@ public class UserServiceImpl implements UserService {
 	private final JwtUtil jwtUtil;
 	private final UserDao userDao;
 	private final AuthenticationManager authenticationManager;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public UserInfoDto addUser(UserDto userDto) {
@@ -53,6 +58,43 @@ public class UserServiceImpl implements UserService {
 
 		log.info("[addUser] return - savedUserInfoDto: {}", savedUserInfoDto);
 		return savedUserInfoDto;
+	}
+
+	@Override
+	public UserInfoDto userInfoById(Long userId) {
+		log.info("[userInfoById] param - userId: {}", userId);
+
+		UserEntity foundUser = userDao.findUserById(userId)
+			.orElseThrow();
+
+		UserInfoDto foundUserInfoDto = EntityToDtoMapper.convertUserToUserInfoDto(
+			foundUser);
+
+		log.info("[userInfoById] return - foundUserDto: {}", foundUserInfoDto);
+		return foundUserInfoDto;
+	}
+
+	@Override
+	public void updateUser(Long userId, UserDto userDto) {
+		log.info("[updateUser] param - userId: {}, userDto: {}", userId, userDto);
+
+		UserEntity user = userDao.findUserById(userId)
+			.orElseThrow();
+
+		if (!isOwner(user)) {
+			throw new AccessDeniedException("cannot update other User");
+		}
+
+		user.setEmail(userDto.getEmail());
+		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+		user.setName(userDto.getName());
+		user.setTel(userDto.getTel());
+
+		UserEntity updatedUser = userDao.saveUser(user);
+
+		UserDto updatedUserDto = EntityToDtoMapper.convertUserToUserDto(updatedUser);
+
+		log.info("[updateUser] result - updatedUserDto: {}", updatedUserDto);
 	}
 
 	@Override
@@ -106,5 +148,9 @@ public class UserServiceImpl implements UserService {
 		UserInfoDto updatedUserInfoDto = EntityToDtoMapper.convertUserToUserInfoDto(updatedUser);
 
 		log.info("[updateUserRole] result - updatedUserInfoDto: {}", updatedUserInfoDto);
+	}
+
+	private boolean isOwner(UserEntity user) {
+		return user.getEmail().equals(UserUtil.getCurrentUserEmail());
 	}
 }

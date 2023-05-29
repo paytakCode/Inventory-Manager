@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User DAO Implementation
  * @Author 김태산
- * @Version 0.1.4
+ * @Version 0.1.5
  * @Since 2023-05-18 오후 3:45
  */
 
@@ -32,6 +32,16 @@ public class UserDaoImpl implements UserDao {
 
 		log.info("[saveUser] return - savedUserEntity: {}", savedUserEntity);
 		return savedUserEntity;
+	}
+
+	@Override
+	public Optional<UserEntity> findUserById(Long userId) {
+		log.info("[findUserById] param - userId: {}", userId);
+
+		Optional<UserEntity> foundUser = userRepository.findById(userId);
+
+		log.info("[findUserById] return - foundUser: {}", foundUser);
+		return foundUser;
 	}
 
 	@Override
@@ -62,15 +72,5 @@ public class UserDaoImpl implements UserDao {
 
 		log.info("[getUserReferenceById] return - gotUserEntity: {}", gotUserEntity);
 		return gotUserEntity;
-	}
-
-	@Override
-	public Optional<UserEntity> findUserById(Long userId) {
-		log.info("[findUserById] param - userId: {}", userId);
-
-		Optional<UserEntity> foundUser = userRepository.findById(userId);
-
-		log.info("[findUserById] return - foundUser: {}", foundUser);
-		return foundUser;
 	}
 }

@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User Controller
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.4.0
  * @Since 2023-05-18 오후 3:40
  */
 
@@ -47,6 +48,30 @@ public class UserController {
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
 			.body(addedUserInfoDto);
+	}
+
+	@GetMapping("/users/{userId}")
+	public ResponseEntity<UserInfoDto> userInfoById(@PathVariable Long userId) {
+		log.info("[userById] param - userId: {}", userId);
+
+		UserInfoDto userInfoDto = userService.userInfoById(userId);
+
+		log.info("[userById] return - HttpStatus.OK(200), userInfoDto: {}", userInfoDto);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(userInfoDto);
+	}
+
+	@PutMapping("/users/{userId}")
+	public ResponseEntity<String> userUpdate(@PathVariable Long userId,
+		@RequestBody @Valid UserDto userDto) {
+		log.info("[userUpdate] param - userId: {}, userDto: {}", userId, userDto);
+
+		userService.updateUser(userId, userDto);
+
+		return ResponseEntity
+			.status(HttpStatus.NO_CONTENT)
+			.build();
 	}
 
 	@PostMapping("/login")
