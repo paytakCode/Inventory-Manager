@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product Controller
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.3.0
  * @Since 2023-05-25 오전 8:59
  */
 
@@ -186,8 +186,22 @@ public class ProductController {
 			.status(HttpStatus.CREATED)
 			.body(addedProductionDto.toString());
 	}
+
+	@GetMapping("/production/productions/{productionId}")
+	public ResponseEntity<ProductionDto> productionById(@PathVariable Long productionId) {
+		log.info("[productById] param - productionId: {}", productionId);
+
+		ProductionDto productionDto = productService.getProductionById(productionId);
+
+		log.info("[productById] return - HttpStatus.OK(200), productDto: {}", productionDto);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(productionDto);
+	}
+
 	@PutMapping("/production/productions/{productionId}")
-	public ResponseEntity<String> productionUpdate(@PathVariable Long productionId, @RequestBody @Valid ProductionDto productionDto) {
+	public ResponseEntity<String> productionUpdate(@PathVariable Long productionId,
+		@RequestBody @Valid ProductionDto productionDto) {
 		log.info("[productionUpdate] param - productionId:{}, productionDto: {}", productionId, productionDto);
 
 		productService.updateProduction(productionId, productionDto);
@@ -197,8 +211,20 @@ public class ProductController {
 			.build();
 	}
 
+	@DeleteMapping("/production/productions/{productionId}")
+	public ResponseEntity<Void> productionDeleteById(@PathVariable Long productionId) {
+		log.info("[productionDeleteById] param - productionId: {}", productionId);
+
+		productService.deleteProductionById(productionId);
+
+		log.info("[productionDeleteById] return - HttpStatus.NO_CONTENT(204)");
+		return ResponseEntity
+			.status(HttpStatus.NO_CONTENT)
+			.build();
+	}
+
 	@GetMapping("/products/{productId}/stock")
-	public ResponseEntity<Integer> productStockByProductId(@PathVariable Long productId){
+	public ResponseEntity<Integer> productStockByProductId(@PathVariable Long productId) {
 		log.info("[productStockByProductId] param - productId: {}", productId);
 
 		Integer productStock = productService.getProductStockByProductId(productId);

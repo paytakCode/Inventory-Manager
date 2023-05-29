@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product DAO Implementation
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.3.0
  * @Since 2023-05-25 오전 9:10
  */
 
@@ -144,6 +144,15 @@ public class ProductDaoImpl implements ProductDao {
 
 		log.info("[findProductionById] result - foundProduction: {}", foundProduction);
 		return foundProduction;
+	}
+
+	@Override
+	public void deleteProductionById(Long productionId) {
+		log.info("[deleteProductionById] param - productionId: {}", productionId);
+
+		productionRepository.deleteById(productionId);
+
+		log.info("[deleteProductionById] result - production Deleted: {}", productionId);
 	}
 
 	@Override

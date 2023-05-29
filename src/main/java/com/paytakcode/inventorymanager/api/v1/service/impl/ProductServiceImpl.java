@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product Service Implementation
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.3.0
  * @Since 2023-05-25 오전 9:02
  */
 @Service
@@ -194,6 +194,20 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public ProductionDto getProductionById(Long productionId) {
+		log.info("[getProductionById] param - productionId: {}", productionId);
+
+		Production foundProduction = productDao.findProductionById(productionId)
+			.orElseThrow();
+
+		ProductionDto foundProductionDto = EntityToDtoMapper.convertProductionToDto(
+			foundProduction);
+
+		log.info("[getProductionById] return - foundProductionDto: {}", foundProductionDto);
+		return foundProductionDto;
+	}
+
+	@Override
 	public void updateProduction(Long productionId, ProductionDto productionDto) {
 		log.info("[updateProduction] param - productionId: {}, productionDto: {}", productionId, productionDto);
 
@@ -201,7 +215,7 @@ public class ProductServiceImpl implements ProductService {
 			.orElseThrow();
 		Product product = productDao.getProductReferenceById(productionDto.getProductId());
 
-		if(productionDto.getStatus() == ProductionStatus.COMPLETED
+		if (productionDto.getStatus() == ProductionStatus.COMPLETED
 			&& production.getStatus() != ProductionStatus.COMPLETED){
 			production.setCompletionDate(LocalDateTime.now());
 		} else {
@@ -223,10 +237,18 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public void deleteProductionById(Long productionId) {
+		log.info("[deleteProductionById] param - productionId: {}", productionId);
+
+		productDao.deleteProductionById(productionId);
+	}
+
+	@Override
 	public Integer getProductStockByProductId(Long productId) {
 		log.info("[getProductStockByProductId] param - productId: {}", productId);
 
-		Integer totalProductionQuantity = Optional.ofNullable(productDao.findTotalProductionQuantityByProductId(productId))
+		Integer totalProductionQuantity = Optional.ofNullable(
+				productDao.findTotalProductionQuantityByProductId(productId))
 			.orElse(0);
 		Integer totalSalesQuantity = Optional.ofNullable(salesDao.findTotalSalesOrderQuantityByProductId(productId))
 			.orElse(0);
