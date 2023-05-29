@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * DTO to Entity Mapper
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.1.2
  * @Since 2023-05-26 오후 4:50
  */
 
@@ -62,18 +62,15 @@ public class DtoToEntityMapper {
     }
 
     public Material convertMaterialDtoToEntity(MaterialDto materialDto) {
-        Material material = Material.builder()
+        Supplier supplier = materialDto.getSupplierId() == null ?
+            null : materialDao.getSupplierReferenceById(materialDto.getSupplierId());
+
+        return Material.builder()
             .name(materialDto.getName())
             .spec(materialDto.getSpec())
             .details(materialDto.getDetails())
+            .supplier(supplier)
             .build();
-
-        if (materialDto.getSupplierId() != null) {
-            Supplier supplier = materialDao.getSupplierReferenceById(materialDto.getSupplierId());
-            material.setSupplier(supplier);
-        }
-
-        return material;
     }
 
     public MaterialPurchase convertMaterialPurchaseDtoToEntity(MaterialPurchaseDto materialPurchaseDto) {
@@ -81,8 +78,10 @@ public class DtoToEntityMapper {
         Material material = materialDao.getMaterialReferenceById(materialPurchaseDto.getMaterialId());
         PurchaseStatus status =
             materialPurchaseDto.getStatus() == null ? PurchaseStatus.ACCEPTED : materialPurchaseDto.getStatus();
+        MaterialRequest materialRequest = materialPurchaseDto.getMaterialRequestId() == null ?
+            null : materialDao.getMaterialRequestReferenceById(materialPurchaseDto.getMaterialRequestId());
 
-        MaterialPurchase materialPurchase = MaterialPurchase.builder()
+        return MaterialPurchase.builder()
             .manager(manager)
             .material(material)
             .details(materialPurchaseDto.getDetails())
@@ -90,16 +89,8 @@ public class DtoToEntityMapper {
             .quantity(materialPurchaseDto.getQuantity())
             .price(materialPurchaseDto.getPrice())
             .status(status)
+            .materialRequest(materialRequest)
             .build();
-
-        if (materialPurchaseDto.getMaterialRequestId() != null) {
-            MaterialRequest materialRequest = materialDao.findMaterialRequestById(
-                materialPurchaseDto.getMaterialRequestId())
-                .orElseThrow();
-            materialPurchase.setMaterialRequest(materialRequest);
-        }
-
-        return materialPurchase;
     }
 
     public MaterialRequest convertMaterialRequestDtoToEntity(MaterialRequestDto materialRequestDto) {

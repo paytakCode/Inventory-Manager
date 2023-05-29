@@ -24,7 +24,7 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 /**
  * Entity to DTO Mapper
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.1.2
  * @Since 2023-05-26 오후 3:39
  */
 public class EntityToDtoMapper {
@@ -43,33 +43,30 @@ public class EntityToDtoMapper {
     }
 
     public static MaterialDto convertMaterialToDto(Material material) {
-        MaterialDto materialDto = MaterialDto.builder()
+        Long supplierId = material.getSupplier() == null ? null : material.getSupplier().getId();
+
+        return MaterialDto.builder()
             .name(material.getName())
             .spec(material.getSpec())
             .details(material.getDetails())
+            .supplierId(supplierId)
             .build();
-
-        if (material.getSupplier() != null) {
-            materialDto.setSupplierId(material.getSupplier().getId());
-        }
-
-        return materialDto;
     }
 
     public static MaterialPurchaseDto convertMaterialPurchaseToDto(MaterialPurchase materialPurchase) {
-        MaterialPurchaseDto materialPurchaseDto = MaterialPurchaseDto.builder()
+        Long materialRequestId =
+            materialPurchase.getMaterialRequest() == null ? null : materialPurchase.getMaterialRequest().getId();
+
+        return MaterialPurchaseDto.builder()
             .materialId(materialPurchase.getMaterial().getId())
             .managerId(materialPurchase.getManager().getId())
             .details(materialPurchase.getDetails())
             .lotNo(materialPurchase.getLotNo())
             .quantity(materialPurchase.getQuantity())
             .price(materialPurchase.getPrice())
+            .status(materialPurchase.getStatus())
+            .materialRequestId(materialRequestId)
             .build();
-
-        if (materialPurchase.getMaterialRequest() != null) {
-            materialPurchaseDto.setMaterialRequestId(materialPurchase.getMaterialRequest().getId());
-        }
-        return materialPurchaseDto;
     }
 
     public static MaterialRequestDto convertMaterialRequestToDto(MaterialRequest materialRequest) {
