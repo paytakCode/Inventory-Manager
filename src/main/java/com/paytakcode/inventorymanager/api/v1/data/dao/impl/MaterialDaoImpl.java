@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material DAO Implementation
  * @Author 김태산
- * @Version 0.4.0
+ * @Version 0.5.0
  * @Since 2023-05-24 오전 11:53
  */
 
@@ -172,5 +172,14 @@ public class MaterialDaoImpl implements MaterialDao {
 
 		log.info("[getSupplierById] return - gotReferenceSupplier: {}", gotReferenceSupplier);
 		return gotReferenceSupplier;
+	}
+
+	@Override
+	public void deleteSupplierById(Long supplierId) {
+		log.info("[deleteSupplierById] param - supplierId: {}", supplierId);
+
+		supplierRepository.deleteById(supplierId);
+
+		log.info("[deleteSupplierById] result - supplier Deleted: {}", supplierId);
 	}
 }

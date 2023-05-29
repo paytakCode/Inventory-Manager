@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Service Implementation
  * @Author 김태산
- * @Version 0.4.0
+ * @Version 0.5.0
  * @Since 2023-05-24 오전 11:46
  */
 
@@ -233,5 +233,47 @@ public class MaterialServiceImpl implements MaterialService {
 
 		log.info("[addSupplier] return - savedSupplierDto: {}", savedSupplierDto);
 		return savedSupplierDto;
+	}
+
+	@Override
+	public SupplierDto getSupplierById(Long supplierId) {
+		log.info("[getSupplierById] param - supplierId: {}", supplierId);
+
+		Supplier foundSupplier = materialDao.findSupplierById(supplierId)
+			.orElseThrow();
+
+		SupplierDto foundSupplierDto = EntityToDtoMapper.convertSupplierToDto(
+			foundSupplier);
+
+		log.info("[getSupplierById] return - foundSupplierDto: {}", foundSupplierDto);
+		return foundSupplierDto;
+	}
+
+	@Override
+	public void updateSupplier(Long supplierId, SupplierDto supplierDto) {
+		log.info("[updateSupplier] param - supplierId: {}, supplierDto: {}", supplierId,
+			supplierDto);
+
+		Supplier supplier = materialDao.findSupplierById(supplierId)
+			.orElseThrow();
+
+		supplier.setCompanyName(supplierDto.getCompanyName());
+		supplier.setManagerName(supplierDto.getManagerName());
+		supplier.setTel(supplierDto.getTel());
+		supplier.setLoc(supplierDto.getLoc());
+
+		Supplier updatedSupplier = materialDao.saveSupplier(supplier);
+
+		SupplierDto updatedSupplierDto = EntityToDtoMapper.convertSupplierToDto(
+			updatedSupplier);
+
+		log.info("[updateSupplier] result - updatedSupplierDto: {}", updatedSupplierDto);
+	}
+
+	@Override
+	public void deleteSupplierById(Long supplierId) {
+		log.info("[deleteSupplierById] param - supplierId: {}", supplierId);
+
+		materialDao.deleteSupplierById(supplierId);
 	}
 }

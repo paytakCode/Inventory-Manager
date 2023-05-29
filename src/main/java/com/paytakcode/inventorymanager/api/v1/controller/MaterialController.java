@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Controller
  * @Author 김태산
- * @Version 0.4.0
+ * @Version 0.5.0
  * @Since 2023-05-24 오전 11:30
  */
 
@@ -198,5 +198,43 @@ public class MaterialController {
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
 			.body(addedSupplierDto.toString());
+	}
+
+	@GetMapping("/material/suppliers/{supplierId}")
+	public ResponseEntity<SupplierDto> supplierById(@PathVariable Long supplierId) {
+		log.info("[supplierById] param - supplierId: {}", supplierId);
+
+		SupplierDto supplierDto = materialService.getSupplierById(supplierId);
+
+		log.info("[supplierById] return - HttpStatus.OK(200), supplierDto: {}", supplierDto);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(supplierDto);
+	}
+
+	@PutMapping("/material/suppliers/{supplierId}")
+	public ResponseEntity<Void> supplierUpdate(@PathVariable Long supplierId,
+		@Valid @RequestBody SupplierDto supplierDto) {
+		log.info("[supplierUpdate] param - supplierId: {}, supplierDto: {}", supplierId,
+			supplierDto);
+
+		materialService.updateSupplier(supplierId, supplierDto);
+
+		log.info("[supplierUpdate] return - HttpStatus.NO_CONTENT(204)");
+		return ResponseEntity
+			.status(HttpStatus.NO_CONTENT)
+			.build();
+	}
+
+	@DeleteMapping("/material/suppliers/{supplierId}")
+	public ResponseEntity<Void> supplierDeleteById(@PathVariable Long supplierId) {
+		log.info("[supplierDeleteById] param - supplierId: {}", supplierId);
+
+		materialService.deleteSupplierById(supplierId);
+
+		log.info("[supplierDeleteById] return - HttpStatus.NO_CONTENT(204)");
+		return ResponseEntity
+			.status(HttpStatus.NO_CONTENT)
+			.build();
 	}
 }
