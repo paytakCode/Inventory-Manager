@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Sales Controller
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.3.0
  * @Since 2023-05-26 오후 3:12
  */
 
@@ -96,12 +96,37 @@ public class SalesController {
             .body(addedSalesOrderDto.toString());
     }
 
+    @GetMapping("/sales/sales-orders/{salesOrderId}")
+    public ResponseEntity<SalesOrderDto> salesOrderById(@PathVariable Long salesOrderId) {
+        log.info("[salesOrderById] param - salesOrderId: {}", salesOrderId);
+
+        SalesOrderDto salesOrderDto = salesService.getSalesOrderById(salesOrderId);
+
+        log.info("[salesOrderById] return - HttpStatus.OK(200), salesOrderDto: {}", salesOrderDto);
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(salesOrderDto);
+    }
+
     @PutMapping("/sales/sales-orders/{salesOrderId}")
-    public ResponseEntity<String> salesOrderUpdate(@PathVariable Long salesOrderId, @RequestBody @Valid SalesOrderDto salesOrderDto) {
+    public ResponseEntity<String> salesOrderUpdate(@PathVariable Long salesOrderId,
+        @RequestBody @Valid SalesOrderDto salesOrderDto) {
         log.info("[salesOrderUpdate] param - salesOrderId: {}, salesOrderDto: {}", salesOrderId, salesOrderDto);
 
         salesService.updateSalesOrder(salesOrderId, salesOrderDto);
 
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .build();
+    }
+
+    @DeleteMapping("/sales/sales-orders/{salesOrderId}")
+    public ResponseEntity<Void> salesOrderDeleteById(@PathVariable Long salesOrderId) {
+        log.info("[salesOrderDeleteById] param - salesOrderId: {}", salesOrderId);
+
+        salesService.deleteSalesOrderById(salesOrderId);
+
+        log.info("[salesOrderDeleteById] return - HttpStatus.NO_CONTENT(204)");
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build();

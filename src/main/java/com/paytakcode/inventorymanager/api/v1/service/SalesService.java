@@ -6,7 +6,7 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
 /**
  * Sales Service
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.3.0
  * @Since 2023-05-26 오후 3:15
  */
 public interface SalesService {
@@ -20,5 +20,9 @@ public interface SalesService {
 
 	SalesOrderDto addSalesOrder(SalesOrderDto salesOrderDto);
 
+	SalesOrderDto getSalesOrderById(Long salesOrderId);
+
 	void updateSalesOrder(Long salesOrderId, SalesOrderDto salesOrderDto);
+
+	void deleteSalesOrderById(Long salesOrderId);
 }

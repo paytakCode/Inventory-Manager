@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  *
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.3.0
  * @Since 2023-05-26 오후 3:17
  */
 
@@ -88,13 +88,22 @@ public class SalesDaoImpl implements SalesDao {
         return savedSalesOrder;
     }
 
-    @Override
-    public Optional<SalesOrder> findSalesOrderById(Long salesOrderId) {
-        log.info("[findSalesOrderById] param - salesOrderId: {}", salesOrderId);
+	@Override
+	public Optional<SalesOrder> findSalesOrderById(Long salesOrderId) {
+		log.info("[findSalesOrderById] param - salesOrderId: {}", salesOrderId);
 
-        Optional<SalesOrder> foundSalesOrder = salesOrderRepository.findById(salesOrderId);
+		Optional<SalesOrder> foundSalesOrder = salesOrderRepository.findById(salesOrderId);
 
-        log.info("[findSalesOrderById] return - foundSalesOrder: {}", foundSalesOrder);
-        return foundSalesOrder;
-    }
+		log.info("[findSalesOrderById] return - foundSalesOrder: {}", foundSalesOrder);
+		return foundSalesOrder;
+	}
+
+	@Override
+	public void deleteSalesOrderById(Long salesOrderId) {
+		log.info("[deleteSalesOrderById] param - salesOrderId: {}", salesOrderId);
+
+		salesOrderRepository.deleteById(salesOrderId);
+
+		log.info("[deleteSalesOrderById] result - salesOrder Deleted: {}", salesOrderId);
+	}
 }

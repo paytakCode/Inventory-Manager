@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Sales Service Implementation
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.3.0
  * @Since 2023-05-26 오후 3:15
  */
 
@@ -100,21 +100,34 @@ public class SalesServiceImpl implements SalesService {
 
 		SalesOrderDto savedSalesOrderDto = EntityToDtoMapper.convertSalesOrderToDto(savedSalesOrder);
 
-        log.info("[addSalesOrder] param - savedSalesOrderDto: {}", savedSalesOrderDto);
-        return savedSalesOrderDto;
-    }
+		log.info("[addSalesOrder] param - savedSalesOrderDto: {}", savedSalesOrderDto);
+		return savedSalesOrderDto;
+	}
 
-    @Override
-    public void updateSalesOrder(Long salesOrderId, SalesOrderDto salesOrderDto) {
-        log.info("[updateSalesOrder] param - salesOrderId: {}, salesOrderDto: {}", salesOrderId, salesOrderDto);
+	@Override
+	public SalesOrderDto getSalesOrderById(Long salesOrderId) {
+		log.info("[getSalesOrderById] param - salesOrderId: {}", salesOrderId);
 
-        SalesOrder salesOrder = salesDao.findSalesOrderById(salesOrderId)
-            .orElseThrow();
+		SalesOrder foundSalesOrder = salesDao.findSalesOrderById(salesOrderId)
+			.orElseThrow();
 
-        Product product = productDao.getProductReferenceById(salesOrderDto.getProductId());
-        Buyer buyer = salesDao.getBuyerReferenceById(salesOrderDto.getBuyerId());
+		SalesOrderDto foundSalesOrderDto = EntityToDtoMapper.convertSalesOrderToDto(foundSalesOrder);
 
-        if(salesOrderDto.getStatus() == OrderStatus.COMPLETED
+		log.info("[getSalesOrderById] return - foundSalesOrderDto: {}", foundSalesOrderDto);
+		return foundSalesOrderDto;
+	}
+
+	@Override
+	public void updateSalesOrder(Long salesOrderId, SalesOrderDto salesOrderDto) {
+		log.info("[updateSalesOrder] param - salesOrderId: {}, salesOrderDto: {}", salesOrderId, salesOrderDto);
+
+		SalesOrder salesOrder = salesDao.findSalesOrderById(salesOrderId)
+			.orElseThrow();
+
+		Product product = productDao.getProductReferenceById(salesOrderDto.getProductId());
+		Buyer buyer = salesDao.getBuyerReferenceById(salesOrderDto.getBuyerId());
+
+		if (salesOrderDto.getStatus() == OrderStatus.COMPLETED
             && salesOrder.getStatus() != OrderStatus.COMPLETED){
             salesOrder.setCompletionDate(LocalDateTime.now());
         } else {
@@ -123,14 +136,21 @@ public class SalesServiceImpl implements SalesService {
 
         salesOrder.setProduct(product);
         salesOrder.setQuantity(salesOrderDto.getQuantity());
-        salesOrder.setBuyer(buyer);
-        salesOrder.setDueDate(salesOrderDto.getDueDate());
-        salesOrder.setStatus(salesOrderDto.getStatus());
+		salesOrder.setBuyer(buyer);
+		salesOrder.setDueDate(salesOrderDto.getDueDate());
+		salesOrder.setStatus(salesOrderDto.getStatus());
 
-        SalesOrder updatedSalesOrder = salesDao.saveSalesOrder(salesOrder);
+		SalesOrder updatedSalesOrder = salesDao.saveSalesOrder(salesOrder);
 
-        SalesOrderDto updatedSalesOrderDto = EntityToDtoMapper.convertSalesOrderToDto(updatedSalesOrder);
+		SalesOrderDto updatedSalesOrderDto = EntityToDtoMapper.convertSalesOrderToDto(updatedSalesOrder);
 
-        log.info("[updateSalesOrder] result - updatedSalesOrderDto: {}", updatedSalesOrderDto);
-    }
+		log.info("[updateSalesOrder] result - updatedSalesOrderDto: {}", updatedSalesOrderDto);
+	}
+
+	@Override
+	public void deleteSalesOrderById(Long salesOrderId) {
+		log.info("[deleteSalesOrderById] param - salesOrderId: {}", salesOrderId);
+
+		salesDao.deleteSalesOrderById(salesOrderId);
+	}
 }
