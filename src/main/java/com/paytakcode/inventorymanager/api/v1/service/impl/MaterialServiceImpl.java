@@ -9,6 +9,7 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierDto;
+import com.paytakcode.inventorymanager.api.v1.data.emum.PurchaseStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Material;
 import com.paytakcode.inventorymanager.api.v1.data.entity.MaterialPurchase;
 import com.paytakcode.inventorymanager.api.v1.data.entity.MaterialRequest;
@@ -24,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Service Implementation
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.4.0
  * @Since 2023-05-24 오전 11:46
  */
 
@@ -166,6 +167,58 @@ public class MaterialServiceImpl implements MaterialService {
 
 		log.info("[addMaterialPurchase] return - savedMaterialPurchaseDto: {}", savedMaterialPurchaseDto);
 		return savedMaterialPurchaseDto;
+	}
+
+	@Override
+	public MaterialPurchaseDto getMaterialPurchaseById(Long materialPurchaseId) {
+		log.info("[getMaterialPurchaseById] param - materialPurchaseId: {}", materialPurchaseId);
+
+		MaterialPurchase foundMaterialPurchase = materialDao.findMaterialPurchaseById(materialPurchaseId)
+			.orElseThrow();
+
+		MaterialPurchaseDto foundMaterialPurchaseDto = EntityToDtoMapper.convertMaterialPurchaseToDto(
+			foundMaterialPurchase);
+
+		log.info("[getMaterialPurchaseById] return - foundMaterialPurchaseDto: {}", foundMaterialPurchaseDto);
+		return foundMaterialPurchaseDto;
+	}
+
+	@Override
+	public void updateMaterialPurchase(Long materialPurchaseId, MaterialPurchaseDto materialPurchaseDto) {
+		log.info("[updateMaterialPurchase] param - materialPurchaseId: {}, materialPurchaseDto: {}", materialPurchaseId,
+			materialPurchaseDto);
+
+		MaterialPurchase materialPurchase = materialDao.findMaterialPurchaseById(materialPurchaseId)
+			.orElseThrow();
+		Material material = materialDao.findMaterialById(materialPurchaseDto.getMaterialId());
+		UserEntity manager = userDao.getUserReferenceById(materialPurchaseDto.getManagerId());
+		PurchaseStatus status =
+			materialPurchaseDto.getStatus() == null ? PurchaseStatus.ACCEPTED : materialPurchaseDto.getStatus();
+		MaterialRequest materialRequest = materialPurchaseDto.getMaterialRequestId() == null
+			? null : materialDao.getMaterialRequestReferenceById(materialPurchaseDto.getMaterialRequestId());
+
+		materialPurchase.setMaterial(material);
+		materialPurchase.setQuantity(materialPurchaseDto.getQuantity());
+		materialPurchase.setDetails(materialPurchaseDto.getDetails());
+		materialPurchase.setLotNo(materialPurchaseDto.getLotNo());
+		materialPurchase.setManager(manager);
+		materialPurchase.setPrice(materialPurchaseDto.getPrice());
+		materialPurchase.setStatus(status);
+		materialPurchase.setMaterialRequest(materialRequest);
+
+		MaterialPurchase updatedMaterialPurchase = materialDao.saveMaterialPurchase(materialPurchase);
+
+		MaterialPurchaseDto updatedMaterialPurchaseDto = EntityToDtoMapper.convertMaterialPurchaseToDto(
+			updatedMaterialPurchase);
+
+		log.info("[updateMaterialPurchase] result - updatedMaterialPurchaseDto: {}", updatedMaterialPurchaseDto);
+	}
+
+	@Override
+	public void deleteMaterialPurchaseById(Long materialPurchaseId) {
+		log.info("[deleteMaterialPurchaseById] param - materialPurchaseId: {}", materialPurchaseId);
+
+		materialDao.deleteMaterialPurchaseById(materialPurchaseId);
 	}
 
 	@Override

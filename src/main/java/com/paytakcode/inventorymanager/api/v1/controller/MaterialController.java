@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Controller
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.4.0
  * @Since 2023-05-24 오전 11:30
  */
 
@@ -148,6 +148,44 @@ public class MaterialController {
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
 			.body(addedMaterialPurchaseDto.toString());
+	}
+
+	@GetMapping("/material/material-purchases/{materialPurchaseId}")
+	public ResponseEntity<MaterialPurchaseDto> materialPurchaseById(@PathVariable Long materialPurchaseId) {
+		log.info("[materialPurchaseById] param - materialPurchaseId: {}", materialPurchaseId);
+
+		MaterialPurchaseDto materialPurchaseDto = materialService.getMaterialPurchaseById(materialPurchaseId);
+
+		log.info("[materialPurchaseById] return - HttpStatus.OK(200), materialPurchaseDto: {}", materialPurchaseDto);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(materialPurchaseDto);
+	}
+
+	@PutMapping("/material/material-purchases/{materialPurchaseId}")
+	public ResponseEntity<Void> materialPurchaseUpdate(@PathVariable Long materialPurchaseId,
+		@Valid @RequestBody MaterialPurchaseDto materialPurchaseDto) {
+		log.info("[materialPurchaseUpdate] param - materialPurchaseId: {}, materialPurchaseDto: {}", materialPurchaseId,
+			materialPurchaseDto);
+
+		materialService.updateMaterialPurchase(materialPurchaseId, materialPurchaseDto);
+
+		log.info("[materialPurchaseUpdate] return - HttpStatus.NO_CONTENT(204)");
+		return ResponseEntity
+			.status(HttpStatus.NO_CONTENT)
+			.build();
+	}
+
+	@DeleteMapping("/material/material-purchases/{materialPurchaseId}")
+	public ResponseEntity<Void> materialPurchaseDeleteById(@PathVariable Long materialPurchaseId) {
+		log.info("[materialPurchaseDeleteById] param - materialPurchaseId: {}", materialPurchaseId);
+
+		materialService.deleteMaterialPurchaseById(materialPurchaseId);
+
+		log.info("[materialPurchaseDeleteById] return - HttpStatus.NO_CONTENT(204)");
+		return ResponseEntity
+			.status(HttpStatus.NO_CONTENT)
+			.build();
 	}
 
 	@PostMapping("/material/suppliers")

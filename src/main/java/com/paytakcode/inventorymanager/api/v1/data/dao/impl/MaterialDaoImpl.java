@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material DAO Implementation
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.4.0
  * @Since 2023-05-24 오전 11:53
  */
 
@@ -86,6 +86,17 @@ public class MaterialDaoImpl implements MaterialDao {
 	}
 
 	@Override
+	public MaterialRequest getMaterialRequestReferenceById(Long materialRequestId) {
+		log.info("[getMaterialRequestReferenceById] param - materialRequestId: {}", materialRequestId);
+
+		MaterialRequest gotMaterialRequestReference = materialRequestRepository.getReferenceById(materialRequestId);
+
+		log.info("[getMaterialRequestReferenceById] return - gotMaterialRequestReference: {}",
+			gotMaterialRequestReference);
+		return gotMaterialRequestReference;
+	}
+
+	@Override
 	public void deleteMaterialRequestById(Long materialRequestId) {
 		log.info("[deleteMaterialRequestById] param - materialRequestId: {}", materialRequestId);
 
@@ -102,6 +113,25 @@ public class MaterialDaoImpl implements MaterialDao {
 
 		log.info("[saveMaterialPurchase] return - savedMaterialPurchase: {}", savedMaterialPurchase);
 		return savedMaterialPurchase;
+	}
+
+	@Override
+	public Optional<MaterialPurchase> findMaterialPurchaseById(Long materialPurchaseId) {
+		log.info("[findMaterialPurchaseById] param - materialPurchaseId: {}", materialPurchaseId);
+
+		Optional<MaterialPurchase> foundMaterialPurchase = materialPurchaseRepository.findById(materialPurchaseId);
+
+		log.info("[findMaterialPurchaseById] return - foundMaterialPurchase: {}", foundMaterialPurchase);
+		return foundMaterialPurchase;
+	}
+
+	@Override
+	public void deleteMaterialPurchaseById(Long materialPurchaseId) {
+		log.info("[deleteMaterialPurchaseById] param - materialPurchaseId: {}", materialPurchaseId);
+
+		materialPurchaseRepository.deleteById(materialPurchaseId);
+
+		log.info("[deleteMaterialPurchaseById] result - materialPurchase Deleted: {}", materialPurchaseId);
 	}
 
 	@Override
