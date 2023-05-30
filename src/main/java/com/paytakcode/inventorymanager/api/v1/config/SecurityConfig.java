@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
  * Security Config
  * Security 세팅은 버전별로 매우 상이함
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.2.1
  * @Since 2023-05-18 오후 2:45
  */
 
@@ -42,8 +42,9 @@ public class SecurityConfig {
 			.authorizeRequests()
 			.antMatchers("/css/**", "/js/**", "/images/**").authenticated()
 			.antMatchers(HttpMethod.GET, "/api/v1/login", "/api/v1/intro", "/api/v1/register").permitAll()
+			.antMatchers(HttpMethod.GET, "/api/v1/**").authenticated()
 			.antMatchers(HttpMethod.POST, "/api/v1/users", "/api/v1/login").permitAll()
-			.antMatchers(HttpMethod.POST, "/api/v1/materials").hasAnyRole("MATERIAL", "PRODUCTION", "ADMIN")
+			.antMatchers(HttpMethod.POST, "/api/v1/material/materials").hasAnyRole("MATERIAL", "PRODUCTION", "ADMIN")
 			.antMatchers("/api/v1/admin/**").hasRole("ADMIN")
 			.antMatchers("/api/v1/production/**").hasAnyRole("PRODUCTION", "ADMIN")
 			.antMatchers("/api/v1/sales/**").hasAnyRole("SALES", "ADMIN")

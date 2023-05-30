@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User Controller
  * @Author 김태산
- * @Version 0.4.0
+ * @Version 0.4.1
  * @Since 2023-05-18 오후 3:40
  */
 
@@ -52,11 +52,11 @@ public class UserController {
 
 	@GetMapping("/users/{userId}")
 	public ResponseEntity<UserInfoDto> userInfoById(@PathVariable Long userId) {
-		log.info("[userById] param - userId: {}", userId);
+		log.info("[userInfoById] param - userId: {}", userId);
 
 		UserInfoDto userInfoDto = userService.userInfoById(userId);
 
-		log.info("[userById] return - HttpStatus.OK(200), userInfoDto: {}", userInfoDto);
+		log.info("[userInfoById] return - HttpStatus.OK(200), userInfoDto: {}", userInfoDto);
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.body(userInfoDto);

@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Controller
  * @Author 김태산
- * @Version 0.5.1
+ * @Version 0.5.2
  * @Since 2023-05-24 오전 11:30
  */
 
@@ -37,7 +37,7 @@ public class MaterialController {
 
 	private final MaterialService materialService;
 
-	@PostMapping("/materials")
+	@PostMapping("/material/materials")
 	public ResponseEntity<String> materialAdd(@RequestBody @Valid MaterialDto materialDto) {
 		log.info("[materialAdd] param - materialDto: {}", materialDto);
 
@@ -99,7 +99,7 @@ public class MaterialController {
 			.body(addedMaterialRequestDto.toString());
 	}
 
-	@GetMapping("/production/material-requests/{materialRequestId}")
+	@GetMapping("/material-requests/{materialRequestId}")
 	public ResponseEntity<MaterialRequestDto> materialRequestById(@PathVariable Long materialRequestId) {
 		log.info("[materialRequestById] param - materialRequestId: {}", materialRequestId);
 
@@ -150,7 +150,7 @@ public class MaterialController {
 			.body(addedMaterialPurchaseDto.toString());
 	}
 
-	@GetMapping("/material/material-purchases/{materialPurchaseId}")
+	@GetMapping("/material-purchases/{materialPurchaseId}")
 	public ResponseEntity<MaterialPurchaseDto> materialPurchaseById(@PathVariable Long materialPurchaseId) {
 		log.info("[materialPurchaseById] param - materialPurchaseId: {}", materialPurchaseId);
 
@@ -200,7 +200,7 @@ public class MaterialController {
 			.body(addedSupplierDto.toString());
 	}
 
-	@GetMapping("/material/suppliers/{supplierId}")
+	@GetMapping("/suppliers/{supplierId}")
 	public ResponseEntity<SupplierDto> supplierById(@PathVariable Long supplierId) {
 		log.info("[supplierById] param - supplierId: {}", supplierId);
 

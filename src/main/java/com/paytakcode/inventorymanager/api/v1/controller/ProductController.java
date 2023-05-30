@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product Controller
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.3.1
  * @Since 2023-05-25 오전 8:59
  */
 
@@ -52,7 +52,7 @@ public class ProductController {
 			.body(addedProductDto.toString());
 	}
 
-	@GetMapping("/production/products/{productId}")
+	@GetMapping("/products/{productId}")
 	public ResponseEntity<ProductDto> productById(@PathVariable Long productId) {
 		log.info("[productById] param - productId: {}", productId);
 
@@ -103,7 +103,7 @@ public class ProductController {
 			.body(addedProductMaterialDto.toString());
 	}
 
-	@GetMapping("/production/product-materials/{productId}/{materialId}")
+	@GetMapping("/product-materials/{productId}/{materialId}")
 	public ResponseEntity<ProductMaterialDto> productMaterialById(@PathVariable Long productId,
 		@PathVariable Long materialId) {
 		log.info("[productMaterialById] param - productId: {}, materialId: {}", productId, materialId);
@@ -187,7 +187,7 @@ public class ProductController {
 			.body(addedProductionDto.toString());
 	}
 
-	@GetMapping("/production/productions/{productionId}")
+	@GetMapping("/productions/{productionId}")
 	public ResponseEntity<ProductionDto> productionById(@PathVariable Long productionId) {
 		log.info("[productById] param - productionId: {}", productionId);
 

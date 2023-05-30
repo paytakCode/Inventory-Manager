@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Sales Controller
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.3.1
  * @Since 2023-05-26 오후 3:12
  */
 
@@ -47,7 +47,7 @@ public class SalesController {
             .body(addedBuyerDto.toString());
     }
 
-    @GetMapping("/sales/buyers/{buyerId}")
+    @GetMapping("/buyers/{buyerId}")
     public ResponseEntity<BuyerDto> buyerById(@PathVariable Long buyerId) {
         log.info("[buyerById] param - buyerId: {}", buyerId);
 
@@ -96,7 +96,7 @@ public class SalesController {
             .body(addedSalesOrderDto.toString());
     }
 
-    @GetMapping("/sales/sales-orders/{salesOrderId}")
+    @GetMapping("/sales-orders/{salesOrderId}")
     public ResponseEntity<SalesOrderDto> salesOrderById(@PathVariable Long salesOrderId) {
         log.info("[salesOrderById] param - salesOrderId: {}", salesOrderId);
 
