@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,10 +35,12 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		CorsConfiguration corsConfig = new CorsConfiguration();
+		corsConfig.addAllowedOrigin("http://localhost:3000");
 		http
 			.httpBasic().disable()
 			.csrf().disable()
-			.cors()
+			.cors().configurationSource(request -> corsConfig.applyPermitDefaultValues())
 			.and()
 			.authorizeRequests()
 			.antMatchers("/css/**", "/js/**", "/images/**").authenticated()
