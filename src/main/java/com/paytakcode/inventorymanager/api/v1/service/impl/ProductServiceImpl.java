@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product Service Implementation
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.3.1
  * @Since 2023-05-25 오전 9:02
  */
 @Service
@@ -61,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
 		log.info("[getProductById] param - productId: {}", productId);
 
 		Product foundProduct = productDao.findProductById(productId)
-			.orElseThrow();
+			.orElseThrow(() -> new EntityNotFoundException("Product not found for ID: " + productId));
 
 		ProductDto foundProductDto = EntityToDtoMapper.convertProductToDto(
 			foundProduct);
@@ -76,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
 			productDto);
 
 		Product product = productDao.findProductById(productId)
-			.orElseThrow();
+			.orElseThrow(() -> new EntityNotFoundException("Product not found for ID: " + productId));
 
 		product.setName(productDto.getName());
 		product.setSpec(productDto.getSpec());
@@ -120,7 +122,7 @@ public class ProductServiceImpl implements ProductService {
 			productMaterialIdDto);
 
 		ProductMaterial foundProductMaterial = productDao.findProductMaterialById(productMaterialId)
-			.orElseThrow();
+			.orElseThrow(() -> new EntityNotFoundException("ProductMaterial not found for ID: " + productMaterialId));
 
 		ProductMaterialDto foundProductMaterialDto = EntityToDtoMapper.convertProductMaterialToDto(
 			foundProductMaterial);
@@ -141,7 +143,7 @@ public class ProductServiceImpl implements ProductService {
 			productMaterialIdDto);
 
 		ProductMaterial productMaterial = productDao.findProductMaterialById(productMaterialId)
-			.orElseThrow();
+			.orElseThrow(() -> new EntityNotFoundException("ProductMaterial not found for ID: " + productMaterialId));
 
 		productMaterial.setRequiredQuantity(productMaterialDto.getRequiredQuantity());
 
@@ -198,7 +200,7 @@ public class ProductServiceImpl implements ProductService {
 		log.info("[getProductionById] param - productionId: {}", productionId);
 
 		Production foundProduction = productDao.findProductionById(productionId)
-			.orElseThrow();
+			.orElseThrow(() -> new EntityNotFoundException("Production not found for ID: " + productionId));
 
 		ProductionDto foundProductionDto = EntityToDtoMapper.convertProductionToDto(
 			foundProduction);
@@ -212,7 +214,7 @@ public class ProductServiceImpl implements ProductService {
 		log.info("[updateProduction] param - productionId: {}, productionDto: {}", productionId, productionDto);
 
 		Production production = productDao.findProductionById(productionId)
-			.orElseThrow();
+			.orElseThrow(() -> new EntityNotFoundException("Production not found for ID: " + productionId));
 		Product product = productDao.getProductReferenceById(productionDto.getProductId());
 
 		if (productionDto.getStatus() == ProductionStatus.COMPLETED

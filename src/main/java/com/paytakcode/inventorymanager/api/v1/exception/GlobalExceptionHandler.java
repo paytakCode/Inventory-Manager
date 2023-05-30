@@ -1,5 +1,7 @@
 package com.paytakcode.inventorymanager.api.v1.exception;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
  * Global Exception Handler
  * 전반적인 Exception 처리를 위한 Handler
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.1.2
  * @Since 2023-05-22 오후 12:10
  */
 
@@ -58,6 +60,12 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<Void> handleNullPointerException(NullPointerException e) {
 		log.error("[handleNullPointerException] {}", e.getMessage());
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(EntityNotFoundException.class)
+	public ResponseEntity<Void> handleEntityNotFoundException(EntityNotFoundException e) {
+		log.error("[handleEntityNotFoundException] {}", e.getMessage());
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(Exception.class)

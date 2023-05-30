@@ -1,5 +1,7 @@
 package com.paytakcode.inventorymanager.api.v1.service.impl;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Service Implementation
  * @Author 김태산
- * @Version 0.5.0
+ * @Version 0.5.1
  * @Since 2023-05-24 오전 11:46
  */
 
@@ -59,7 +61,7 @@ public class MaterialServiceImpl implements MaterialService {
 		log.info("[getMaterialById] param - materialId: {}", materialId);
 
 		Material foundMaterial = materialDao.findMaterialById(materialId)
-			.orElseThrow();
+			.orElseThrow(() -> new EntityNotFoundException("Material not found for ID: " + materialId));
 
 		MaterialDto foundMaterialDto = EntityToDtoMapper.convertMaterialToDto(foundMaterial);
 
@@ -72,7 +74,7 @@ public class MaterialServiceImpl implements MaterialService {
 		log.info("[updateMaterial] param - materialId: {}, materialDto: {}", materialId, materialDto);
 
 		Material material = materialDao.findMaterialById(materialId)
-			.orElseThrow();
+			.orElseThrow(() -> new EntityNotFoundException("Material not found for ID: " + materialId));
 
 		material.setName(materialDto.getName());
 		material.setSpec(materialDto.getSpec());
@@ -117,7 +119,7 @@ public class MaterialServiceImpl implements MaterialService {
 		log.info("[getMaterialRequestById] param - materialRequestId: {}", materialRequestId);
 
 		MaterialRequest foundMaterialRequest = materialDao.findMaterialRequestById(materialRequestId)
-			.orElseThrow();
+			.orElseThrow(() -> new EntityNotFoundException("MaterialRequest not found for ID: " + materialRequestId));
 
 		MaterialRequestDto foundMaterialRequestDto = EntityToDtoMapper.convertMaterialRequestToDto(
 			foundMaterialRequest);
@@ -132,9 +134,10 @@ public class MaterialServiceImpl implements MaterialService {
 			materialRequestDto);
 
 		MaterialRequest materialRequest = materialDao.findMaterialRequestById(materialRequestId)
-			.orElseThrow();
+			.orElseThrow(() -> new EntityNotFoundException("MaterialRequest not found for ID: " + materialRequestId));
 		Material material = materialDao.findMaterialById(materialRequestDto.getMaterialId())
-			.orElseThrow();
+			.orElseThrow(
+				() -> new EntityNotFoundException("Material not found for ID: " + materialRequestDto.getMaterialId()));
 		UserEntity requester = userDao.getUserReferenceById(materialRequestDto.getRequesterId());
 
 		materialRequest.setMaterial(material);
@@ -177,7 +180,7 @@ public class MaterialServiceImpl implements MaterialService {
 		log.info("[getMaterialPurchaseById] param - materialPurchaseId: {}", materialPurchaseId);
 
 		MaterialPurchase foundMaterialPurchase = materialDao.findMaterialPurchaseById(materialPurchaseId)
-			.orElseThrow();
+			.orElseThrow(() -> new EntityNotFoundException("MaterialPurchase not found for ID: " + materialPurchaseId));
 
 		MaterialPurchaseDto foundMaterialPurchaseDto = EntityToDtoMapper.convertMaterialPurchaseToDto(
 			foundMaterialPurchase);
@@ -192,9 +195,10 @@ public class MaterialServiceImpl implements MaterialService {
 			materialPurchaseDto);
 
 		MaterialPurchase materialPurchase = materialDao.findMaterialPurchaseById(materialPurchaseId)
-			.orElseThrow();
+			.orElseThrow(() -> new EntityNotFoundException("MaterialPurchase not found for ID: " + materialPurchaseId));
 		Material material = materialDao.findMaterialById(materialPurchaseDto.getMaterialId())
-			.orElseThrow();
+			.orElseThrow(
+				() -> new EntityNotFoundException("Material not found for ID: " + materialPurchaseDto.getMaterialId()));
 		UserEntity manager = userDao.getUserReferenceById(materialPurchaseDto.getManagerId());
 		PurchaseStatus status =
 			materialPurchaseDto.getStatus() == null ? PurchaseStatus.ACCEPTED : materialPurchaseDto.getStatus();
@@ -244,7 +248,7 @@ public class MaterialServiceImpl implements MaterialService {
 		log.info("[getSupplierById] param - supplierId: {}", supplierId);
 
 		Supplier foundSupplier = materialDao.findSupplierById(supplierId)
-			.orElseThrow();
+			.orElseThrow(() -> new EntityNotFoundException("Supplier not found for ID: " + supplierId));
 
 		SupplierDto foundSupplierDto = EntityToDtoMapper.convertSupplierToDto(
 			foundSupplier);
@@ -259,7 +263,7 @@ public class MaterialServiceImpl implements MaterialService {
 			supplierDto);
 
 		Supplier supplier = materialDao.findSupplierById(supplierId)
-			.orElseThrow();
+			.orElseThrow(() -> new EntityNotFoundException("Supplier not found for ID: " + supplierId));
 
 		supplier.setCompanyName(supplierDto.getCompanyName());
 		supplier.setManagerName(supplierDto.getManagerName());
