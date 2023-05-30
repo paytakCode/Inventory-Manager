@@ -15,7 +15,7 @@ import lombok.ToString;
 /**
  * Material Purchase DTO
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.1.2
  * @Since 2023-05-24 오후 10:24
  */
 
@@ -31,7 +31,7 @@ public class MaterialPurchaseDto {
 	@NotNull
 	private Long materialId;
 
-	@Nullable
+	@NotNull
 	private Long managerId;
 
 	@Nullable

@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * DTO to Entity Mapper
  * @Author 김태산
- * @Version 0.1.3
+ * @Version 0.1.4
  * @Since 2023-05-26 오후 4:50
  */
 
@@ -75,7 +75,7 @@ public class DtoToEntityMapper {
     }
 
     public MaterialPurchase convertMaterialPurchaseDtoToEntity(MaterialPurchaseDto materialPurchaseDto) {
-        UserEntity manager = userDao.getUserReferenceByEmail(UserUtil.getCurrentUserEmail());
+        UserEntity manager = userDao.getUserReferenceById(materialPurchaseDto.getManagerId());
         Material material = materialDao.getMaterialReferenceById(materialPurchaseDto.getMaterialId());
         PurchaseStatus status =
             materialPurchaseDto.getStatus() == null ? PurchaseStatus.ACCEPTED : materialPurchaseDto.getStatus();
@@ -116,7 +116,7 @@ public class DtoToEntityMapper {
 
     public Production convertProductionDtoToEntity(ProductionDto productionDto) {
         Product product = productDao.getProductReferenceById(productionDto.getProductId());
-        UserEntity manager = userDao.getUserReferenceByEmail(UserUtil.getCurrentUserEmail());
+        UserEntity manager = userDao.getUserReferenceById(productionDto.getManagerId());
         ProductionStatus status =
             productionDto.getStatus() == null ? ProductionStatus.PLANNED : productionDto.getStatus();
 
@@ -151,7 +151,7 @@ public class DtoToEntityMapper {
     public SalesOrder convertSalesOrderDtoToEntity(SalesOrderDto salesOrderDto) {
         Product product = productDao.getProductReferenceById(salesOrderDto.getProductId());
         Buyer buyer = salesDao.getBuyerReferenceById(salesOrderDto.getBuyerId());
-        UserEntity manager = userDao.getUserReferenceByEmail(UserUtil.getCurrentUserEmail());
+        UserEntity manager = userDao.getUserReferenceById(salesOrderDto.getManagerId());
 
         return SalesOrder.builder()
             .product(product)
