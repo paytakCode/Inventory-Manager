@@ -1,5 +1,6 @@
 package com.paytakcode.inventorymanager.api.v1.data.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,7 +27,7 @@ import lombok.ToString;
  * Material Purchase Entity
  * 자재 구매 Table
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.1.2
  * @Since 2023-05-21 오후 11:00
  */
 @Entity
@@ -40,6 +41,7 @@ public class MaterialPurchase extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(updatable = false)
 	private Long id;
 
 	@NotNull

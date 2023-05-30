@@ -1,5 +1,6 @@
 package com.paytakcode.inventorymanager.api.v1.data.entity;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
@@ -29,6 +30,7 @@ import lombok.ToString;
 public class ProductMaterial extends BaseEntity {
 
 	@EmbeddedId
+	@Column(updatable = false)
 	private ProductMaterialId id;
 
 	@NotNull

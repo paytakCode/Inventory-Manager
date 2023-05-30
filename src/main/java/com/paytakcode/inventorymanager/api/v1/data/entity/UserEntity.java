@@ -26,10 +26,10 @@ import lombok.Setter;
 
 /**
  * UserEntity
- * Security User랑 구분하기 위해 접미사 Entity 추가
+ * Security User와 구분하기 위해 접미사 Entity 추가
  *
  * @Author 김태산
- * @Version 0.1.2
+ * @Version 0.1.3
  * @Since 2023-05-18 오후 2:55
  */
 
@@ -44,6 +44,7 @@ public class UserEntity extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(updatable = false)
 	private Long id;
 
 	@NotNull
