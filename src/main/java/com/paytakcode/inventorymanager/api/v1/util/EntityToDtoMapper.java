@@ -26,7 +26,7 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 /**
  * Entity to DTO Mapper
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.2.1
  * @Since 2023-05-26 오후 3:39
  */
 public class EntityToDtoMapper {
@@ -37,6 +37,7 @@ public class EntityToDtoMapper {
 
     public static BuyerDto convertBuyerToDto(Buyer buyer) {
         return BuyerDto.builder()
+            .id(buyer.getId())
             .companyName(buyer.getCompanyName())
             .managerName(buyer.getManagerName())
             .tel(buyer.getTel())
@@ -48,6 +49,7 @@ public class EntityToDtoMapper {
         Long supplierId = material.getSupplier() == null ? null : material.getSupplier().getId();
 
         return MaterialDto.builder()
+            .id(material.getId())
             .name(material.getName())
             .spec(material.getSpec())
             .details(material.getDetails())
@@ -60,6 +62,7 @@ public class EntityToDtoMapper {
             materialPurchase.getMaterialRequest() == null ? null : materialPurchase.getMaterialRequest().getId();
 
         return MaterialPurchaseDto.builder()
+            .id(materialPurchase.getId())
             .materialId(materialPurchase.getMaterial().getId())
             .managerId(materialPurchase.getManager().getId())
             .details(materialPurchase.getDetails())
@@ -73,6 +76,7 @@ public class EntityToDtoMapper {
 
     public static MaterialRequestDto convertMaterialRequestToDto(MaterialRequest materialRequest) {
         return MaterialRequestDto.builder()
+            .id(materialRequest.getId())
             .materialId(materialRequest.getId())
             .requesterId(materialRequest.getRequester().getId())
             .quantity(materialRequest.getQuantity())
@@ -83,6 +87,7 @@ public class EntityToDtoMapper {
 
     public static ProductDto convertProductToDto(Product product) {
         return ProductDto.builder()
+            .id(product.getId())
             .name(product.getName())
             .spec(product.getSpec())
             .details(product.getDetails())
@@ -91,6 +96,7 @@ public class EntityToDtoMapper {
 
     public static ProductionDto convertProductionToDto(Production production) {
         return ProductionDto.builder()
+            .id(production.getId())
             .productId(production.getProduct().getId())
             .managerId(production.getManager().getId())
             .quantity(production.getQuantity())
@@ -114,6 +120,7 @@ public class EntityToDtoMapper {
 
     public static SupplierDto convertSupplierToDto(Supplier supplier) {
         return SupplierDto.builder()
+            .id(supplier.getId())
             .companyName(supplier.getCompanyName())
             .loc(supplier.getLoc())
             .managerName(supplier.getManagerName())
@@ -133,6 +140,7 @@ public class EntityToDtoMapper {
 
     public static SalesOrderDto convertSalesOrderToDto(SalesOrder salesOrder) {
         return SalesOrderDto.builder()
+            .id(salesOrder.getId())
             .productId(salesOrder.getProduct().getId())
             .buyerId(salesOrder.getBuyer().getId())
             .managerId(salesOrder.getManager().getId())
@@ -145,6 +153,7 @@ public class EntityToDtoMapper {
 
     public static UserDto convertUserToUserDto(UserEntity userEntity) {
         return UserDto.builder()
+            .id(userEntity.getId())
             .email(userEntity.getEmail())
             .password(userEntity.getPassword())
             .name(userEntity.getName())

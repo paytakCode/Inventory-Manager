@@ -12,7 +12,7 @@ import lombok.ToString;
 /**
  * Product DTO
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-25 오후 1:51
  */
 
@@ -21,6 +21,9 @@ import lombok.ToString;
 @Builder
 @ToString
 public class ProductDto {
+
+	@Nullable
+	private Long id;
 
 	@NotBlank
 	private String name;

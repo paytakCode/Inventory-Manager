@@ -15,7 +15,7 @@ import lombok.ToString;
 /**
  * Sales DTO
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-27 오후 9:23
  */
 
@@ -24,6 +24,9 @@ import lombok.ToString;
 @Builder
 @ToString
 public class SalesOrderDto {
+
+	@Nullable
+	private Long id;
 
 	@NotNull
 	private Long productId;

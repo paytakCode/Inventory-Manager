@@ -3,6 +3,8 @@ package com.paytakcode.inventorymanager.api.v1.data.dto;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.lang.Nullable;
+
 import com.paytakcode.inventorymanager.api.v1.util.PasswordMaskingUtil;
 
 import lombok.Builder;
@@ -12,13 +14,16 @@ import lombok.Setter;
 /**
  * User DTO
  * @Author 김태산
- * @Version 0.1.2
+ * @Version 0.1.3
  * @Since 2023-05-18 오후 3:54
  */
 @Getter
 @Setter
 @Builder
 public class UserDto {
+
+	@Nullable
+	private Long id;
 
 	@NotBlank
 	@Email

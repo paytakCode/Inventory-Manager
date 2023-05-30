@@ -14,7 +14,7 @@ import lombok.ToString;
 /**
  * Material DTO
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-24 오전 11:40
  */
 
@@ -25,6 +25,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MaterialDto {
+
+	@Nullable
+	private Long id;
 
 	@NotBlank
 	private String name;

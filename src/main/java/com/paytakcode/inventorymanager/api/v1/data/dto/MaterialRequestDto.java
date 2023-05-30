@@ -12,7 +12,7 @@ import lombok.ToString;
 /**
  * Material Request DTO
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.2.1
  * @Since 2023-05-24 오후 12:28
  */
 
@@ -21,6 +21,9 @@ import lombok.ToString;
 @Builder
 @ToString
 public class MaterialRequestDto {
+
+	@Nullable
+	private Long id;
 
 	@NotNull
 	private Long materialId;
