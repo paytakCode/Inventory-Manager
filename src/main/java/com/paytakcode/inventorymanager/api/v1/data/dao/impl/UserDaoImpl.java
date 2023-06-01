@@ -1,5 +1,6 @@
 package com.paytakcode.inventorymanager.api.v1.data.dao.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User DAO Implementation
  * @Author 김태산
- * @Version 0.1.5
+ * @Version 0.2.0
  * @Since 2023-05-18 오후 3:45
  */
 
@@ -32,6 +33,16 @@ public class UserDaoImpl implements UserDao {
 
 		log.info("[saveUser] return - savedUserEntity: {}", savedUserEntity);
 		return savedUserEntity;
+	}
+
+	@Override
+	public List<UserEntity> findUserList() {
+		log.info("[findUserList] param - none");
+
+		List<UserEntity> foundUserList = userRepository.findAll();
+
+		log.info("[findUserList] return - foundUserList: {}", foundUserList);
+		return foundUserList;
 	}
 
 	@Override

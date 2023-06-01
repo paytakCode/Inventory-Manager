@@ -1,5 +1,7 @@
 package com.paytakcode.inventorymanager.api.v1.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -26,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User Controller
  * @Author 김태산
- * @Version 0.4.1
+ * @Version 0.5.0
  * @Since 2023-05-18 오후 3:40
  */
 
@@ -50,11 +52,23 @@ public class UserController {
 			.body(addedUserInfoDto);
 	}
 
+	@GetMapping("/users")
+	public ResponseEntity<List<UserInfoDto>> userList() {
+		log.info("[userList] param - none");
+
+		List<UserInfoDto> userList = userService.getUserList();
+
+		log.info("[userList] return - HttpStatus.OK(200), userList: {}", userList);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(userList);
+	}
+
 	@GetMapping("/users/{userId}")
 	public ResponseEntity<UserInfoDto> userInfoById(@PathVariable Long userId) {
 		log.info("[userInfoById] param - userId: {}", userId);
 
-		UserInfoDto userInfoDto = userService.userInfoById(userId);
+		UserInfoDto userInfoDto = userService.getUserInfoById(userId);
 
 		log.info("[userInfoById] return - HttpStatus.OK(200), userInfoDto: {}", userInfoDto);
 		return ResponseEntity

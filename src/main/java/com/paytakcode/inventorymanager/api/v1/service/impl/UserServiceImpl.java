@@ -1,6 +1,9 @@
 package com.paytakcode.inventorymanager.api.v1.service.impl;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpHeaders;
@@ -31,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User Service Implementation
  * @Author 김태산
- * @Version 0.4.0
+ * @Version 0.5.0
  * @Since 2023-05-18 오후 3:43
  */
 @Service
@@ -61,7 +64,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserInfoDto userInfoById(Long userId) {
+	public List<UserInfoDto> getUserList() {
+		log.info("[getUserList] param - none");
+
+		List<UserEntity> foundUserList = userDao.findUserList();
+
+		List<UserInfoDto> foundUserDtoList = new ArrayList<>();
+
+		for (UserEntity user : foundUserList) {
+			foundUserDtoList.add(EntityToDtoMapper.convertUserToUserInfoDto(user));
+		}
+
+		log.info("[getUserList] return - foundUserDtoList: {}", foundUserDtoList);
+		return foundUserDtoList;
+	}
+
+	@Override
+	public UserInfoDto getUserInfoById(Long userId) {
 		log.info("[userInfoById] param - userId: {}", userId);
 
 		UserEntity foundUser = userDao.findUserById(userId)
