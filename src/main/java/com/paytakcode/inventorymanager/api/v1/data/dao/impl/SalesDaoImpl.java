@@ -1,5 +1,6 @@
 package com.paytakcode.inventorymanager.api.v1.data.dao.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -16,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  *
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.4.0
  * @Since 2023-05-26 오후 3:17
  */
 
@@ -36,6 +37,16 @@ public class SalesDaoImpl implements SalesDao {
 
 		log.info("[saveBuyer] param - savedBuyer: {}", savedBuyer);
 		return savedBuyer;
+	}
+
+	@Override
+	public List<Buyer> findBuyerList() {
+		log.info("[findBuyerList] param - none");
+
+		List<Buyer> foundBuyerList = buyerRepository.findAll();
+
+		log.info("[findBuyerList] return - foundBuyerList: {}", foundBuyerList);
+		return foundBuyerList;
 	}
 
 	@Override
@@ -59,7 +70,7 @@ public class SalesDaoImpl implements SalesDao {
 
 	@Override
 	public Integer findTotalSalesOrderQuantityByProductId(Long productId) {
-		log.info("[findTotalSalesOrderQuantityByProductId] param - productId: {}", productId);
+		log.info("[findTotalSalesOrderQuantityByBuyerId] param - productId: {}", productId);
 
 		Integer totalSalesOrderQuantity = salesOrderRepository.findTotalSalesOrderQuantityByProductId(productId);
 
@@ -78,15 +89,25 @@ public class SalesDaoImpl implements SalesDao {
         return gotBuyerReference;
     }
 
-    @Override
-    public SalesOrder saveSalesOrder(SalesOrder salesOrder) {
-        log.info("[saveSalesOrder] param - order: {}", salesOrder);
+	@Override
+	public SalesOrder saveSalesOrder(SalesOrder salesOrder) {
+		log.info("[saveSalesOrder] param - order: {}", salesOrder);
 
-        SalesOrder savedSalesOrder = salesOrderRepository.save(salesOrder);
+		SalesOrder savedSalesOrder = salesOrderRepository.save(salesOrder);
 
-        log.info("[saveSalesOrder] param - savedSalesOrder: {}", savedSalesOrder);
-        return savedSalesOrder;
-    }
+		log.info("[saveSalesOrder] param - savedSalesOrder: {}", savedSalesOrder);
+		return savedSalesOrder;
+	}
+
+	@Override
+	public List<SalesOrder> findSalesOrderList() {
+		log.info("[findSalesOrderList] param - none");
+
+		List<SalesOrder> foundSalesOrderList = salesOrderRepository.findAll();
+
+		log.info("[findSalesOrderList] return - foundSalesOrderList: {}", foundSalesOrderList);
+		return foundSalesOrderList;
+	}
 
 	@Override
 	public Optional<SalesOrder> findSalesOrderById(Long salesOrderId) {

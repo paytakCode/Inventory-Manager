@@ -1,6 +1,8 @@
 package com.paytakcode.inventorymanager.api.v1.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Sales Service Implementation
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.4.0
  * @Since 2023-05-26 오후 3:15
  */
 
@@ -49,6 +51,22 @@ public class SalesServiceImpl implements SalesService {
 
 		log.info("[addBuyer] param - savedBuyerDto: {}", savedBuyerDto);
 		return savedBuyerDto;
+	}
+
+	@Override
+	public List<BuyerDto> getBuyerList() {
+		log.info("[getBuyerList] param - none");
+
+		List<Buyer> foundBuyerList = salesDao.findBuyerList();
+
+		List<BuyerDto> foundBuyerDtoList = new ArrayList<>();
+
+		for (Buyer buyer : foundBuyerList) {
+			foundBuyerDtoList.add(EntityToDtoMapper.convertBuyerToDto(buyer));
+		}
+
+		log.info("[getBuyerList] return - foundBuyerDtoList: {}", foundBuyerDtoList);
+		return foundBuyerDtoList;
 	}
 
 	@Override
@@ -102,6 +120,22 @@ public class SalesServiceImpl implements SalesService {
 
 		log.info("[addSalesOrder] param - savedSalesOrderDto: {}", savedSalesOrderDto);
 		return savedSalesOrderDto;
+	}
+
+	@Override
+	public List<SalesOrderDto> getSalesOrderList() {
+		log.info("[getSalesOrderList] param - none");
+
+		List<SalesOrder> foundSalesOrderList = salesDao.findSalesOrderList();
+
+		List<SalesOrderDto> foundSalesOrderDtoList = new ArrayList<>();
+
+		for (SalesOrder salesOrder : foundSalesOrderList) {
+			foundSalesOrderDtoList.add(EntityToDtoMapper.convertSalesOrderToDto(salesOrder));
+		}
+
+		log.info("[getSalesOrderList] return - foundSalesOrderDtoList: {}", foundSalesOrderDtoList);
+		return foundSalesOrderDtoList;
 	}
 
 	@Override

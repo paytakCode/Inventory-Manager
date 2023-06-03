@@ -1,5 +1,7 @@
 package com.paytakcode.inventorymanager.api.v1.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paytakcode.inventorymanager.api.v1.config.ApiBaseUrlConfig;
 import com.paytakcode.inventorymanager.api.v1.data.dto.BuyerDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
 import com.paytakcode.inventorymanager.api.v1.service.SalesService;
@@ -23,14 +26,14 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Sales Controller
  * @Author 김태산
- * @Version 0.3.1
+ * @Version 0.4.0
  * @Since 2023-05-26 오후 3:12
  */
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping(ApiBaseUrlConfig.API_BASE_URL)
 public class SalesController {
 
     private final SalesService salesService;
@@ -45,6 +48,18 @@ public class SalesController {
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(addedBuyerDto.toString());
+    }
+
+    @GetMapping("/buyers")
+    public ResponseEntity<List<BuyerDto>> buyerList() {
+        log.info("[buyerList] param - none");
+
+        List<BuyerDto> buyerList = salesService.getBuyerList();
+
+        log.info("[buyerList] return - HttpStatus.OK(200), buyerList: {}", buyerList);
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(buyerList);
     }
 
     @GetMapping("/buyers/{buyerId}")
@@ -94,6 +109,18 @@ public class SalesController {
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(addedSalesOrderDto.toString());
+    }
+
+    @GetMapping("/sales-orders")
+    public ResponseEntity<List<SalesOrderDto>> salesOrderList() {
+        log.info("[salesOrderList] param - none");
+
+        List<SalesOrderDto> salesOrderList = salesService.getSalesOrderList();
+
+        log.info("[salesOrderList] return - HttpStatus.OK(200), salesOrderList: {}", salesOrderList);
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(salesOrderList);
     }
 
     @GetMapping("/sales-orders/{salesOrderId}")
