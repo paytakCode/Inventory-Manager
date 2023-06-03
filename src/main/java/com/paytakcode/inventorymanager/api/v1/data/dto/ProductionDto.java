@@ -17,7 +17,7 @@ import lombok.ToString;
 /**
  * Production DTO
  * @Author 김태산
- * @Version 0.1.2
+ * @Version 0.2.0
  * @Since 2023-05-25 오후 5:06
  */
 
@@ -47,6 +47,9 @@ public class ProductionDto {
 
 	@NotNull
 	private LocalDateTime targetDate;
+
+	@Nullable
+	private LocalDateTime completionDate;
 
 	@Nullable
 	private ProductionStatus status;
