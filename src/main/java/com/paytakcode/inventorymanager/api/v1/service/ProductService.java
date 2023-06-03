@@ -10,12 +10,14 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
 /**
  * Product Service
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.4.0
  * @Since 2023-05-25 오전 9:02
  */
 public interface ProductService {
 
 	ProductDto addProduct(ProductDto productDto);
+
+	List<ProductDto> getProductList();
 
 	ProductDto getProductById(Long productId);
 
@@ -24,6 +26,8 @@ public interface ProductService {
 	void deleteProductById(Long productId);
 
 	ProductMaterialDto addProductMaterial(ProductMaterialDto productMaterialDto);
+
+	List<ProductMaterialDto> getProductMaterialList();
 
 	ProductMaterialDto getProductMaterialById(ProductMaterialIdDto productMaterialIdDto);
 
@@ -34,6 +38,8 @@ public interface ProductService {
 	List<ProductMaterialDto> getProductMaterialListByProductId(Long productId);
 
 	ProductionDto addProduction(ProductionDto productionDto);
+
+	List<ProductionDto> getProductionList();
 
 	ProductionDto getProductionById(Long productionId);
 

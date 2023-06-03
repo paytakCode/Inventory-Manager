@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product Service Implementation
  * @Author 김태산
- * @Version 0.3.1
+ * @Version 0.4.0
  * @Since 2023-05-25 오전 9:02
  */
 @Service
@@ -56,6 +56,22 @@ public class ProductServiceImpl implements ProductService {
 
 		log.info("[addProduct] return - savedProductDto: {}", savedProductDto);
 		return savedProductDto;
+	}
+
+	@Override
+	public List<ProductDto> getProductList() {
+		log.info("[getProductList] param - none");
+
+		List<Product> foundProductList = productDao.findProductList();
+
+		List<ProductDto> foundProductDtoList = new ArrayList<>();
+
+		for (Product product : foundProductList) {
+			foundProductDtoList.add(EntityToDtoMapper.convertProductToDto(product));
+		}
+
+		log.info("[getProductList] return - foundProductDtoList: {}", foundProductDtoList);
+		return foundProductDtoList;
 	}
 
 	@Override
@@ -112,6 +128,22 @@ public class ProductServiceImpl implements ProductService {
 
 		log.info("[addProductMaterial] return - savedProductMaterialDto: {}", savedProductMaterialDto);
 		return savedProductMaterialDto;
+	}
+
+	@Override
+	public List<ProductMaterialDto> getProductMaterialList() {
+		log.info("[getProductMaterialList] param - none");
+
+		List<ProductMaterial> foundProductMaterialList = productDao.findProductMaterialList();
+
+		List<ProductMaterialDto> foundProductMaterialDtoList = new ArrayList<>();
+
+		for (ProductMaterial productMaterial : foundProductMaterialList) {
+			foundProductMaterialDtoList.add(EntityToDtoMapper.convertProductMaterialToDto(productMaterial));
+		}
+
+		log.info("[getProductMaterialList] return - foundProductMaterialDtoList: {}", foundProductMaterialDtoList);
+		return foundProductMaterialDtoList;
 	}
 
 	@Override
@@ -193,6 +225,22 @@ public class ProductServiceImpl implements ProductService {
 
 		log.info("[addProduction] return - savedProductionDto: {}", savedProductionDto);
 		return savedProductionDto;
+	}
+
+	@Override
+	public List<ProductionDto> getProductionList() {
+		log.info("[getProductionList] param - none");
+
+		List<Production> foundProductionList = productDao.findProductionList();
+
+		List<ProductionDto> foundProductionDtoList = new ArrayList<>();
+
+		for (Production production : foundProductionList) {
+			foundProductionDtoList.add(EntityToDtoMapper.convertProductionToDto(production));
+		}
+
+		log.info("[getProductionList] return - foundProductionDtoList: {}", foundProductionDtoList);
+		return foundProductionDtoList;
 	}
 
 	@Override

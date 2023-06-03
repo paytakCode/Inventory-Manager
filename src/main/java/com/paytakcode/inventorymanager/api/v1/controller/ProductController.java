@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paytakcode.inventorymanager.api.v1.config.ApiBaseUrlConfig;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialIdDto;
@@ -28,14 +29,14 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product Controller
  * @Author 김태산
- * @Version 0.3.1
+ * @Version 0.4.0
  * @Since 2023-05-25 오전 8:59
  */
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping(ApiBaseUrlConfig.API_BASE_URL)
 public class ProductController {
 
 	private final ProductService productService;
@@ -50,6 +51,18 @@ public class ProductController {
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
 			.body(addedProductDto.toString());
+	}
+
+	@GetMapping("/products")
+	public ResponseEntity<List<ProductDto>> productList() {
+		log.info("[productList] param - none");
+
+		List<ProductDto> productList = productService.getProductList();
+
+		log.info("[productList] return - HttpStatus.OK(200), productList: {}", productList);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(productList);
 	}
 
 	@GetMapping("/products/{productId}")
@@ -101,6 +114,18 @@ public class ProductController {
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
 			.body(addedProductMaterialDto.toString());
+	}
+
+	@GetMapping("/product-materials")
+	public ResponseEntity<List<ProductMaterialDto>> productMaterialList() {
+		log.info("[productMaterialList] param - none");
+
+		List<ProductMaterialDto> productMaterialList = productService.getProductMaterialList();
+
+		log.info("[productMaterialList] return - HttpStatus.OK(200), productMaterialList: {}", productMaterialList);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(productMaterialList);
 	}
 
 	@GetMapping("/product-materials/{productId}/{materialId}")
@@ -185,6 +210,18 @@ public class ProductController {
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
 			.body(addedProductionDto.toString());
+	}
+
+	@GetMapping("/productions")
+	public ResponseEntity<List<ProductionDto>> productionList() {
+		log.info("[productionList] param - none");
+
+		List<ProductionDto> productionList = productService.getProductionList();
+
+		log.info("[productionList] return - HttpStatus.OK(200), productionList: {}", productionList);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(productionList);
 	}
 
 	@GetMapping("/productions/{productionId}")

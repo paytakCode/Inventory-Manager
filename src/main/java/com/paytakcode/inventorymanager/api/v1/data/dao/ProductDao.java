@@ -12,13 +12,15 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.Supplier;
 /**
  * Product DAO
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.4.0
  * @Since 2023-05-25 오전 9:10
  */
 
 public interface ProductDao {
 
 	Product saveProduct(Product product);
+
+	List<Product> findProductList();
 
 	Optional<Product> findProductById(Long productId);
 
@@ -28,6 +30,8 @@ public interface ProductDao {
 
 	ProductMaterial saveProductMaterial(ProductMaterial productMaterial);
 
+	List<ProductMaterial> findProductMaterialList();
+
 	Optional<ProductMaterial> findProductMaterialById(ProductMaterialId productMaterialId);
 
 	void deleteProductMaterialById(ProductMaterialId productMaterialId);
@@ -35,6 +39,8 @@ public interface ProductDao {
 	List<ProductMaterial> findProductMaterialListByProductId(Long productId);
 
 	Production saveProduction(Production production);
+
+	List<Production> findProductionList();
 
 	Optional<Production> findProductionById(Long productionId);
 

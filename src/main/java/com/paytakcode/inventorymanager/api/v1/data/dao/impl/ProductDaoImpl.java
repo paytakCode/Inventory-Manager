@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product DAO Implementation
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.4.0
  * @Since 2023-05-25 오전 9:10
  */
 
@@ -44,6 +44,16 @@ public class ProductDaoImpl implements ProductDao {
 
 		log.info("[saveProduct] param - savedProduct: {}", savedProduct);
 		return savedProduct;
+	}
+
+	@Override
+	public List<Product> findProductList() {
+		log.info("[findProductList] param - none");
+
+		List<Product> foundProductList = productRepository.findAll();
+
+		log.info("[findProductList] return - foundProductList: {}", foundProductList);
+		return foundProductList;
 	}
 
 	@Override
@@ -83,6 +93,16 @@ public class ProductDaoImpl implements ProductDao {
 
 		log.info("[saveProductMaterial] param - savedProductMaterial: {}", savedProductMaterial);
 		return savedProductMaterial;
+	}
+
+	@Override
+	public List<ProductMaterial> findProductMaterialList() {
+		log.info("[findProductMaterialList] param - none");
+
+		List<ProductMaterial> foundProductMaterialList = productMaterialRepository.findAll();
+
+		log.info("[findProductMaterialList] return - foundProductMaterialList: {}", foundProductMaterialList);
+		return foundProductMaterialList;
 	}
 
 	@Override
@@ -127,12 +147,23 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
+	public List<Production> findProductionList() {
+		log.info("[findProductionList] param - none");
+
+		List<Production> foundProductionList = productionRepository.findAll();
+
+		log.info("[findProductionList] return - foundProductionList: {}", foundProductionList);
+		return foundProductionList;
+	}
+
+	@Override
 	public Integer findTotalProductionQuantityByProductId(Long productId) {
 		log.info("[findTotalProductionQuantityByProductId] param - productId: {}", productId);
 
 		Integer totalProductionQuantity = productionRepository.findTotalProductionQuantityByProductId(productId);
 
-		log.info("[findTotalProductionQuantityByProductId] result - totalProductionQuantity: {}", totalProductionQuantity);
+		log.info("[findTotalProductionQuantityByProductId] result - totalProductionQuantity: {}",
+			totalProductionQuantity);
 		return totalProductionQuantity;
 	}
 
