@@ -1,5 +1,8 @@
 package com.paytakcode.inventorymanager.api.v1.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
@@ -27,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Service Implementation
  * @Author 김태산
- * @Version 0.5.1
+ * @Version 0.6.0
  * @Since 2023-05-24 오전 11:46
  */
 
@@ -54,6 +57,22 @@ public class MaterialServiceImpl implements MaterialService {
 
 		log.info("[addMaterial] return - savedMaterialDto: {}", savedMaterialDto);
 		return savedMaterialDto;
+	}
+
+	@Override
+	public List<MaterialDto> getMaterialList() {
+		log.info("[getMaterialList] param - none");
+
+		List<Material> foundMaterialList = materialDao.findMaterialList();
+
+		List<MaterialDto> foundMaterialDtoList = new ArrayList<>();
+
+		for (Material material : foundMaterialList) {
+			foundMaterialDtoList.add(EntityToDtoMapper.convertMaterialToDto(material));
+		}
+
+		log.info("[getMaterialList] return - foundMaterialDtoList: {}", foundMaterialDtoList);
+		return foundMaterialDtoList;
 	}
 
 	@Override
@@ -115,6 +134,22 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	@Override
+	public List<MaterialRequestDto> getMaterialRequestList() {
+		log.info("[getMaterialRequestList] param - none");
+
+		List<MaterialRequest> foundMaterialRequestList = materialDao.findMaterialRequestList();
+
+		List<MaterialRequestDto> foundMaterialRequestDtoList = new ArrayList<>();
+
+		for (MaterialRequest material : foundMaterialRequestList) {
+			foundMaterialRequestDtoList.add(EntityToDtoMapper.convertMaterialRequestToDto(material));
+		}
+
+		log.info("[getMaterialRequestList] return - foundMaterialRequestDtoList: {}", foundMaterialRequestDtoList);
+		return foundMaterialRequestDtoList;
+	}
+
+	@Override
 	public MaterialRequestDto getMaterialRequestById(Long materialRequestId) {
 		log.info("[getMaterialRequestById] param - materialRequestId: {}", materialRequestId);
 
@@ -173,6 +208,22 @@ public class MaterialServiceImpl implements MaterialService {
 
 		log.info("[addMaterialPurchase] return - savedMaterialPurchaseDto: {}", savedMaterialPurchaseDto);
 		return savedMaterialPurchaseDto;
+	}
+
+	@Override
+	public List<MaterialPurchaseDto> getMaterialPurchaseList() {
+		log.info("[getMaterialPurchaseList] param - none");
+
+		List<MaterialPurchase> foundMaterialPurchaseList = materialDao.findMaterialPurchaseList();
+
+		List<MaterialPurchaseDto> foundMaterialPurchaseDtoList = new ArrayList<>();
+
+		for (MaterialPurchase material : foundMaterialPurchaseList) {
+			foundMaterialPurchaseDtoList.add(EntityToDtoMapper.convertMaterialPurchaseToDto(material));
+		}
+
+		log.info("[getMaterialPurchaseList] return - foundMaterialPurchaseDtoList: {}", foundMaterialPurchaseDtoList);
+		return foundMaterialPurchaseDtoList;
 	}
 
 	@Override
@@ -241,6 +292,22 @@ public class MaterialServiceImpl implements MaterialService {
 
 		log.info("[addSupplier] return - savedSupplierDto: {}", savedSupplierDto);
 		return savedSupplierDto;
+	}
+
+	@Override
+	public List<SupplierDto> getSupplierList() {
+		log.info("[getSupplierList] param - none");
+
+		List<Supplier> foundSupplierList = materialDao.findSupplierList();
+
+		List<SupplierDto> foundSupplierDtoList = new ArrayList<>();
+
+		for (Supplier material : foundSupplierList) {
+			foundSupplierDtoList.add(EntityToDtoMapper.convertSupplierToDto(material));
+		}
+
+		log.info("[getSupplierList] return - foundSupplierDtoList: {}", foundSupplierDtoList);
+		return foundSupplierDtoList;
 	}
 
 	@Override

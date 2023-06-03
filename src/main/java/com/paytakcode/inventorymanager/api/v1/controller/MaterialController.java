@@ -1,5 +1,7 @@
 package com.paytakcode.inventorymanager.api.v1.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paytakcode.inventorymanager.api.v1.config.ApiBaseUrlConfig;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestDto;
@@ -25,14 +28,14 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Controller
  * @Author 김태산
- * @Version 0.5.2
+ * @Version 0.6.0
  * @Since 2023-05-24 오전 11:30
  */
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping(ApiBaseUrlConfig.API_BASE_URL)
 public class MaterialController {
 
 	private final MaterialService materialService;
@@ -49,16 +52,16 @@ public class MaterialController {
 			.body(addedMaterialDto.toString());
 	}
 
-	@GetMapping("/materials/{materialId}")
-	public ResponseEntity<MaterialDto> materialById(@PathVariable Long materialId) {
-		log.info("[materialById] param - materialId: {}", materialId);
+	@GetMapping("/materials")
+	public ResponseEntity<List<MaterialDto>> materialList() {
+		log.info("[materialList] param - none");
 
-		MaterialDto materialDto = materialService.getMaterialById(materialId);
+		List<MaterialDto> materialList = materialService.getMaterialList();
 
-		log.info("[materialById] return - HttpStatus.OK(200), materialDto: {}", materialDto);
+		log.info("[materialList] return - HttpStatus.OK(200), materialList: {}", materialList);
 		return ResponseEntity
 			.status(HttpStatus.OK)
-			.body(materialDto);
+			.body(materialList);
 	}
 
 	@PutMapping("/material/materials/{materialId}")
@@ -97,6 +100,18 @@ public class MaterialController {
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
 			.body(addedMaterialRequestDto.toString());
+	}
+
+	@GetMapping("/material-requests")
+	public ResponseEntity<List<MaterialPurchaseDto>> materialRequestList() {
+		log.info("[materialRequestList] param - none");
+
+		List<MaterialPurchaseDto> materialRequestList = materialService.getMaterialPurchaseList();
+
+		log.info("[materialRequestList] return - HttpStatus.OK(200), materialRequestList: {}", materialRequestList);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(materialRequestList);
 	}
 
 	@GetMapping("/material-requests/{materialRequestId}")
@@ -150,6 +165,18 @@ public class MaterialController {
 			.body(addedMaterialPurchaseDto.toString());
 	}
 
+	@GetMapping("/material-purchases")
+	public ResponseEntity<List<MaterialRequestDto>> materialPurchaseList() {
+		log.info("[materialPurchaseList] param - none");
+
+		List<MaterialRequestDto> materialPurchaseList = materialService.getMaterialRequestList();
+
+		log.info("[materialPurchaseList] return - HttpStatus.OK(200), materialPurchaseList: {}", materialPurchaseList);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(materialPurchaseList);
+	}
+
 	@GetMapping("/material-purchases/{materialPurchaseId}")
 	public ResponseEntity<MaterialPurchaseDto> materialPurchaseById(@PathVariable Long materialPurchaseId) {
 		log.info("[materialPurchaseById] param - materialPurchaseId: {}", materialPurchaseId);
@@ -198,6 +225,18 @@ public class MaterialController {
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
 			.body(addedSupplierDto.toString());
+	}
+
+	@GetMapping("/suppliers")
+	public ResponseEntity<List<SupplierDto>> supplierList() {
+		log.info("[supplierList] param - none");
+
+		List<SupplierDto> supplierList = materialService.getSupplierList();
+
+		log.info("[supplierList] return - HttpStatus.OK(200), supplierList: {}", supplierList);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(supplierList);
 	}
 
 	@GetMapping("/suppliers/{supplierId}")

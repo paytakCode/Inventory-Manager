@@ -1,5 +1,6 @@
 package com.paytakcode.inventorymanager.api.v1.data.dao.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -20,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material DAO Implementation
  * @Author 김태산
- * @Version 0.5.0
+ * @Version 0.6.0
  * @Since 2023-05-24 오전 11:53
  */
 
@@ -42,6 +43,16 @@ public class MaterialDaoImpl implements MaterialDao {
 
 		log.info("[saveMaterial] return - savedMaterial: {}", savedMaterial);
 		return savedMaterial;
+	}
+
+	@Override
+	public List<Material> findMaterialList() {
+		log.info("[findMaterialList] param - none");
+
+		List<Material> foundMaterialList = materialRepository.findAll();
+
+		log.info("[findMaterialList] return - foundMaterialList: {}", foundMaterialList);
+		return foundMaterialList;
 	}
 
 	@Override
@@ -71,6 +82,16 @@ public class MaterialDaoImpl implements MaterialDao {
 
 		log.info("[saveMaterialRequest] return - savedMaterialRequest: {}", savedMaterialRequest);
 		return savedMaterialRequest;
+	}
+
+	@Override
+	public List<MaterialRequest> findMaterialRequestList() {
+		log.info("[findMaterialRequestList] param - none");
+
+		List<MaterialRequest> foundMaterialRequestList = materialRequestRepository.findAll();
+
+		log.info("[findMaterialRequestList] return - foundMaterialRequestList: {}", foundMaterialRequestList);
+		return foundMaterialRequestList;
 	}
 
 	@Override
@@ -114,6 +135,16 @@ public class MaterialDaoImpl implements MaterialDao {
 	}
 
 	@Override
+	public List<MaterialPurchase> findMaterialPurchaseList() {
+		log.info("[findMaterialPurchaseList] param - none");
+
+		List<MaterialPurchase> foundMaterialPurchaseList = materialPurchaseRepository.findAll();
+
+		log.info("[findMaterialPurchaseList] return - foundMaterialPurchaseList: {}", foundMaterialPurchaseList);
+		return foundMaterialPurchaseList;
+	}
+
+	@Override
 	public Optional<MaterialPurchase> findMaterialPurchaseById(Long materialPurchaseId) {
 		log.info("[findMaterialPurchaseById] param - materialPurchaseId: {}", materialPurchaseId);
 
@@ -150,6 +181,16 @@ public class MaterialDaoImpl implements MaterialDao {
 
 		log.info("[saveSupplier] return - savedSupplier: {}", savedSupplier);
 		return savedSupplier;
+	}
+
+	@Override
+	public List<Supplier> findSupplierList() {
+		log.info("[findSupplierList] param - none");
+
+		List<Supplier> foundSupplierList = supplierRepository.findAll();
+
+		log.info("[findSupplierList] return - foundSupplierList: {}", foundSupplierList);
+		return foundSupplierList;
 	}
 
 	@Override
