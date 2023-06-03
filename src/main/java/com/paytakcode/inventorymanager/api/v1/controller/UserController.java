@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paytakcode.inventorymanager.api.v1.config.ApiBaseUrlConfig;
 import com.paytakcode.inventorymanager.api.v1.data.dto.LoginDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.RoleDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.UserDto;
@@ -28,14 +29,14 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User Controller
  * @Author 김태산
- * @Version 0.5.0
+ * @Version 0.5.1
  * @Since 2023-05-18 오후 3:40
  */
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping(ApiBaseUrlConfig.API_BASE_URL)
 public class UserController {
 
 	private final UserService userService;
