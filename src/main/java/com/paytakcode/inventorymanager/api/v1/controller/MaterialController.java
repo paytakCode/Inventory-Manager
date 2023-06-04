@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paytakcode.inventorymanager.api.v1.config.ApiBaseUrlConfig;
+import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestDto;
@@ -28,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Controller
  * @Author 김태산
- * @Version 0.6.2
+ * @Version 0.7.0
  * @Since 2023-05-24 오전 11:30
  */
 
@@ -275,5 +276,17 @@ public class MaterialController {
 		return ResponseEntity
 			.status(HttpStatus.NO_CONTENT)
 			.build();
+	}
+
+	@GetMapping("/material-contents")
+	public ResponseEntity<List<MaterialContentDto>> materialContentList() {
+		log.info("[materialContentList] param - none");
+
+		List<MaterialContentDto> materialContentList = materialService.getMaterialContentList();
+
+		log.info("[materialContentList] return - HttpStatus.OK(200), materialContentList: {}", materialContentList);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(materialContentList);
 	}
 }

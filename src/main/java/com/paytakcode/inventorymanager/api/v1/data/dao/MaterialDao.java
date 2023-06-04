@@ -11,7 +11,7 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.Supplier;
 /**
  * Material DAO
  * @Author 김태산
- * @Version 0.6.0
+ * @Version 0.7.0
  * @Since 2023-05-24 오전 11:52
  */
 public interface MaterialDao {
@@ -52,4 +52,8 @@ public interface MaterialDao {
 	Supplier getSupplierReferenceById(Long supplierId);
 
 	void deleteSupplierById(Long supplierId);
+
+	Integer getTotalPurchaseQuantityById(Long materialId);
+
+	Integer getExpectedInboundQuantityById(Long materialId);
 }

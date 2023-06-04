@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material DAO Implementation
  * @Author 김태산
- * @Version 0.6.0
+ * @Version 0.7.0
  * @Since 2023-05-24 오전 11:53
  */
 
@@ -220,5 +220,26 @@ public class MaterialDaoImpl implements MaterialDao {
 		supplierRepository.deleteById(supplierId);
 
 		log.info("[deleteSupplierById] result - supplier Deleted: {}", supplierId);
+	}
+
+	@Override
+	public Integer getTotalPurchaseQuantityById(Long materialId) {
+		log.info("[getTotalPurchaseQuantityById] param - materialId: {}", materialId);
+
+		Integer gotTotalPurchaseQuantity = materialPurchaseRepository.getTotalPurchaseQuantityById(materialId);
+
+		log.info("[getTotalPurchaseQuantityById] return - gotTotalPurchaseQuantity: {}", gotTotalPurchaseQuantity);
+		return gotTotalPurchaseQuantity;
+	}
+
+	@Override
+	public Integer getExpectedInboundQuantityById(Long materialId) {
+		log.info("[getExpectedInboundQuantityById] param - materialId: {}", materialId);
+
+		Integer gotExpectedInboundQuantity = materialPurchaseRepository.getExpectedInboundQuantityById(materialId);
+
+		log.info("[getExpectedInboundQuantityById] return - gotExpectedInboundQuantity: {}",
+			gotExpectedInboundQuantity);
+		return gotExpectedInboundQuantity;
 	}
 }

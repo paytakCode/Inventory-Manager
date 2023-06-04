@@ -1,7 +1,11 @@
 package com.paytakcode.inventorymanager.api.v1.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -9,11 +13,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.paytakcode.inventorymanager.api.v1.data.dao.MaterialDao;
+import com.paytakcode.inventorymanager.api.v1.data.dao.ProductDao;
 import com.paytakcode.inventorymanager.api.v1.data.dao.UserDao;
+import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierDto;
+import com.paytakcode.inventorymanager.api.v1.data.emum.ProductionStatus;
 import com.paytakcode.inventorymanager.api.v1.data.emum.PurchaseStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Material;
 import com.paytakcode.inventorymanager.api.v1.data.entity.MaterialPurchase;
@@ -21,6 +30,7 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.MaterialRequest;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Supplier;
 import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 import com.paytakcode.inventorymanager.api.v1.service.MaterialService;
+import com.paytakcode.inventorymanager.api.v1.service.ProductService;
 import com.paytakcode.inventorymanager.api.v1.util.DtoToEntityMapper;
 import com.paytakcode.inventorymanager.api.v1.util.EntityToDtoMapper;
 
@@ -30,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Service Implementation
  * @Author 김태산
- * @Version 0.7.0
+ * @Version 0.8.0
  * @Since 2023-05-24 오전 11:46
  */
 
@@ -40,9 +50,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MaterialServiceImpl implements MaterialService {
 
-
 	private final DtoToEntityMapper dtoToEntityMapper;
 	private final MaterialDao materialDao;
+	private final ProductDao productDao;
+	private final ProductService productService;
 	private final UserDao userDao;
 
 	@Override
@@ -350,4 +361,68 @@ public class MaterialServiceImpl implements MaterialService {
 
 		materialDao.deleteSupplierById(supplierId);
 	}
+
+	@Override
+	public List<MaterialContentDto> getMaterialContentList() {
+		log.info("[getMaterialContentList] param - none");
+
+		List<MaterialContentDto> materialContentList = new ArrayList<>();
+
+		List<MaterialDto> materialList = getMaterialList();
+		List<ProductMaterialDto> productMaterialList = productService.getProductMaterialList();
+		List<ProductionDto> productionList = productService.getProductionList();
+
+		Map<Long, Integer> totalConsumptionQuantityByMaterialId = new HashMap<>();
+		Map<Long, Integer> totalPlannedConsumptionQuantityByMaterialId = new HashMap<>();
+
+		for (ProductionDto productionDto : productionList) {
+			Long productId = productionDto.getProductDto().getId();
+			boolean isCompleted = productionDto.getStatus() == ProductionStatus.COMPLETED;
+			boolean isPlannedOrInProduction = productionDto.getStatus() == ProductionStatus.PRODUCTION
+				|| productionDto.getStatus() == ProductionStatus.PLANNED;
+
+			for (ProductMaterialDto productMaterialDto : productMaterialList) {
+				if (Objects.equals(productMaterialDto.getProductMaterialIdDto().getProductId(), productId)) {
+					Long materialId = productMaterialDto.getProductMaterialIdDto().getMaterialId();
+					int quantity = productionDto.getQuantity() * productMaterialDto.getRequiredQuantity();
+
+					if (isCompleted) {
+						totalConsumptionQuantityByMaterialId.merge(materialId, quantity, Integer::sum);
+					} else if (isPlannedOrInProduction) {
+						totalPlannedConsumptionQuantityByMaterialId.merge(materialId, quantity, Integer::sum);
+					}
+				}
+			}
+		}
+
+		for (MaterialDto materialDto : materialList) {
+			Long materialId = materialDto.getId();
+			Integer totalPurchaseQuantity = Optional.ofNullable(materialDao.getTotalPurchaseQuantityById(materialId))
+				.orElse(0);
+			Integer expectedInboundQuantity = Optional.ofNullable(
+				materialDao.getExpectedInboundQuantityById(materialId)).orElse(0);
+			Integer currentQuantity =
+				totalPurchaseQuantity - totalConsumptionQuantityByMaterialId.getOrDefault(materialId, 0);
+			Integer actualQuantity = currentQuantity + expectedInboundQuantity
+				- totalPlannedConsumptionQuantityByMaterialId.getOrDefault(materialId, 0);
+
+			MaterialContentDto materialContentDto = new MaterialContentDto();
+			materialContentDto.setId(materialDto.getId());
+			materialContentDto.setName(materialDto.getName());
+			materialContentDto.setDetails(materialDto.getDetails());
+			materialContentDto.setSpec(materialDto.getSpec());
+			materialContentDto.setSupplierDto(materialDto.getSupplierDto());
+			materialContentDto.setCurrentQuantity(currentQuantity);
+			materialContentDto.setExpectedInboundQuantity(expectedInboundQuantity);
+			materialContentDto.setPlannedConsumptionQuantity(
+				totalPlannedConsumptionQuantityByMaterialId.getOrDefault(materialId, 0));
+			materialContentDto.setActualQuantity(actualQuantity);
+
+			materialContentList.add(materialContentDto);
+		}
+
+		log.info("[getMaterialContentList] return - materialContentList: {}", materialContentList);
+		return materialContentList;
+	}
+
 }
