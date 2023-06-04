@@ -26,7 +26,7 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 /**
  * Entity to DTO Mapper
  * @Author 김태산
- * @Version 0.2.2
+ * @Version 0.3.0
  * @Since 2023-05-26 오후 3:39
  */
 public class EntityToDtoMapper {
@@ -46,42 +46,51 @@ public class EntityToDtoMapper {
     }
 
     public static MaterialDto convertMaterialToDto(Material material) {
-        Long supplierId = material.getSupplier() == null ? null : material.getSupplier().getId();
+        SupplierDto supplierDto = material.getSupplier() == null ?
+            null : EntityToDtoMapper.convertSupplierToDto(material.getSupplier());
 
         return MaterialDto.builder()
             .id(material.getId())
             .name(material.getName())
             .spec(material.getSpec())
             .details(material.getDetails())
-            .supplierId(supplierId)
+            .supplierDto(supplierDto)
             .build();
     }
 
     public static MaterialPurchaseDto convertMaterialPurchaseToDto(MaterialPurchase materialPurchase) {
-        Long materialRequestId =
-            materialPurchase.getMaterialRequest() == null ? null : materialPurchase.getMaterialRequest().getId();
+        MaterialRequestDto materialRequestDto = materialPurchase.getMaterialRequest() == null ?
+            null : EntityToDtoMapper.convertMaterialRequestToDto(materialPurchase.getMaterialRequest());
+
+        MaterialDto materialDto = EntityToDtoMapper.convertMaterialToDto(materialPurchase.getMaterial());
+        UserInfoDto managerDto = EntityToDtoMapper.convertUserToUserInfoDto(materialPurchase.getManager());
 
         return MaterialPurchaseDto.builder()
             .id(materialPurchase.getId())
-            .materialId(materialPurchase.getMaterial().getId())
-            .managerId(materialPurchase.getManager().getId())
+            .materialDto(materialDto)
+            .managerDto(managerDto)
             .details(materialPurchase.getDetails())
             .lotNo(materialPurchase.getLotNo())
             .quantity(materialPurchase.getQuantity())
             .price(materialPurchase.getPrice())
             .status(materialPurchase.getStatus())
-            .materialRequestId(materialRequestId)
+            .materialRequestDto(materialRequestDto)
             .build();
     }
 
     public static MaterialRequestDto convertMaterialRequestToDto(MaterialRequest materialRequest) {
+        MaterialDto materialDto = EntityToDtoMapper.convertMaterialToDto(materialRequest.getMaterial());
+        UserInfoDto requesterDto = EntityToDtoMapper.convertUserToUserInfoDto(materialRequest.getRequester());
+        MaterialPurchaseDto materialPurchaseDto = materialRequest.getMaterialPurchase() == null ?
+            null : EntityToDtoMapper.convertMaterialPurchaseToDto(materialRequest.getMaterialPurchase());
+
         return MaterialRequestDto.builder()
             .id(materialRequest.getId())
-            .materialId(materialRequest.getId())
-            .requesterId(materialRequest.getRequester().getId())
+            .materialDto(materialDto)
+            .requesterDto(requesterDto)
             .quantity(materialRequest.getQuantity())
             .details(materialRequest.getDetails())
-            .materialPurchaseId(materialRequest.getId())
+            .materialPurchaseDto(materialPurchaseDto)
             .build();
     }
 
@@ -95,10 +104,13 @@ public class EntityToDtoMapper {
     }
 
     public static ProductionDto convertProductionToDto(Production production) {
+        ProductDto productDto = EntityToDtoMapper.convertProductToDto(production.getProduct());
+        UserInfoDto managerDto = EntityToDtoMapper.convertUserToUserInfoDto(production.getManager());
+
         return ProductionDto.builder()
             .id(production.getId())
-            .productId(production.getProduct().getId())
-            .managerId(production.getManager().getId())
+            .productDto(productDto)
+            .managerDto(managerDto)
             .quantity(production.getQuantity())
             .details(production.getDetails())
             .targetDate(production.getTargetDate())
@@ -140,11 +152,15 @@ public class EntityToDtoMapper {
     }
 
     public static SalesOrderDto convertSalesOrderToDto(SalesOrder salesOrder) {
+        ProductDto productDto = EntityToDtoMapper.convertProductToDto(salesOrder.getProduct());
+        BuyerDto buyerDto = EntityToDtoMapper.convertBuyerToDto(salesOrder.getBuyer());
+        UserInfoDto managerDto = EntityToDtoMapper.convertUserToUserInfoDto(salesOrder.getManager());
+
         return SalesOrderDto.builder()
             .id(salesOrder.getId())
-            .productId(salesOrder.getProduct().getId())
-            .buyerId(salesOrder.getBuyer().getId())
-            .managerId(salesOrder.getManager().getId())
+            .productDto(productDto)
+            .buyerDto(buyerDto)
+            .managerDto(managerDto)
             .dueDate(salesOrder.getDueDate())
             .quantity(salesOrder.getQuantity())
             .completionDate(salesOrder.getCompletionDate())

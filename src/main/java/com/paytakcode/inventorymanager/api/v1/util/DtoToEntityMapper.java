@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * DTO to Entity Mapper
  * @Author 김태산
- * @Version 0.1.4
+ * @Version 0.2.0
  * @Since 2023-05-26 오후 4:50
  */
 
@@ -63,8 +63,8 @@ public class DtoToEntityMapper {
     }
 
     public Material convertMaterialDtoToEntity(MaterialDto materialDto) {
-        Supplier supplier = materialDto.getSupplierId() == null ?
-            null : materialDao.getSupplierReferenceById(materialDto.getSupplierId());
+        Supplier supplier = materialDto.getSupplierDto() == null ?
+            null : materialDao.getSupplierReferenceById(materialDto.getSupplierDto().getId());
 
         return Material.builder()
             .name(materialDto.getName())
@@ -75,12 +75,12 @@ public class DtoToEntityMapper {
     }
 
     public MaterialPurchase convertMaterialPurchaseDtoToEntity(MaterialPurchaseDto materialPurchaseDto) {
-        UserEntity manager = userDao.getUserReferenceById(materialPurchaseDto.getManagerId());
-        Material material = materialDao.getMaterialReferenceById(materialPurchaseDto.getMaterialId());
+        UserEntity manager = userDao.getUserReferenceById(materialPurchaseDto.getManagerDto().getId());
+        Material material = materialDao.getMaterialReferenceById(materialPurchaseDto.getMaterialDto().getId());
         PurchaseStatus status =
             materialPurchaseDto.getStatus() == null ? PurchaseStatus.ACCEPTED : materialPurchaseDto.getStatus();
-        MaterialRequest materialRequest = materialPurchaseDto.getMaterialRequestId() == null ?
-            null : materialDao.getMaterialRequestReferenceById(materialPurchaseDto.getMaterialRequestId());
+        MaterialRequest materialRequest = materialPurchaseDto.getMaterialRequestDto() == null ?
+            null : materialDao.getMaterialRequestReferenceById(materialPurchaseDto.getMaterialRequestDto().getId());
 
         return MaterialPurchase.builder()
             .manager(manager)
@@ -95,8 +95,8 @@ public class DtoToEntityMapper {
     }
 
     public MaterialRequest convertMaterialRequestDtoToEntity(MaterialRequestDto materialRequestDto) {
-        Material requestMaterial = materialDao.getMaterialReferenceById(materialRequestDto.getMaterialId());
-        UserEntity requester = userDao.getUserReferenceById(materialRequestDto.getRequesterId());
+        Material requestMaterial = materialDao.getMaterialReferenceById(materialRequestDto.getMaterialDto().getId());
+        UserEntity requester = userDao.getUserReferenceById(materialRequestDto.getRequesterDto().getId());
 
         return MaterialRequest.builder()
             .requester(requester)
@@ -115,8 +115,8 @@ public class DtoToEntityMapper {
     }
 
     public Production convertProductionDtoToEntity(ProductionDto productionDto) {
-        Product product = productDao.getProductReferenceById(productionDto.getProductId());
-        UserEntity manager = userDao.getUserReferenceById(productionDto.getManagerId());
+        Product product = productDao.getProductReferenceById(productionDto.getProductDto().getId());
+        UserEntity manager = userDao.getUserReferenceById(productionDto.getManagerDto().getId());
         ProductionStatus status =
             productionDto.getStatus() == null ? ProductionStatus.PLANNED : productionDto.getStatus();
 
@@ -149,9 +149,9 @@ public class DtoToEntityMapper {
             .build();
     }
     public SalesOrder convertSalesOrderDtoToEntity(SalesOrderDto salesOrderDto) {
-        Product product = productDao.getProductReferenceById(salesOrderDto.getProductId());
-        Buyer buyer = salesDao.getBuyerReferenceById(salesOrderDto.getBuyerId());
-        UserEntity manager = userDao.getUserReferenceById(salesOrderDto.getManagerId());
+        Product product = productDao.getProductReferenceById(salesOrderDto.getProductDto().getId());
+        Buyer buyer = salesDao.getBuyerReferenceById(salesOrderDto.getBuyerDto().getId());
+        UserEntity manager = userDao.getUserReferenceById(salesOrderDto.getManagerDto().getId());
 
         return SalesOrder.builder()
             .product(product)

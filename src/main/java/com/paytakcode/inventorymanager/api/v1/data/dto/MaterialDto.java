@@ -14,7 +14,7 @@ import lombok.ToString;
 /**
  * Material DTO
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.2.0
  * @Since 2023-05-24 오전 11:40
  */
 
@@ -39,5 +39,5 @@ public class MaterialDto {
 	private String details;
 
 	@Nullable
-	private Long supplierId;
+	private SupplierDto supplierDto;
 }

@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product Service Implementation
  * @Author 김태산
- * @Version 0.4.0
+ * @Version 0.5.0
  * @Since 2023-05-25 오전 9:02
  */
 @Service
@@ -263,7 +263,7 @@ public class ProductServiceImpl implements ProductService {
 
 		Production production = productDao.findProductionById(productionId)
 			.orElseThrow(() -> new EntityNotFoundException("Production not found for ID: " + productionId));
-		Product product = productDao.getProductReferenceById(productionDto.getProductId());
+		Product product = productDao.getProductReferenceById(productionDto.getProductDto().getId());
 
 		if (productionDto.getStatus() == ProductionStatus.COMPLETED
 			&& production.getStatus() != ProductionStatus.COMPLETED){

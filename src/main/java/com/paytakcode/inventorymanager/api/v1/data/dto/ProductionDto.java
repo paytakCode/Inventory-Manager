@@ -17,7 +17,7 @@ import lombok.ToString;
 /**
  * Production DTO
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.3.0
  * @Since 2023-05-25 오후 5:06
  */
 
@@ -31,10 +31,10 @@ public class ProductionDto {
 	private Long id;
 
 	@NotNull
-	private Long productId;
+	private ProductDto productDto;
 
 	@NotNull
-	private Long managerId;
+	private UserInfoDto managerDto;
 
 	@Nullable
 	private String lotNo;

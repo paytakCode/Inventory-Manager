@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Sales Service Implementation
  * @Author 김태산
- * @Version 0.4.0
+ * @Version 0.5.0
  * @Since 2023-05-26 오후 3:15
  */
 
@@ -158,18 +158,18 @@ public class SalesServiceImpl implements SalesService {
 		SalesOrder salesOrder = salesDao.findSalesOrderById(salesOrderId)
 			.orElseThrow();
 
-		Product product = productDao.getProductReferenceById(salesOrderDto.getProductId());
-		Buyer buyer = salesDao.getBuyerReferenceById(salesOrderDto.getBuyerId());
+		Product product = productDao.getProductReferenceById(salesOrderDto.getProductDto().getId());
+		Buyer buyer = salesDao.getBuyerReferenceById(salesOrderDto.getBuyerDto().getId());
 
 		if (salesOrderDto.getStatus() == OrderStatus.COMPLETED
-            && salesOrder.getStatus() != OrderStatus.COMPLETED){
-            salesOrder.setCompletionDate(LocalDateTime.now());
-        } else {
-            salesOrder.setCompletionDate(null);
-        }
+			&& salesOrder.getStatus() != OrderStatus.COMPLETED) {
+			salesOrder.setCompletionDate(LocalDateTime.now());
+		} else {
+			salesOrder.setCompletionDate(null);
+		}
 
-        salesOrder.setProduct(product);
-        salesOrder.setQuantity(salesOrderDto.getQuantity());
+		salesOrder.setProduct(product);
+		salesOrder.setQuantity(salesOrderDto.getQuantity());
 		salesOrder.setBuyer(buyer);
 		salesOrder.setDueDate(salesOrderDto.getDueDate());
 		salesOrder.setStatus(salesOrderDto.getStatus());

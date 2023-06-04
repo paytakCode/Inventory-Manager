@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Service Implementation
  * @Author 김태산
- * @Version 0.6.0
+ * @Version 0.7.0
  * @Since 2023-05-24 오전 11:46
  */
 
@@ -99,10 +99,10 @@ public class MaterialServiceImpl implements MaterialService {
 		material.setSpec(materialDto.getSpec());
 		material.setDetails(materialDto.getDetails());
 
-		Supplier newSupplier = materialDto.getSupplierId() != null ?
-			materialDao.getSupplierReferenceById(materialDto.getSupplierId()) : null;
+		Supplier supplier = materialDto.getSupplierDto() != null ?
+			materialDao.getSupplierReferenceById(materialDto.getSupplierDto().getId()) : null;
 
-		material.setSupplier(newSupplier);
+		material.setSupplier(supplier);
 
 		Material updatedMaterial = materialDao.saveMaterial(material);
 
@@ -170,10 +170,8 @@ public class MaterialServiceImpl implements MaterialService {
 
 		MaterialRequest materialRequest = materialDao.findMaterialRequestById(materialRequestId)
 			.orElseThrow(() -> new EntityNotFoundException("MaterialRequest not found for ID: " + materialRequestId));
-		Material material = materialDao.findMaterialById(materialRequestDto.getMaterialId())
-			.orElseThrow(
-				() -> new EntityNotFoundException("Material not found for ID: " + materialRequestDto.getMaterialId()));
-		UserEntity requester = userDao.getUserReferenceById(materialRequestDto.getRequesterId());
+		Material material = materialDao.getMaterialReferenceById(materialRequestDto.getMaterialDto().getId());
+		UserEntity requester = userDao.getUserReferenceById(materialRequestDto.getRequesterDto().getId());
 
 		materialRequest.setMaterial(material);
 		materialRequest.setQuantity(materialRequestDto.getQuantity());
@@ -247,14 +245,15 @@ public class MaterialServiceImpl implements MaterialService {
 
 		MaterialPurchase materialPurchase = materialDao.findMaterialPurchaseById(materialPurchaseId)
 			.orElseThrow(() -> new EntityNotFoundException("MaterialPurchase not found for ID: " + materialPurchaseId));
-		Material material = materialDao.findMaterialById(materialPurchaseDto.getMaterialId())
+		Material material = materialDao.findMaterialById(materialPurchaseDto.getMaterialDto().getId())
 			.orElseThrow(
-				() -> new EntityNotFoundException("Material not found for ID: " + materialPurchaseDto.getMaterialId()));
-		UserEntity manager = userDao.getUserReferenceById(materialPurchaseDto.getManagerId());
+				() -> new EntityNotFoundException(
+					"Material not found for ID: " + materialPurchaseDto.getMaterialDto().getId()));
+		UserEntity manager = userDao.getUserReferenceById(materialPurchaseDto.getManagerDto().getId());
 		PurchaseStatus status =
 			materialPurchaseDto.getStatus() == null ? PurchaseStatus.ACCEPTED : materialPurchaseDto.getStatus();
-		MaterialRequest materialRequest = materialPurchaseDto.getMaterialRequestId() == null
-			? null : materialDao.getMaterialRequestReferenceById(materialPurchaseDto.getMaterialRequestId());
+		MaterialRequest materialRequest = materialPurchaseDto.getMaterialRequestDto() == null
+			? null : materialDao.getMaterialRequestReferenceById(materialPurchaseDto.getMaterialRequestDto().getId());
 
 		materialPurchase.setMaterial(material);
 		materialPurchase.setQuantity(materialPurchaseDto.getQuantity());

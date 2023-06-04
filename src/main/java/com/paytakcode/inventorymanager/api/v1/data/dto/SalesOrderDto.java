@@ -15,7 +15,7 @@ import lombok.ToString;
 /**
  * Sales DTO
  * @Author 김태산
- * @Version 0.1.2
+ * @Version 0.2.0
  * @Since 2023-05-27 오후 9:23
  */
 
@@ -29,16 +29,16 @@ public class SalesOrderDto {
 	private Long id;
 
 	@NotNull
-	private Long productId;
+	private ProductDto productDto;
 
 	@NotNull
 	private Integer quantity;
 
 	@NotNull
-	private Long managerId;
+	private UserInfoDto managerDto;
 
 	@NotNull
-	private Long buyerId;
+	private BuyerDto buyerDto;
 
 	@NotNull
 	private LocalDateTime dueDate;
