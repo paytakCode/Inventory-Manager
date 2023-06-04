@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Controller
  * @Author 김태산
- * @Version 0.6.1
+ * @Version 0.6.2
  * @Since 2023-05-24 오전 11:30
  */
 
@@ -103,10 +103,10 @@ public class MaterialController {
 	}
 
 	@GetMapping("/material-requests")
-	public ResponseEntity<List<MaterialPurchaseDto>> materialRequestList() {
+	public ResponseEntity<List<MaterialRequestDto>> materialRequestList() {
 		log.info("[materialRequestList] param - none");
 
-		List<MaterialPurchaseDto> materialRequestList = materialService.getMaterialPurchaseList();
+		List<MaterialRequestDto> materialRequestList = materialService.getMaterialRequestList();
 
 		log.info("[materialRequestList] return - HttpStatus.OK(200), materialRequestList: {}", materialRequestList);
 		return ResponseEntity
