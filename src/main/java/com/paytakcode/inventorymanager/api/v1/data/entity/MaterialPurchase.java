@@ -1,5 +1,7 @@
 package com.paytakcode.inventorymanager.api.v1.data.entity;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -27,7 +29,7 @@ import lombok.ToString;
  * Material Purchase Entity
  * 자재 구매 Table
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.3.0
  * @Since 2023-05-21 오후 11:00
  */
 @Entity
@@ -75,4 +77,17 @@ public class MaterialPurchase extends BaseEntity {
 
 	@NotNull
 	private Boolean isDeleted;
+
+	public void setMaterialRequest(MaterialRequest materialRequest) {
+		if (Objects.equals(this.materialRequest, materialRequest)) {
+			return;
+		}
+
+		this.materialRequest = materialRequest;
+
+		if (materialRequest != null && materialRequest.getMaterialPurchase() != null
+			&& !materialRequest.getMaterialPurchase().equals(this)) {
+			materialRequest.setMaterialPurchase(this);
+		}
+	}
 }

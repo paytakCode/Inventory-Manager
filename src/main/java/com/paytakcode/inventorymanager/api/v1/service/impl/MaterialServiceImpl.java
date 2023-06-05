@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Service Implementation
  * @Author 김태산
- * @Version 0.9.0
+ * @Version 0.9.1
  * @Since 2023-05-24 오전 11:46
  */
 
@@ -292,7 +292,8 @@ public class MaterialServiceImpl implements MaterialService {
 		UserEntity manager = userDao.getUserReferenceById(materialPurchaseDto.getManagerDto().getId());
 		PurchaseStatus status =
 			materialPurchaseDto.getStatus() == null ? PurchaseStatus.ACCEPTED : materialPurchaseDto.getStatus();
-		MaterialRequest materialRequest = materialPurchaseDto.getMaterialRequestDto() == null
+		MaterialRequest materialRequest = (materialPurchaseDto.getMaterialRequestDto() == null
+			|| materialPurchaseDto.getMaterialRequestDto().getId() == null)
 			? null : materialDao.getMaterialRequestReferenceById(materialPurchaseDto.getMaterialRequestDto().getId());
 
 		materialPurchase.setMaterial(material);

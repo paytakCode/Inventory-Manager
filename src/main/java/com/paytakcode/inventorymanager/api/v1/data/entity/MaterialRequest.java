@@ -1,5 +1,7 @@
 package com.paytakcode.inventorymanager.api.v1.data.entity;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +25,7 @@ import lombok.ToString;
  * Material Request Entity
  * 생산부에서 자재 요청한 내역을 저장하는 테이블
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.3.0
  * @Since 2023-05-21 오후 10:39
  */
 @Entity
@@ -60,4 +62,17 @@ public class MaterialRequest extends BaseEntity {
 
 	@NotNull
 	private Boolean isDeleted;
+
+	public void setMaterialPurchase(MaterialPurchase materialPurchase) {
+		if (Objects.equals(this.materialPurchase, materialPurchase)) {
+			return;
+		}
+
+		this.materialPurchase = materialPurchase;
+
+		if (materialPurchase != null && materialPurchase.getMaterialRequest() != null
+			&& !materialPurchase.getMaterialRequest().equals(this)) {
+			materialPurchase.setMaterialRequest(this);
+		}
+	}
 }

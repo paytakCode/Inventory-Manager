@@ -26,7 +26,7 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 /**
  * Entity to DTO Mapper
  * @Author 김태산
- * @Version 0.3.1
+ * @Version 0.4.0
  * @Since 2023-05-26 오후 3:39
  */
 public class EntityToDtoMapper {
@@ -59,8 +59,21 @@ public class EntityToDtoMapper {
     }
 
     public static MaterialPurchaseDto convertMaterialPurchaseToDto(MaterialPurchase materialPurchase) {
-        MaterialRequestDto materialRequestDto = materialPurchase.getMaterialRequest() == null ?
-            null : EntityToDtoMapper.convertMaterialRequestToDto(materialPurchase.getMaterialRequest());
+        MaterialRequestDto materialRequestDto = null;
+        if (materialPurchase.getMaterialRequest() != null) {
+            MaterialDto materialDto = EntityToDtoMapper.convertMaterialToDto(
+                materialPurchase.getMaterialRequest().getMaterial());
+            UserInfoDto requesterDto = EntityToDtoMapper.convertUserToUserInfoDto(
+                materialPurchase.getMaterialRequest().getRequester());
+            materialRequestDto = MaterialRequestDto.builder()
+                .id(materialPurchase.getMaterialRequest().getId())
+                .materialDto(materialDto)
+                .requesterDto(requesterDto)
+                .requestDate(materialPurchase.getMaterialRequest().getCreatedDate())
+                .details(materialPurchase.getMaterialRequest().getDetails())
+                .quantity(materialPurchase.getMaterialRequest().getQuantity())
+                .build();
+        }
 
         MaterialDto materialDto = EntityToDtoMapper.convertMaterialToDto(materialPurchase.getMaterial());
         UserInfoDto managerDto = EntityToDtoMapper.convertUserToUserInfoDto(materialPurchase.getManager());
@@ -79,10 +92,25 @@ public class EntityToDtoMapper {
     }
 
     public static MaterialRequestDto convertMaterialRequestToDto(MaterialRequest materialRequest) {
+        MaterialPurchaseDto materialPurchaseDto = null;
+        if (materialRequest.getMaterialPurchase() != null) {
+            MaterialDto materialDto = EntityToDtoMapper.convertMaterialToDto(
+                materialRequest.getMaterialPurchase().getMaterial());
+            UserInfoDto managerDto = EntityToDtoMapper.convertUserToUserInfoDto(
+                materialRequest.getMaterialPurchase().getManager());
+            materialPurchaseDto = MaterialPurchaseDto.builder()
+                .id(materialRequest.getMaterialPurchase().getId())
+                .materialDto(materialDto)
+                .managerDto(managerDto)
+                .status(materialRequest.getMaterialPurchase().getStatus())
+                .price(materialRequest.getMaterialPurchase().getPrice())
+                .lotNo(materialRequest.getMaterialPurchase().getLotNo())
+                .details(materialRequest.getMaterialPurchase().getDetails())
+                .quantity(materialRequest.getMaterialPurchase().getQuantity())
+                .build();
+        }
         MaterialDto materialDto = EntityToDtoMapper.convertMaterialToDto(materialRequest.getMaterial());
         UserInfoDto requesterDto = EntityToDtoMapper.convertUserToUserInfoDto(materialRequest.getRequester());
-        MaterialPurchaseDto materialPurchaseDto = materialRequest.getMaterialPurchase() == null ?
-            null : EntityToDtoMapper.convertMaterialPurchaseToDto(materialRequest.getMaterialPurchase());
 
         return MaterialRequestDto.builder()
             .id(materialRequest.getId())
