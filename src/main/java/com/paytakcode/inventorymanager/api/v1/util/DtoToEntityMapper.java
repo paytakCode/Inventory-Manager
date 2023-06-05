@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * DTO to Entity Mapper
  * @Author 김태산
- * @Version 0.2.0
+ * @Version 0.3.0
  * @Since 2023-05-26 오후 4:50
  */
 
@@ -70,6 +70,7 @@ public class DtoToEntityMapper {
             .name(materialDto.getName())
             .spec(materialDto.getSpec())
             .details(materialDto.getDetails())
+            .isDeleted(false)
             .supplier(supplier)
             .build();
     }
@@ -91,6 +92,7 @@ public class DtoToEntityMapper {
             .price(materialPurchaseDto.getPrice())
             .status(status)
             .materialRequest(materialRequest)
+            .isDeleted(false)
             .build();
     }
 
@@ -103,6 +105,7 @@ public class DtoToEntityMapper {
             .material(requestMaterial)
             .quantity(materialRequestDto.getQuantity())
             .details(materialRequestDto.getDetails())
+            .isDeleted(false)
             .build();
     }
 
@@ -136,6 +139,7 @@ public class DtoToEntityMapper {
             .loc(supplierDto.getLoc())
             .managerName(supplierDto.getManagerName())
             .tel(supplierDto.getTel())
+            .isDeleted(false)
             .build();
     }
 

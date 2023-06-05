@@ -11,7 +11,7 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierDto;
 /**
  * Material Service
  * @Author 김태산
- * @Version 0.7.0
+ * @Version 0.8.0
  * @Since 2023-05-24 오전 11:46
  */
 public interface MaterialService {
@@ -26,6 +26,8 @@ public interface MaterialService {
 
 	void deleteMaterialById(Long materialId);
 
+	void updateMaterialIsDeletedToTrueById(Long materialId);
+
 	MaterialRequestDto addMaterialRequest(MaterialRequestDto materialRequestDto);
 
 	List<MaterialRequestDto> getMaterialRequestList();
@@ -35,6 +37,8 @@ public interface MaterialService {
 	void updateMaterialRequest(Long materialRequestId, MaterialRequestDto materialRequestDto);
 
 	void deleteMaterialRequestById(Long materialRequestId);
+
+	void updateMaterialRequestIsDeletedToTrueById(Long materialRequestId);
 
 	MaterialPurchaseDto addMaterialPurchase(MaterialPurchaseDto materialPurchaseDto);
 
@@ -46,6 +50,8 @@ public interface MaterialService {
 
 	void deleteMaterialPurchaseById(Long materialPurchaseId);
 
+	void updateMaterialPurchaseIsDeletedToTrueById(Long materialPurchaseId);
+
 	SupplierDto addSupplier(SupplierDto supplierDto);
 
 	List<SupplierDto> getSupplierList();
@@ -55,6 +61,8 @@ public interface MaterialService {
 	void updateSupplier(Long supplierId, SupplierDto supplierDto);
 
 	void deleteSupplierById(Long supplierId);
+
+	void updateSupplierIsDeletedToTrueById(Long supplierId);
 
 	List<MaterialContentDto> getMaterialContentList();
 }

@@ -19,18 +19,17 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestDto;
-import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
-import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierDto;
 import com.paytakcode.inventorymanager.api.v1.data.emum.ProductionStatus;
 import com.paytakcode.inventorymanager.api.v1.data.emum.PurchaseStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Material;
 import com.paytakcode.inventorymanager.api.v1.data.entity.MaterialPurchase;
 import com.paytakcode.inventorymanager.api.v1.data.entity.MaterialRequest;
+import com.paytakcode.inventorymanager.api.v1.data.entity.ProductMaterial;
+import com.paytakcode.inventorymanager.api.v1.data.entity.Production;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Supplier;
 import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 import com.paytakcode.inventorymanager.api.v1.service.MaterialService;
-import com.paytakcode.inventorymanager.api.v1.service.ProductService;
 import com.paytakcode.inventorymanager.api.v1.util.DtoToEntityMapper;
 import com.paytakcode.inventorymanager.api.v1.util.EntityToDtoMapper;
 
@@ -40,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Service Implementation
  * @Author 김태산
- * @Version 0.8.0
+ * @Version 0.9.0
  * @Since 2023-05-24 오전 11:46
  */
 
@@ -53,7 +52,6 @@ public class MaterialServiceImpl implements MaterialService {
 	private final DtoToEntityMapper dtoToEntityMapper;
 	private final MaterialDao materialDao;
 	private final ProductDao productDao;
-	private final ProductService productService;
 	private final UserDao userDao;
 
 	@Override
@@ -130,6 +128,21 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	@Override
+	public void updateMaterialIsDeletedToTrueById(Long materialId) {
+		log.info("[updateMaterialIsDeletedToTrueById] param - materialId: {}", materialId);
+
+		Material material = materialDao.findMaterialById(materialId)
+			.orElseThrow(() -> new EntityNotFoundException("Material not found for ID: " + materialId));
+
+		material.setIsDeleted(true);
+
+		materialDao.saveMaterial(material);
+
+		log.info("[updateMaterialIsDeletedToTrueById] result - Material updated(isDeleted=true) materialId: {}",
+			materialId);
+	}
+
+	@Override
 	public MaterialRequestDto addMaterialRequest(MaterialRequestDto materialRequestDto) {
 		log.info("[addMaterialRequest] param - materialRequestDto: {}", materialRequestDto);
 
@@ -202,6 +215,22 @@ public class MaterialServiceImpl implements MaterialService {
 		log.info("[deleteMaterialRequestById] param - materialRequestId: {}", materialRequestId);
 
 		materialDao.deleteMaterialRequestById(materialRequestId);
+	}
+
+	@Override
+	public void updateMaterialRequestIsDeletedToTrueById(Long materialRequestId) {
+		log.info("[updateMaterialRequestIsDeletedToTrueById] param - materialRequestId: {}", materialRequestId);
+
+		MaterialRequest materialRequest = materialDao.findMaterialRequestById(materialRequestId)
+			.orElseThrow(() -> new EntityNotFoundException("MaterialRequest not found for ID: " + materialRequestId));
+
+		materialRequest.setIsDeleted(true);
+
+		materialDao.saveMaterialRequest(materialRequest);
+
+		log.info(
+			"[updateMaterialRequestIsDeletedToTrueById] result - MaterialRequest updated(isDeleted=true) materialRequestId: {}",
+			materialRequestId);
 	}
 
 	@Override
@@ -291,6 +320,22 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	@Override
+	public void updateMaterialPurchaseIsDeletedToTrueById(Long materialPurchaseId) {
+		log.info("[updateMaterialPurchaseIsDeletedToTrueById] param - materialPurchaseId: {}", materialPurchaseId);
+
+		MaterialPurchase materialPurchase = materialDao.findMaterialPurchaseById(materialPurchaseId)
+			.orElseThrow(() -> new EntityNotFoundException("MaterialPurchase not found for ID: " + materialPurchaseId));
+
+		materialPurchase.setIsDeleted(true);
+
+		materialDao.saveMaterialPurchase(materialPurchase);
+
+		log.info(
+			"[updateMaterialPurchaseIsDeletedToTrueById] result - MaterialPurchase updated(isDeleted=true) materialPurchaseId: {}",
+			materialPurchaseId);
+	}
+
+	@Override
 	public SupplierDto addSupplier(SupplierDto supplierDto) {
 		log.info("[addSupplier] param - supplierDto: {}", supplierDto);
 
@@ -363,28 +408,43 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	@Override
+	public void updateSupplierIsDeletedToTrueById(Long supplierId) {
+		log.info("[updateSupplierIsDeletedToTrueById] param - supplierId: {}", supplierId);
+
+		Supplier supplier = materialDao.findSupplierById(supplierId)
+			.orElseThrow(() -> new EntityNotFoundException("Supplier not found for ID: " + supplierId));
+
+		supplier.setIsDeleted(true);
+
+		materialDao.saveSupplier(supplier);
+
+		log.info("[updateSupplierIsDeletedToTrueById] result - Supplier updated(isDeleted=true) supplierId: {}",
+			supplierId);
+	}
+
+	@Override
 	public List<MaterialContentDto> getMaterialContentList() {
 		log.info("[getMaterialContentList] param - none");
 
-		List<MaterialContentDto> materialContentList = new ArrayList<>();
+		List<MaterialContentDto> materialContentDtoList = new ArrayList<>();
 
-		List<MaterialDto> materialList = getMaterialList();
-		List<ProductMaterialDto> productMaterialList = productService.getProductMaterialList();
-		List<ProductionDto> productionList = productService.getProductionList();
+		List<Material> materialList = materialDao.findMaterialList();
+		List<ProductMaterial> productMaterialList = productDao.findProductMaterialList();
+		List<Production> productionList = productDao.findProductionList();
 
 		Map<Long, Integer> totalConsumptionQuantityByMaterialId = new HashMap<>();
 		Map<Long, Integer> totalPlannedConsumptionQuantityByMaterialId = new HashMap<>();
 
-		for (ProductionDto productionDto : productionList) {
-			Long productId = productionDto.getProductDto().getId();
-			boolean isCompleted = productionDto.getStatus() == ProductionStatus.COMPLETED;
-			boolean isPlannedOrInProduction = productionDto.getStatus() == ProductionStatus.PRODUCTION
-				|| productionDto.getStatus() == ProductionStatus.PLANNED;
+		for (Production production : productionList) {
+			Long productId = production.getProduct().getId();
+			boolean isCompleted = production.getStatus() == ProductionStatus.COMPLETED;
+			boolean isPlannedOrInProduction = production.getStatus() == ProductionStatus.PRODUCTION
+				|| production.getStatus() == ProductionStatus.PLANNED;
 
-			for (ProductMaterialDto productMaterialDto : productMaterialList) {
-				if (Objects.equals(productMaterialDto.getProductMaterialIdDto().getProductId(), productId)) {
-					Long materialId = productMaterialDto.getProductMaterialIdDto().getMaterialId();
-					int quantity = productionDto.getQuantity() * productMaterialDto.getRequiredQuantity();
+			for (ProductMaterial productMaterial : productMaterialList) {
+				if (Objects.equals(productMaterial.getId().getProduct().getId(), productId)) {
+					Long materialId = productMaterial.getId().getMaterial().getId();
+					int quantity = production.getQuantity() * productMaterial.getRequiredQuantity();
 
 					if (isCompleted) {
 						totalConsumptionQuantityByMaterialId.merge(materialId, quantity, Integer::sum);
@@ -395,34 +455,40 @@ public class MaterialServiceImpl implements MaterialService {
 			}
 		}
 
-		for (MaterialDto materialDto : materialList) {
-			Long materialId = materialDto.getId();
-			Integer totalPurchaseQuantity = Optional.ofNullable(materialDao.getTotalPurchaseQuantityById(materialId))
-				.orElse(0);
-			Integer expectedInboundQuantity = Optional.ofNullable(
-				materialDao.getExpectedInboundQuantityById(materialId)).orElse(0);
-			Integer currentQuantity =
-				totalPurchaseQuantity - totalConsumptionQuantityByMaterialId.getOrDefault(materialId, 0);
-			Integer actualQuantity = currentQuantity + expectedInboundQuantity
-				- totalPlannedConsumptionQuantityByMaterialId.getOrDefault(materialId, 0);
+		for (Material material : materialList) {
+			if (!material.getIsDeleted()) {
+				Long materialId = material.getId();
+				Integer totalPurchaseQuantity = Optional.ofNullable(
+						materialDao.getTotalPurchaseQuantityById(materialId))
+					.orElse(0);
+				Integer expectedInboundQuantity = Optional.ofNullable(
+					materialDao.getExpectedInboundQuantityById(materialId)).orElse(0);
+				Integer currentQuantity =
+					totalPurchaseQuantity - totalConsumptionQuantityByMaterialId.getOrDefault(materialId, 0);
+				Integer actualQuantity = currentQuantity + expectedInboundQuantity
+					- totalPlannedConsumptionQuantityByMaterialId.getOrDefault(materialId, 0);
 
-			MaterialContentDto materialContentDto = new MaterialContentDto();
-			materialContentDto.setId(materialDto.getId());
-			materialContentDto.setName(materialDto.getName());
-			materialContentDto.setDetails(materialDto.getDetails());
-			materialContentDto.setSpec(materialDto.getSpec());
-			materialContentDto.setSupplierDto(materialDto.getSupplierDto());
-			materialContentDto.setCurrentQuantity(currentQuantity);
-			materialContentDto.setExpectedInboundQuantity(expectedInboundQuantity);
-			materialContentDto.setPlannedConsumptionQuantity(
-				totalPlannedConsumptionQuantityByMaterialId.getOrDefault(materialId, 0));
-			materialContentDto.setActualQuantity(actualQuantity);
+				SupplierDto supplierDto = material.getSupplier() == null ?
+					null : EntityToDtoMapper.convertSupplierToDto(material.getSupplier());
 
-			materialContentList.add(materialContentDto);
+				MaterialContentDto materialContentDto = new MaterialContentDto();
+				materialContentDto.setId(material.getId());
+				materialContentDto.setName(material.getName());
+				materialContentDto.setDetails(material.getDetails());
+				materialContentDto.setSpec(material.getSpec());
+				materialContentDto.setSupplierDto(supplierDto);
+				materialContentDto.setCurrentQuantity(currentQuantity);
+				materialContentDto.setExpectedInboundQuantity(expectedInboundQuantity);
+				materialContentDto.setPlannedConsumptionQuantity(
+					totalPlannedConsumptionQuantityByMaterialId.getOrDefault(materialId, 0));
+				materialContentDto.setActualQuantity(actualQuantity);
+
+				materialContentDtoList.add(materialContentDto);
+			}
 		}
 
-		log.info("[getMaterialContentList] return - materialContentList: {}", materialContentList);
-		return materialContentList;
+		log.info("[getMaterialContentList] return - materialContentDtoList: {}", materialContentDtoList);
+		return materialContentDtoList;
 	}
 
 }

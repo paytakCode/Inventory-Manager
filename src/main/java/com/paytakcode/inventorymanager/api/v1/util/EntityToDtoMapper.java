@@ -26,7 +26,7 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 /**
  * Entity to DTO Mapper
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.3.1
  * @Since 2023-05-26 오후 3:39
  */
 public class EntityToDtoMapper {
@@ -90,6 +90,7 @@ public class EntityToDtoMapper {
             .requesterDto(requesterDto)
             .quantity(materialRequest.getQuantity())
             .details(materialRequest.getDetails())
+            .requestDate(materialRequest.getCreatedDate())
             .materialPurchaseDto(materialPurchaseDto)
             .build();
     }

@@ -23,7 +23,7 @@ import lombok.ToString;
 /**
  * Material Entity
  * @Author 김태산
- * @Version 0.1.2
+ * @Version 0.2.0
  * @Since 2023-05-21 오후 9:02
  */
 @Entity
@@ -52,4 +52,7 @@ public class Material extends BaseEntity implements Serializable {
 	@Nullable
 	@ManyToOne
 	private Supplier supplier;
+
+	@NotNull
+	private Boolean isDeleted;
 }

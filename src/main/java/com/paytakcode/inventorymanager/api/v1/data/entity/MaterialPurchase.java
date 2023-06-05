@@ -27,7 +27,7 @@ import lombok.ToString;
  * Material Purchase Entity
  * 자재 구매 Table
  * @Author 김태산
- * @Version 0.1.2
+ * @Version 0.2.0
  * @Since 2023-05-21 오후 11:00
  */
 @Entity
@@ -72,4 +72,7 @@ public class MaterialPurchase extends BaseEntity {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private PurchaseStatus status;
+
+	@NotNull
+	private Boolean isDeleted;
 }

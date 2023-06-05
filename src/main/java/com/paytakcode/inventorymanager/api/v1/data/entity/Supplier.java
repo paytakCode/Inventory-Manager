@@ -20,7 +20,7 @@ import lombok.ToString;
 /**
  * Supplier Entity
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.2.0
  * @Since 2023-05-21 오후 9:20
  */
 @Entity
@@ -48,5 +48,8 @@ public class Supplier extends BaseEntity implements Serializable {
 
 	@NotNull
 	private String loc;
+
+	@NotNull
+	private Boolean isDeleted;
 
 }

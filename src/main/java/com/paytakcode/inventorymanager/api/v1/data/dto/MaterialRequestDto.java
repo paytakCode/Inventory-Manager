@@ -1,5 +1,7 @@
 package com.paytakcode.inventorymanager.api.v1.data.dto;
 
+import java.time.LocalDateTime;
+
 import javax.validation.constraints.NotNull;
 
 import org.springframework.lang.Nullable;
@@ -12,7 +14,7 @@ import lombok.ToString;
 /**
  * Material Request DTO
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.4.0
  * @Since 2023-05-24 오후 12:28
  */
 
@@ -36,6 +38,9 @@ public class MaterialRequestDto {
 
 	@Nullable
 	private String details;
+
+	@Nullable
+	private LocalDateTime requestDate;
 
 	@Nullable
 	private MaterialPurchaseDto materialPurchaseDto;

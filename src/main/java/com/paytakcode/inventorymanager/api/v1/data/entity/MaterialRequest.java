@@ -23,7 +23,7 @@ import lombok.ToString;
  * Material Request Entity
  * 생산부에서 자재 요청한 내역을 저장하는 테이블
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.2.0
  * @Since 2023-05-21 오후 10:39
  */
 @Entity
@@ -57,4 +57,7 @@ public class MaterialRequest extends BaseEntity {
 	@Nullable
 	@OneToOne(mappedBy = "materialRequest")
 	private MaterialPurchase materialPurchase;
+
+	@NotNull
+	private Boolean isDeleted;
 }

@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Controller
  * @Author 김태산
- * @Version 0.7.0
+ * @Version 0.8.0
  * @Since 2023-05-24 오전 11:30
  */
 
@@ -82,7 +82,8 @@ public class MaterialController {
 	public ResponseEntity<Void> materialDeleteById(@PathVariable Long materialId) {
 		log.info("[materialDeleteById] param - materialId: {}", materialId);
 
-		materialService.deleteMaterialById(materialId);
+		// materialService.deleteMaterialById(materialId);
+		materialService.updateMaterialIsDeletedToTrueById(materialId);
 
 		log.info("[materialDeleteById] return - HttpStatus.NO_CONTENT(204)");
 		return ResponseEntity
@@ -145,7 +146,8 @@ public class MaterialController {
 	public ResponseEntity<Void> materialRequestDeleteById(@PathVariable Long materialRequestId) {
 		log.info("[materialRequestDeleteById] param - materialRequestId: {}", materialRequestId);
 
-		materialService.deleteMaterialRequestById(materialRequestId);
+		// materialService.deleteMaterialRequestById(materialRequestId);
+		materialService.updateMaterialRequestIsDeletedToTrueById(materialRequestId);
 
 		log.info("[materialRequestDeleteById] return - HttpStatus.NO_CONTENT(204)");
 		return ResponseEntity
@@ -208,8 +210,8 @@ public class MaterialController {
 	public ResponseEntity<Void> materialPurchaseDeleteById(@PathVariable Long materialPurchaseId) {
 		log.info("[materialPurchaseDeleteById] param - materialPurchaseId: {}", materialPurchaseId);
 
-		materialService.deleteMaterialPurchaseById(materialPurchaseId);
-
+		// materialService.deleteMaterialPurchaseById(materialPurchaseId);
+		materialService.updateMaterialPurchaseIsDeletedToTrueById(materialPurchaseId);
 		log.info("[materialPurchaseDeleteById] return - HttpStatus.NO_CONTENT(204)");
 		return ResponseEntity
 			.status(HttpStatus.NO_CONTENT)
@@ -270,7 +272,8 @@ public class MaterialController {
 	public ResponseEntity<Void> supplierDeleteById(@PathVariable Long supplierId) {
 		log.info("[supplierDeleteById] param - supplierId: {}", supplierId);
 
-		materialService.deleteSupplierById(supplierId);
+		// materialService.deleteSupplierById(supplierId);
+		materialService.updateSupplierIsDeletedToTrueById(supplierId);
 
 		log.info("[supplierDeleteById] return - HttpStatus.NO_CONTENT(204)");
 		return ResponseEntity
