@@ -22,7 +22,7 @@ import lombok.ToString;
 /**
  * Product Entity
  * @Author 김태산
- * @Version 0.1.2
+ * @Version 0.1.3
  * @Since 2023-05-21 오후 8:36
  */
 
@@ -49,4 +49,6 @@ public class Product extends BaseEntity implements Serializable {
 	@Nullable
 	private String details;
 
+	@NotNull
+	private Boolean isDeleted;
 }

@@ -27,7 +27,7 @@ import lombok.ToString;
  * Production Entity
  * 생산 내역 Table
  * @Author 김태산
- * @Version 0.1.2
+ * @Version 0.1.3
  * @Since 2023-05-21 오후 11:34
  */
 @Entity
@@ -70,4 +70,7 @@ public class Production extends BaseEntity {
 
 	@Nullable
 	private String details;
+
+	@NotNull
+	private Boolean isDeleted;
 }

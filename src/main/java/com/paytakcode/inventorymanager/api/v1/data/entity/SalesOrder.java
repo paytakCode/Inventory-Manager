@@ -27,7 +27,7 @@ import lombok.ToString;
  * Sales Entity
  * 판매 내역
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.1.2
  * @Since 2023-05-22 오전 12:14
  */
 @Entity
@@ -68,5 +68,8 @@ public class SalesOrder extends BaseEntity {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
+
+	@NotNull
+	private Boolean isDeleted;
 
 }

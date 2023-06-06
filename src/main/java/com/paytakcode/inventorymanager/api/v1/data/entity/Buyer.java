@@ -18,7 +18,7 @@ import lombok.ToString;
 /**
  * Buyer Entity
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.1.2
  * @Since 2023-05-22 오전 12:11
  */
 @Entity
@@ -46,5 +46,8 @@ public class Buyer extends BaseEntity {
 
 	@NotNull
 	private String loc;
+
+	@NotNull
+	private Boolean isDeleted;
 
 }

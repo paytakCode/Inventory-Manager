@@ -17,7 +17,7 @@ import lombok.ToString;
  * Product Material Entity
  * 생산의 필요한 자재 정보 테이블
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.1.2
  * @Since 2023-05-21 오후 9:02
  */
 @Entity
@@ -35,4 +35,7 @@ public class ProductMaterial extends BaseEntity {
 
 	@NotNull
 	private Integer requiredQuantity;
+
+	@NotNull
+	private Boolean isDeleted;
 }
