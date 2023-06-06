@@ -2,7 +2,9 @@ package com.paytakcode.inventorymanager.api.v1.service;
 
 import java.util.List;
 
+import com.paytakcode.inventorymanager.api.v1.data.dto.BuyerContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.BuyerDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
 
 /**
@@ -22,6 +24,8 @@ public interface SalesService {
 
 	void deleteBuyerById(Long buyerId);
 
+	void updateBuyerIsDeletedToTrueById(Long buyerId);
+
 	SalesOrderDto addSalesOrder(SalesOrderDto salesOrderDto);
 
 	List<SalesOrderDto> getSalesOrderList();
@@ -31,4 +35,10 @@ public interface SalesService {
 	void updateSalesOrder(Long salesOrderId, SalesOrderDto salesOrderDto);
 
 	void deleteSalesOrderById(Long salesOrderId);
+
+	void updateSalesOrderIsDeletedToTrueById(Long salesOrderId);
+
+	List<BuyerContentDto> getBuyerContentList();
+
+	List<SalesOrderContentDto> getSalesOrderContentList();
 }

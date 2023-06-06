@@ -3,13 +3,18 @@ package com.paytakcode.inventorymanager.api.v1.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.paytakcode.inventorymanager.api.v1.data.dao.ProductDao;
 import com.paytakcode.inventorymanager.api.v1.data.dao.SalesDao;
+import com.paytakcode.inventorymanager.api.v1.data.dto.BuyerContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.BuyerDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
 import com.paytakcode.inventorymanager.api.v1.data.emum.OrderStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Buyer;
@@ -109,6 +114,21 @@ public class SalesServiceImpl implements SalesService {
 	}
 
 	@Override
+	public void updateBuyerIsDeletedToTrueById(Long buyerId) {
+		log.info("[updateBuyerIsDeletedToTrueById] param - buyerId: {}", buyerId);
+
+		Buyer buyer = salesDao.findBuyerById(buyerId)
+			.orElseThrow(() -> new EntityNotFoundException("Buyer not found for ID: " + buyerId));
+
+		buyer.setIsDeleted(true);
+
+		salesDao.saveBuyer(buyer);
+
+		log.info("[updateBuyerIsDeletedToTrueById] result - Buyer updated(isDeleted=true) buyerId: {}",
+			buyerId);
+	}
+
+	@Override
 	public SalesOrderDto addSalesOrder(SalesOrderDto salesOrderDto) {
 		log.info("[addSalesOrder] param - orderDto: {}", salesOrderDto);
 
@@ -186,5 +206,81 @@ public class SalesServiceImpl implements SalesService {
 		log.info("[deleteSalesOrderById] param - salesOrderId: {}", salesOrderId);
 
 		salesDao.deleteSalesOrderById(salesOrderId);
+	}
+
+	@Override
+	public void updateSalesOrderIsDeletedToTrueById(Long salesOrderId) {
+		log.info("[updateSalesOrderIsDeletedToTrueById] param - salesOrderId: {}", salesOrderId);
+
+		SalesOrder salesOrder = salesDao.findSalesOrderById(salesOrderId)
+			.orElseThrow(() -> new EntityNotFoundException("SalesOrder not found for ID: " + salesOrderId));
+
+		salesOrder.setIsDeleted(true);
+
+		salesDao.saveSalesOrder(salesOrder);
+
+		log.info("[updateSalesOrderIsDeletedToTrueById] result - SalesOrder updated(isDeleted=true) salesOrderId: {}",
+			salesOrderId);
+	}
+
+	@Override
+	public List<BuyerContentDto> getBuyerContentList() {
+		log.info("[getBuyerContentList] param - none");
+
+		List<Buyer> buyerList = salesDao.findBuyerList();
+
+		List<Buyer> notDeletedBuyerList = buyerList.stream()
+			.filter(buyer -> !buyer.getIsDeleted())
+			.collect(Collectors.toList());
+
+		List<BuyerContentDto> buyerContentDtoList = new ArrayList<>();
+
+		for (Buyer buyer : notDeletedBuyerList) {
+			BuyerDto buyerDto = EntityToDtoMapper.convertBuyerToDto(buyer);
+
+			BuyerContentDto buyerContentDto = new BuyerContentDto();
+			buyerContentDto.setId(buyerDto.getId());
+			buyerContentDto.setCompanyName(buyerDto.getCompanyName());
+			buyerContentDto.setManagerName(buyerDto.getManagerName());
+			buyerContentDto.setTel(buyerDto.getTel());
+			buyerContentDto.setLoc(buyerDto.getLoc());
+
+			buyerContentDtoList.add(buyerContentDto);
+		}
+
+		log.info("[getBuyerContentList] return - buyerContentDtoList: {}", buyerContentDtoList);
+		return buyerContentDtoList;
+	}
+
+	@Override
+	public List<SalesOrderContentDto> getSalesOrderContentList() {
+		log.info("[getSalesOrderContentList] param - none");
+
+		List<SalesOrder> salesOrderList = salesDao.findSalesOrderList();
+
+		List<SalesOrder> notDeletedSalesOrderList = salesOrderList.stream()
+			.filter(salesOrder -> !salesOrder.getIsDeleted())
+			.collect(Collectors.toList());
+
+		List<SalesOrderContentDto> salesOrderContentDtoList = new ArrayList<>();
+
+		for (SalesOrder salesOrder : notDeletedSalesOrderList) {
+			SalesOrderDto salesOrderDto = EntityToDtoMapper.convertSalesOrderToDto(salesOrder);
+
+			SalesOrderContentDto salesOrderContentDto = new SalesOrderContentDto();
+			salesOrderContentDto.setId(salesOrderDto.getId());
+			salesOrderContentDto.setProductDto(salesOrderDto.getProductDto());
+			salesOrderContentDto.setQuantity(salesOrderDto.getQuantity());
+			salesOrderContentDto.setBuyerDto(salesOrderDto.getBuyerDto());
+			salesOrderContentDto.setManagerDto(salesOrderDto.getManagerDto());
+			salesOrderContentDto.setDueDate(salesOrderDto.getDueDate());
+			salesOrderContentDto.setCompletionDate(salesOrderDto.getCompletionDate());
+			salesOrderContentDto.setStatus(salesOrderDto.getStatus());
+
+			salesOrderContentDtoList.add(salesOrderContentDto);
+		}
+
+		log.info("[getSalesOrderContentList] return - salesOrderContentDtoList: {}", salesOrderContentDtoList);
+		return salesOrderContentDtoList;
 	}
 }

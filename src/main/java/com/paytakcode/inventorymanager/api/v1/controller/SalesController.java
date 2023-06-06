@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paytakcode.inventorymanager.api.v1.config.ApiBaseUrlConfig;
+import com.paytakcode.inventorymanager.api.v1.data.dto.BuyerContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.BuyerDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
 import com.paytakcode.inventorymanager.api.v1.service.SalesService;
 
@@ -91,7 +93,8 @@ public class SalesController {
     public ResponseEntity<Void> buyerDeleteById(@PathVariable Long buyerId) {
         log.info("[buyerDeleteById] param - buyerId: {}", buyerId);
 
-        salesService.deleteBuyerById(buyerId);
+        // salesService.deleteBuyerById(buyerId);
+        salesService.updateBuyerIsDeletedToTrueById(buyerId);
 
         log.info("[buyerDeleteById] return - HttpStatus.NO_CONTENT(204)");
         return ResponseEntity
@@ -151,11 +154,37 @@ public class SalesController {
     public ResponseEntity<Void> salesOrderDeleteById(@PathVariable Long salesOrderId) {
         log.info("[salesOrderDeleteById] param - salesOrderId: {}", salesOrderId);
 
-        salesService.deleteSalesOrderById(salesOrderId);
+        // salesService.deleteSalesOrderById(salesOrderId);
+        salesService.updateSalesOrderIsDeletedToTrueById(salesOrderId);
 
         log.info("[salesOrderDeleteById] return - HttpStatus.NO_CONTENT(204)");
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build();
+    }
+
+    @GetMapping("/buyer-contents")
+    public ResponseEntity<List<BuyerContentDto>> buyerContentList() {
+        log.info("[buyerContentList] param - none");
+
+        List<BuyerContentDto> buyerContentList = salesService.getBuyerContentList();
+
+        log.info("[buyerContentList] return - HttpStatus.OK(200), buyerContentList: {}", buyerContentList);
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(buyerContentList);
+    }
+
+    @GetMapping("/sales-order-contents")
+    public ResponseEntity<List<SalesOrderContentDto>> salesOrderContentList() {
+        log.info("[salesOrderContentList] param - none");
+
+        List<SalesOrderContentDto> salesOrderContentList = salesService.getSalesOrderContentList();
+
+        log.info("[salesOrderContentList] return - HttpStatus.OK(200), salesOrderContentList: {}",
+            salesOrderContentList);
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(salesOrderContentList);
     }
 }
