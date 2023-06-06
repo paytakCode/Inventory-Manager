@@ -4,14 +4,17 @@ import java.util.List;
 
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierDto;
 
 /**
  * Material Service
  * @Author 김태산
- * @Version 0.8.0
+ * @Version 0.9.0
  * @Since 2023-05-24 오전 11:46
  */
 public interface MaterialService {
@@ -65,4 +68,10 @@ public interface MaterialService {
 	void updateSupplierIsDeletedToTrueById(Long supplierId);
 
 	List<MaterialContentDto> getMaterialContentList();
+
+	List<MaterialRequestContentDto> getMaterialRequestContentList();
+
+	List<MaterialPurchaseContentDto> getMaterialPurchaseContentList();
+
+	List<SupplierContentDto> getSupplierContentList();
 }

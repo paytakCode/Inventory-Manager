@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paytakcode.inventorymanager.api.v1.config.ApiBaseUrlConfig;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierDto;
 import com.paytakcode.inventorymanager.api.v1.service.MaterialService;
 
@@ -29,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Controller
  * @Author 김태산
- * @Version 0.8.0
+ * @Version 0.9.0
  * @Since 2023-05-24 오전 11:30
  */
 
@@ -291,5 +294,43 @@ public class MaterialController {
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.body(materialContentList);
+	}
+
+	@GetMapping("/material-request-contents")
+	public ResponseEntity<List<MaterialRequestContentDto>> materialRequestContentList() {
+		log.info("[materialRequestContentList] param - none");
+
+		List<MaterialRequestContentDto> materialRequestContentList = materialService.getMaterialRequestContentList();
+
+		log.info("[materialRequestContentList] return - HttpStatus.OK(200), materialRequestContentList: {}",
+			materialRequestContentList);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(materialRequestContentList);
+	}
+
+	@GetMapping("/material-purchase-contents")
+	public ResponseEntity<List<MaterialPurchaseContentDto>> materialPurchaseContentList() {
+		log.info("[materialPurchaseContentList] param - none");
+
+		List<MaterialPurchaseContentDto> materialPurchaseContentList = materialService.getMaterialPurchaseContentList();
+
+		log.info("[materialPurchaseContentList] return - HttpStatus.OK(200), materialPurchaseContentList: {}",
+			materialPurchaseContentList);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(materialPurchaseContentList);
+	}
+
+	@GetMapping("/supplier-contents")
+	public ResponseEntity<List<SupplierContentDto>> supplierContentList() {
+		log.info("[supplierContentList] param - none");
+
+		List<SupplierContentDto> supplierContentList = materialService.getSupplierContentList();
+
+		log.info("[supplierContentList] return - HttpStatus.OK(200), supplierContentList: {}", supplierContentList);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(supplierContentList);
 	}
 }

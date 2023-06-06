@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -17,8 +18,11 @@ import com.paytakcode.inventorymanager.api.v1.data.dao.ProductDao;
 import com.paytakcode.inventorymanager.api.v1.data.dao.UserDao;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialPurchaseDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialRequestDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SupplierDto;
 import com.paytakcode.inventorymanager.api.v1.data.emum.ProductionStatus;
 import com.paytakcode.inventorymanager.api.v1.data.emum.PurchaseStatus;
@@ -39,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Service Implementation
  * @Author 김태산
- * @Version 0.9.1
+ * @Version 0.10.0
  * @Since 2023-05-24 오전 11:46
  */
 
@@ -490,6 +494,101 @@ public class MaterialServiceImpl implements MaterialService {
 
 		log.info("[getMaterialContentList] return - materialContentDtoList: {}", materialContentDtoList);
 		return materialContentDtoList;
+	}
+
+	@Override
+	public List<MaterialRequestContentDto> getMaterialRequestContentList() {
+		log.info("[getMaterialRequestContentList] param - none");
+
+		List<MaterialRequest> materialRequestList = materialDao.findMaterialRequestList();
+
+		List<MaterialRequest> notDeletedMaterialRequestList = materialRequestList.stream()
+			.filter(materialRequest -> !materialRequest.getIsDeleted())
+			.collect(Collectors.toList());
+
+		List<MaterialRequestContentDto> materialRequestContentDtoList = new ArrayList<>();
+
+		for (MaterialRequest materialRequest : notDeletedMaterialRequestList) {
+			MaterialRequestDto materialRequestDto = EntityToDtoMapper.convertMaterialRequestToDto(materialRequest);
+
+			MaterialRequestContentDto materialRequestContentDto = new MaterialRequestContentDto();
+			materialRequestContentDto.setId(materialRequestDto.getId());
+			materialRequestContentDto.setMaterialDto(materialRequestDto.getMaterialDto());
+			materialRequestContentDto.setQuantity(materialRequestDto.getQuantity());
+			materialRequestContentDto.setMaterialPurchaseDto(materialRequestDto.getMaterialPurchaseDto());
+			materialRequestContentDto.setRequesterDto(materialRequestDto.getRequesterDto());
+			materialRequestContentDto.setRequestDate(materialRequestDto.getRequestDate());
+			materialRequestContentDto.setDetails(materialRequestDto.getDetails());
+
+			materialRequestContentDtoList.add(materialRequestContentDto);
+		}
+
+		log.info("[getMaterialRequestContentList] return - materialRequestContentDtoList: {}",
+			materialRequestContentDtoList);
+		return materialRequestContentDtoList;
+	}
+
+	@Override
+	public List<MaterialPurchaseContentDto> getMaterialPurchaseContentList() {
+		log.info("[getMaterialPurchaseContentList] param - none");
+
+		List<MaterialPurchase> materialPurchaseList = materialDao.findMaterialPurchaseList();
+
+		List<MaterialPurchase> notDeletedMaterialPurchaseList = materialPurchaseList.stream()
+			.filter(materialPurchase -> !materialPurchase.getIsDeleted())
+			.collect(Collectors.toList());
+
+		List<MaterialPurchaseContentDto> materialPurchaseContentDtoList = new ArrayList<>();
+
+		for (MaterialPurchase materialPurchase : notDeletedMaterialPurchaseList) {
+			MaterialPurchaseDto materialPurchaseDto = EntityToDtoMapper.convertMaterialPurchaseToDto(materialPurchase);
+
+			MaterialPurchaseContentDto materialPurchaseContentDto = new MaterialPurchaseContentDto();
+			materialPurchaseContentDto.setId(materialPurchaseDto.getId());
+			materialPurchaseContentDto.setMaterialDto(materialPurchaseDto.getMaterialDto());
+			materialPurchaseContentDto.setManagerDto(materialPurchaseDto.getManagerDto());
+			materialPurchaseContentDto.setQuantity(materialPurchaseDto.getQuantity());
+			materialPurchaseContentDto.setPrice(materialPurchaseDto.getPrice());
+			materialPurchaseContentDto.setMaterialRequestDto(materialPurchaseDto.getMaterialRequestDto());
+			materialPurchaseContentDto.setLotNo(materialPurchaseDto.getLotNo());
+			materialPurchaseContentDto.setDetails(materialPurchaseDto.getDetails());
+			materialPurchaseContentDto.setStatus(materialPurchaseDto.getStatus());
+
+			materialPurchaseContentDtoList.add(materialPurchaseContentDto);
+		}
+
+		log.info("[getMaterialPurchaseContentList] return - materialPurchaseContentDtoList: {}",
+			materialPurchaseContentDtoList);
+		return materialPurchaseContentDtoList;
+	}
+
+	@Override
+	public List<SupplierContentDto> getSupplierContentList() {
+		log.info("[getSupplierContentList] param - none");
+
+		List<Supplier> supplierList = materialDao.findSupplierList();
+
+		List<Supplier> notDeletedSupplierList = supplierList.stream()
+			.filter(supplier -> !supplier.getIsDeleted())
+			.collect(Collectors.toList());
+
+		List<SupplierContentDto> supplierContentDtoList = new ArrayList<>();
+
+		for (Supplier supplier : notDeletedSupplierList) {
+			SupplierDto supplierDto = EntityToDtoMapper.convertSupplierToDto(supplier);
+
+			SupplierContentDto supplierContentDto = new SupplierContentDto();
+			supplierContentDto.setId(supplierDto.getId());
+			supplierContentDto.setCompanyName(supplierDto.getCompanyName());
+			supplierContentDto.setManagerName(supplierDto.getManagerName());
+			supplierContentDto.setTel(supplierDto.getTel());
+			supplierContentDto.setLoc(supplierDto.getLoc());
+
+			supplierContentDtoList.add(supplierContentDto);
+		}
+
+		log.info("[getSupplierContentList] return - supplierContentDtoList: {}", supplierContentDtoList);
+		return supplierContentDtoList;
 	}
 
 }
