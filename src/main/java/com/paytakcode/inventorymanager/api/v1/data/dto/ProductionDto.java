@@ -9,15 +9,17 @@ import org.springframework.lang.Nullable;
 
 import com.paytakcode.inventorymanager.api.v1.data.emum.ProductionStatus;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 /**
  * Production DTO
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.3.1
  * @Since 2023-05-25 오후 5:06
  */
 
@@ -25,6 +27,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductionDto {
 
 	@Nullable

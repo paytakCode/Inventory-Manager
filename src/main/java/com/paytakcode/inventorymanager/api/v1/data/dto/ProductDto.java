@@ -4,15 +4,17 @@ import javax.validation.constraints.NotBlank;
 
 import org.springframework.lang.Nullable;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 /**
  * Product DTO
  * @Author 김태산
- * @Version 0.1.1
+ * @Version 0.1.2
  * @Since 2023-05-25 오후 1:51
  */
 
@@ -20,6 +22,8 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDto {
 
 	@Nullable
