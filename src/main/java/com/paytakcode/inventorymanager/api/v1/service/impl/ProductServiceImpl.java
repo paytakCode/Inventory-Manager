@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -12,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.paytakcode.inventorymanager.api.v1.data.dao.ProductDao;
 import com.paytakcode.inventorymanager.api.v1.data.dao.SalesDao;
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialIdDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
 import com.paytakcode.inventorymanager.api.v1.data.emum.ProductionStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Product;
@@ -116,6 +119,21 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public void updateProductIsDeletedToTrueById(Long productId) {
+		log.info("[updateProductIsDeletedToTrueById] param - productId: {}", productId);
+
+		Product product = productDao.findProductById(productId)
+			.orElseThrow(() -> new EntityNotFoundException("Product not found for ID: " + productId));
+
+		product.setIsDeleted(true);
+
+		productDao.saveProduct(product);
+
+		log.info("[updateProductIsDeletedToTrueById] result - Product updated(isDeleted=true) productId: {}",
+			productId);
+	}
+
+	@Override
 	public ProductMaterialDto addProductMaterial(ProductMaterialDto productMaterialDto) {
 		log.info("[addProductMaterial] param - productMaterialDto: {}", productMaterialDto);
 
@@ -195,6 +213,25 @@ public class ProductServiceImpl implements ProductService {
 			productMaterialIdDto);
 
 		productDao.deleteProductMaterialById(productMaterialId);
+	}
+
+	@Override
+	public void updateProductMaterialIsDeletedToTrueById(ProductMaterialIdDto productMaterialIdDto) {
+		log.info("[updateProductMaterialIsDeletedToTrueById] param - productMaterialIdDto: {}", productMaterialIdDto);
+
+		ProductMaterialId productMaterialId = dtoToEntityMapper.convertProductMaterialIdDtoToEntity(
+			productMaterialIdDto);
+
+		ProductMaterial productMaterial = productDao.findProductMaterialById(productMaterialId)
+			.orElseThrow(() -> new EntityNotFoundException("ProductMaterial not found for ID: " + productMaterialId));
+
+		productMaterial.setIsDeleted(true);
+
+		productDao.saveProductMaterial(productMaterial);
+
+		log.info(
+			"[updateProductMaterialIsDeletedToTrueById] result - ProductMaterial updated(isDeleted=true) productMaterialId: {}",
+			productMaterialId);
 	}
 
 	@Override
@@ -294,6 +331,21 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public void updateProductionIsDeletedToTrueById(Long productionId) {
+		log.info("[updateProductionIsDeletedToTrueById] param - productionId: {}", productionId);
+
+		Production production = productDao.findProductionById(productionId)
+			.orElseThrow(() -> new EntityNotFoundException("Production not found for ID: " + productionId));
+
+		production.setIsDeleted(true);
+
+		productDao.saveProduction(production);
+
+		log.info("[updateProductionIsDeletedToTrueById] result - Production updated(isDeleted=true) productionId: {}",
+			productionId);
+	}
+
+	@Override
 	public Integer getProductStockByProductId(Long productId) {
 		log.info("[getProductStockByProductId] param - productId: {}", productId);
 
@@ -307,5 +359,66 @@ public class ProductServiceImpl implements ProductService {
 
 		log.info("[getProductStockByProductId] return - productStock: {}", productStock);
 		return productStock;
+	}
+
+	@Override
+	public List<ProductContentDto> getProductContentList() {
+		log.info("[getProductContentList] param - none");
+
+		List<Product> productList = productDao.findProductList();
+
+		List<Product> notDeletedProductList = productList.stream()
+			.filter(product -> !product.getIsDeleted())
+			.collect(Collectors.toList());
+
+		List<ProductContentDto> productContentDtoList = new ArrayList<>();
+
+		for (Product product : notDeletedProductList) {
+			ProductDto productDto = EntityToDtoMapper.convertProductToDto(product);
+
+			ProductContentDto productContentDto = new ProductContentDto();
+			productContentDto.setId(productDto.getId());
+			productContentDto.setName(productDto.getName());
+			productContentDto.setSpec(productDto.getSpec());
+			productContentDto.setDetails(productDto.getDetails());
+
+			productContentDtoList.add(productContentDto);
+		}
+
+		log.info("[getProductContentList] return - productContentDtoList: {}", productContentDtoList);
+		return productContentDtoList;
+	}
+
+	@Override
+	public List<ProductionContentDto> getProductionContentList() {
+		log.info("[getProductionContentList] param - none");
+
+		List<Production> productionList = productDao.findProductionList();
+
+		List<Production> notDeletedProductionList = productionList.stream()
+			.filter(production -> !production.getIsDeleted())
+			.collect(Collectors.toList());
+
+		List<ProductionContentDto> productionContentDtoList = new ArrayList<>();
+
+		for (Production production : notDeletedProductionList) {
+			ProductionDto productionDto = EntityToDtoMapper.convertProductionToDto(production);
+
+			ProductionContentDto productionContentDto = new ProductionContentDto();
+			productionContentDto.setId(productionDto.getId());
+			productionContentDto.setProductDto(productionDto.getProductDto());
+			productionContentDto.setQuantity(productionDto.getQuantity());
+			productionContentDto.setManagerDto(productionDto.getManagerDto());
+			productionContentDto.setDetails(productionDto.getDetails());
+			productionContentDto.setLotNo(productionDto.getLotNo());
+			productionContentDto.setTargetDate(productionDto.getTargetDate());
+			productionContentDto.setCompletionDate(productionDto.getCompletionDate());
+			productionContentDto.setStatus(productionDto.getStatus());
+
+			productionContentDtoList.add(productionContentDto);
+		}
+
+		log.info("[getProductionContentList] return - productionContentDtoList: {}", productionContentDtoList);
+		return productionContentDtoList;
 	}
 }

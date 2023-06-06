@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paytakcode.inventorymanager.api.v1.config.ApiBaseUrlConfig;
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialIdDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.RequiredQuantityDto;
 import com.paytakcode.inventorymanager.api.v1.service.ProductService;
@@ -95,7 +97,8 @@ public class ProductController {
 	public ResponseEntity<Void> productDeleteById(@PathVariable Long productId) {
 		log.info("[productDeleteById] param - productId: {}", productId);
 
-		productService.deleteProductById(productId);
+		// productService.deleteProductById(productId);
+		productService.updateProductIsDeletedToTrueById(productId);
 
 		log.info("[productDeleteById] return - HttpStatus.NO_CONTENT(204)");
 		return ResponseEntity
@@ -179,7 +182,8 @@ public class ProductController {
 			.materialId(materialId)
 			.build();
 
-		productService.deleteProductMaterialById(productMaterialIdDto);
+		// productService.deleteProductMaterialById(productMaterialIdDto);
+		productService.updateProductMaterialIsDeletedToTrueById(productMaterialIdDto);
 
 		log.info("[productMaterialDeleteById] return - HttpStatus.NO_CONTENT(204)");
 		return ResponseEntity
@@ -252,7 +256,8 @@ public class ProductController {
 	public ResponseEntity<Void> productionDeleteById(@PathVariable Long productionId) {
 		log.info("[productionDeleteById] param - productionId: {}", productionId);
 
-		productService.deleteProductionById(productionId);
+		// productService.deleteProductionById(productionId);
+		productService.updateProductionIsDeletedToTrueById(productionId);
 
 		log.info("[productionDeleteById] return - HttpStatus.NO_CONTENT(204)");
 		return ResponseEntity
@@ -270,5 +275,30 @@ public class ProductController {
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.body(productStock);
+	}
+
+	@GetMapping("/product-contents")
+	public ResponseEntity<List<ProductContentDto>> productContentList() {
+		log.info("[productContentList] param - none");
+
+		List<ProductContentDto> productContentList = productService.getProductContentList();
+
+		log.info("[productContentList] return - HttpStatus.OK(200), productContentList: {}", productContentList);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(productContentList);
+	}
+
+	@GetMapping("/production-contents")
+	public ResponseEntity<List<ProductionContentDto>> productionContentList() {
+		log.info("[productionContentList] param - none");
+
+		List<ProductionContentDto> productionContentList = productService.getProductionContentList();
+
+		log.info("[productionContentList] return - HttpStatus.OK(200), productionContentList: {}",
+			productionContentList);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(productionContentList);
 	}
 }

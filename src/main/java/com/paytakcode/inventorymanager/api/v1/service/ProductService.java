@@ -2,9 +2,11 @@ package com.paytakcode.inventorymanager.api.v1.service;
 
 import java.util.List;
 
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialIdDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
 
 /**
@@ -25,6 +27,8 @@ public interface ProductService {
 
 	void deleteProductById(Long productId);
 
+	void updateProductIsDeletedToTrueById(Long productId);
+
 	ProductMaterialDto addProductMaterial(ProductMaterialDto productMaterialDto);
 
 	List<ProductMaterialDto> getProductMaterialList();
@@ -34,6 +38,8 @@ public interface ProductService {
 	void updateProductMaterial(ProductMaterialIdDto productMaterialIdDto, ProductMaterialDto productMaterialDto);
 
 	void deleteProductMaterialById(ProductMaterialIdDto productMaterialIdDto);
+
+	void updateProductMaterialIsDeletedToTrueById(ProductMaterialIdDto productMaterialIdDto);
 
 	List<ProductMaterialDto> getProductMaterialListByProductId(Long productId);
 
@@ -47,5 +53,11 @@ public interface ProductService {
 
 	void deleteProductionById(Long productionId);
 
+	void updateProductionIsDeletedToTrueById(Long productionId);
+
 	Integer getProductStockByProductId(Long productId);
+
+	List<ProductContentDto> getProductContentList();
+
+	List<ProductionContentDto> getProductionContentList();
 }
