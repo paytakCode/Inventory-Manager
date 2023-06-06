@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * DTO to Entity Mapper
  * @Author 김태산
- * @Version 0.3.0
+ * @Version 0.3.1
  * @Since 2023-05-26 오후 4:50
  */
 
@@ -59,6 +59,7 @@ public class DtoToEntityMapper {
             .managerName(buyerDto.getManagerName())
             .tel(buyerDto.getTel())
             .loc(buyerDto.getLoc())
+            .isDeleted(false)
             .build();
     }
 
@@ -70,8 +71,8 @@ public class DtoToEntityMapper {
             .name(materialDto.getName())
             .spec(materialDto.getSpec())
             .details(materialDto.getDetails())
-            .isDeleted(false)
             .supplier(supplier)
+            .isDeleted(false)
             .build();
     }
 
@@ -114,6 +115,7 @@ public class DtoToEntityMapper {
             .name(productDto.getName())
             .spec(productDto.getSpec())
             .details(productDto.getDetails())
+            .isDeleted(false)
             .build();
     }
 
@@ -130,6 +132,7 @@ public class DtoToEntityMapper {
             .details(productionDto.getDetails())
             .targetDate(productionDto.getTargetDate())
             .status(status)
+            .isDeleted(false)
             .build();
     }
 
@@ -164,6 +167,7 @@ public class DtoToEntityMapper {
             .buyer(buyer)
             .dueDate(salesOrderDto.getDueDate())
             .status(OrderStatus.ORDER_CONFIRMED)
+            .isDeleted(false)
             .build();
     }
 
@@ -184,6 +188,7 @@ public class DtoToEntityMapper {
         return ProductMaterial.builder()
             .id(productMaterialId)
             .requiredQuantity(productMaterialDto.getRequiredQuantity())
+            .isDeleted(false)
             .build();
     }
 
