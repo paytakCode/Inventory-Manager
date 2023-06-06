@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,7 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material Service Implementation
  * @Author 김태산
- * @Version 0.10.0
+ * @Version 0.10.1
  * @Since 2023-05-24 오전 11:46
  */
 
@@ -78,11 +79,10 @@ public class MaterialServiceImpl implements MaterialService {
 
 		List<Material> foundMaterialList = materialDao.findMaterialList();
 
-		List<MaterialDto> foundMaterialDtoList = new ArrayList<>();
-
-		for (Material material : foundMaterialList) {
-			foundMaterialDtoList.add(EntityToDtoMapper.convertMaterialToDto(material));
-		}
+		List<MaterialDto> foundMaterialDtoList = foundMaterialList.stream()
+			.filter(material -> !material.getIsDeleted())
+			.map(EntityToDtoMapper::convertMaterialToDto)
+			.collect(Collectors.toList());
 
 		log.info("[getMaterialList] return - foundMaterialDtoList: {}", foundMaterialDtoList);
 		return foundMaterialDtoList;
@@ -94,6 +94,10 @@ public class MaterialServiceImpl implements MaterialService {
 
 		Material foundMaterial = materialDao.findMaterialById(materialId)
 			.orElseThrow(() -> new EntityNotFoundException("Material not found for ID: " + materialId));
+
+		if (foundMaterial.getIsDeleted()) {
+			throw new NoSuchElementException();
+		}
 
 		MaterialDto foundMaterialDto = EntityToDtoMapper.convertMaterialToDto(foundMaterial);
 
@@ -167,11 +171,10 @@ public class MaterialServiceImpl implements MaterialService {
 
 		List<MaterialRequest> foundMaterialRequestList = materialDao.findMaterialRequestList();
 
-		List<MaterialRequestDto> foundMaterialRequestDtoList = new ArrayList<>();
-
-		for (MaterialRequest material : foundMaterialRequestList) {
-			foundMaterialRequestDtoList.add(EntityToDtoMapper.convertMaterialRequestToDto(material));
-		}
+		List<MaterialRequestDto> foundMaterialRequestDtoList = foundMaterialRequestList.stream()
+			.filter(materialRequest -> !materialRequest.getIsDeleted())
+			.map(EntityToDtoMapper::convertMaterialRequestToDto)
+			.collect(Collectors.toList());
 
 		log.info("[getMaterialRequestList] return - foundMaterialRequestDtoList: {}", foundMaterialRequestDtoList);
 		return foundMaterialRequestDtoList;
@@ -183,6 +186,10 @@ public class MaterialServiceImpl implements MaterialService {
 
 		MaterialRequest foundMaterialRequest = materialDao.findMaterialRequestById(materialRequestId)
 			.orElseThrow(() -> new EntityNotFoundException("MaterialRequest not found for ID: " + materialRequestId));
+
+		if (foundMaterialRequest.getIsDeleted()) {
+			throw new NoSuchElementException();
+		}
 
 		MaterialRequestDto foundMaterialRequestDto = EntityToDtoMapper.convertMaterialRequestToDto(
 			foundMaterialRequest);
@@ -258,11 +265,10 @@ public class MaterialServiceImpl implements MaterialService {
 
 		List<MaterialPurchase> foundMaterialPurchaseList = materialDao.findMaterialPurchaseList();
 
-		List<MaterialPurchaseDto> foundMaterialPurchaseDtoList = new ArrayList<>();
-
-		for (MaterialPurchase material : foundMaterialPurchaseList) {
-			foundMaterialPurchaseDtoList.add(EntityToDtoMapper.convertMaterialPurchaseToDto(material));
-		}
+		List<MaterialPurchaseDto> foundMaterialPurchaseDtoList = foundMaterialPurchaseList.stream()
+			.filter(materialPurchase -> !materialPurchase.getIsDeleted())
+			.map(EntityToDtoMapper::convertMaterialPurchaseToDto)
+			.collect(Collectors.toList());
 
 		log.info("[getMaterialPurchaseList] return - foundMaterialPurchaseDtoList: {}", foundMaterialPurchaseDtoList);
 		return foundMaterialPurchaseDtoList;
@@ -274,6 +280,10 @@ public class MaterialServiceImpl implements MaterialService {
 
 		MaterialPurchase foundMaterialPurchase = materialDao.findMaterialPurchaseById(materialPurchaseId)
 			.orElseThrow(() -> new EntityNotFoundException("MaterialPurchase not found for ID: " + materialPurchaseId));
+
+		if (foundMaterialPurchase.getIsDeleted()) {
+			throw new NoSuchElementException();
+		}
 
 		MaterialPurchaseDto foundMaterialPurchaseDto = EntityToDtoMapper.convertMaterialPurchaseToDto(
 			foundMaterialPurchase);
@@ -360,11 +370,10 @@ public class MaterialServiceImpl implements MaterialService {
 
 		List<Supplier> foundSupplierList = materialDao.findSupplierList();
 
-		List<SupplierDto> foundSupplierDtoList = new ArrayList<>();
-
-		for (Supplier material : foundSupplierList) {
-			foundSupplierDtoList.add(EntityToDtoMapper.convertSupplierToDto(material));
-		}
+		List<SupplierDto> foundSupplierDtoList = foundSupplierList.stream()
+			.filter(supplier -> !supplier.getIsDeleted())
+			.map(EntityToDtoMapper::convertSupplierToDto)
+			.collect(Collectors.toList());
 
 		log.info("[getSupplierList] return - foundSupplierDtoList: {}", foundSupplierDtoList);
 		return foundSupplierDtoList;
@@ -376,6 +385,10 @@ public class MaterialServiceImpl implements MaterialService {
 
 		Supplier foundSupplier = materialDao.findSupplierById(supplierId)
 			.orElseThrow(() -> new EntityNotFoundException("Supplier not found for ID: " + supplierId));
+
+		if (foundSupplier.getIsDeleted()) {
+			throw new NoSuchElementException();
+		}
 
 		SupplierDto foundSupplierDto = EntityToDtoMapper.convertSupplierToDto(
 			foundSupplier);
