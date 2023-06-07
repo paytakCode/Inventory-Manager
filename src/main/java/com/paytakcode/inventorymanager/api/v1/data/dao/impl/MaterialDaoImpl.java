@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.paytakcode.inventorymanager.api.v1.data.dao.MaterialDao;
+import com.paytakcode.inventorymanager.api.v1.data.emum.PurchaseStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Material;
 import com.paytakcode.inventorymanager.api.v1.data.entity.MaterialPurchase;
 import com.paytakcode.inventorymanager.api.v1.data.entity.MaterialRequest;
@@ -21,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Material DAO Implementation
  * @Author 김태산
- * @Version 0.7.0
+ * @Version 0.7.1
  * @Since 2023-05-24 오전 11:53
  */
 
@@ -223,23 +224,15 @@ public class MaterialDaoImpl implements MaterialDao {
 	}
 
 	@Override
-	public Integer getTotalPurchaseQuantityById(Long materialId) {
-		log.info("[getTotalPurchaseQuantityById] param - materialId: {}", materialId);
+	public Integer findTotalMaterialQuantityByMaterialIdAndStatus(Long materialId, PurchaseStatus purchaseStatus) {
+		log.info("[findTotalMaterialQuantityByMaterialIdAndStatus] param - materialId: {}, purchaseStatus: {}",
+			materialId, purchaseStatus);
 
-		Integer gotTotalPurchaseQuantity = materialPurchaseRepository.getTotalPurchaseQuantityById(materialId);
+		Integer foundTotalMaterialQuantity = materialPurchaseRepository.findTotalMaterialQuantityByMaterialIdAndStatus(
+			materialId, purchaseStatus);
 
-		log.info("[getTotalPurchaseQuantityById] return - gotTotalPurchaseQuantity: {}", gotTotalPurchaseQuantity);
-		return gotTotalPurchaseQuantity;
-	}
-
-	@Override
-	public Integer getExpectedInboundQuantityById(Long materialId) {
-		log.info("[getExpectedInboundQuantityById] param - materialId: {}", materialId);
-
-		Integer gotExpectedInboundQuantity = materialPurchaseRepository.getExpectedInboundQuantityById(materialId);
-
-		log.info("[getExpectedInboundQuantityById] return - gotExpectedInboundQuantity: {}",
-			gotExpectedInboundQuantity);
-		return gotExpectedInboundQuantity;
+		log.info("[findTotalMaterialQuantityByMaterialIdAndStatus] return - foundTotalMaterialQuantity: {}",
+			foundTotalMaterialQuantity);
+		return foundTotalMaterialQuantity;
 	}
 }

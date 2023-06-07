@@ -456,7 +456,7 @@ public class MaterialServiceImpl implements MaterialService {
 		for (Production production : productionList) {
 			Long productId = production.getProduct().getId();
 			boolean isCompleted = production.getStatus() == ProductionStatus.COMPLETED;
-			boolean isPlannedOrInProduction = production.getStatus() == ProductionStatus.PRODUCTION
+			boolean isPlannedOrInProduction = production.getStatus() == ProductionStatus.INPRODUCTION
 				|| production.getStatus() == ProductionStatus.PLANNED;
 
 			for (ProductMaterial productMaterial : productMaterialList) {
@@ -477,10 +477,14 @@ public class MaterialServiceImpl implements MaterialService {
 			if (!material.getIsDeleted()) {
 				Long materialId = material.getId();
 				Integer totalPurchaseQuantity = Optional.ofNullable(
-						materialDao.getTotalPurchaseQuantityById(materialId))
+						materialDao.findTotalMaterialQuantityByMaterialIdAndStatus(materialId, PurchaseStatus.COMPLETED))
 					.orElse(0);
 				Integer expectedInboundQuantity = Optional.ofNullable(
-					materialDao.getExpectedInboundQuantityById(materialId)).orElse(0);
+						materialDao.findTotalMaterialQuantityByMaterialIdAndStatus(materialId, PurchaseStatus.ORDERED))
+					.orElse(0)
+					+ Optional.ofNullable(
+						materialDao.findTotalMaterialQuantityByMaterialIdAndStatus(materialId, PurchaseStatus.RECEIVED))
+					.orElse(0);
 				Integer currentQuantity =
 					totalPurchaseQuantity - totalConsumptionQuantityByMaterialId.getOrDefault(materialId, 0);
 				Integer actualQuantity = currentQuantity + expectedInboundQuantity
