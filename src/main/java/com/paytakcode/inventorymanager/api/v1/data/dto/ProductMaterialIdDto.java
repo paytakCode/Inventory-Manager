@@ -10,7 +10,7 @@ import lombok.ToString;
 /**
  * Product Material Id Dto
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.2.0
  * @Since 2023-05-29 오후 9:42
  */
 
@@ -21,8 +21,8 @@ import lombok.ToString;
 public class ProductMaterialIdDto {
 
 	@NotNull
-	private Long productId;
+	private ProductDto productDto;
 
 	@NotNull
-	private Long materialId;
+	private MaterialDto materialDto;
 }

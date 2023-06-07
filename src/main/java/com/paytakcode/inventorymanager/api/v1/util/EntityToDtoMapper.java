@@ -26,7 +26,7 @@ import com.paytakcode.inventorymanager.api.v1.data.entity.UserEntity;
 /**
  * Entity to DTO Mapper
  * @Author 김태산
- * @Version 0.4.0
+ * @Version 0.4.1
  * @Since 2023-05-26 오후 3:39
  */
 public class EntityToDtoMapper {
@@ -149,9 +149,12 @@ public class EntityToDtoMapper {
     }
 
     public static ProductMaterialDto convertProductMaterialToDto(ProductMaterial productMaterial) {
+        MaterialDto materialDto = EntityToDtoMapper.convertMaterialToDto(productMaterial.getId().getMaterial());
+        ProductDto productDto = EntityToDtoMapper.convertProductToDto(productMaterial.getId().getProduct());
+
         ProductMaterialIdDto productMaterialIdDto = ProductMaterialIdDto.builder()
-            .materialId(productMaterial.getId().getMaterial().getId())
-            .productId(productMaterial.getId().getProduct().getId())
+            .materialDto(materialDto)
+            .productDto(productDto)
             .build();
 
         return ProductMaterialDto.builder()

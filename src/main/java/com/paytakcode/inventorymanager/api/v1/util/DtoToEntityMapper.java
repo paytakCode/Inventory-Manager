@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * DTO to Entity Mapper
  * @Author 김태산
- * @Version 0.3.1
+ * @Version 0.3.2
  * @Since 2023-05-26 오후 4:50
  */
 
@@ -172,8 +172,8 @@ public class DtoToEntityMapper {
     }
 
     public ProductMaterialId convertProductMaterialIdDtoToEntity(ProductMaterialIdDto productMaterialIdDto) {
-        Product product = productDao.getProductReferenceById(productMaterialIdDto.getProductId());
-        Material material = materialDao.getMaterialReferenceById(productMaterialIdDto.getMaterialId());
+        Product product = productDao.getProductReferenceById(productMaterialIdDto.getProductDto().getId());
+        Material material = materialDao.getMaterialReferenceById(productMaterialIdDto.getMaterialDto().getId());
 
         return ProductMaterialId.builder()
             .product(product)
