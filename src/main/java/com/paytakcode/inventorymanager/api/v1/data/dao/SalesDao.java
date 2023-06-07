@@ -3,6 +3,7 @@ package com.paytakcode.inventorymanager.api.v1.data.dao;
 import java.util.List;
 import java.util.Optional;
 
+import com.paytakcode.inventorymanager.api.v1.data.emum.OrderStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Buyer;
 import com.paytakcode.inventorymanager.api.v1.data.entity.SalesOrder;
 
@@ -21,7 +22,7 @@ public interface SalesDao {
 
     void deleteBuyerById(Long buyerId);
 
-    Integer findTotalSalesOrderQuantityByProductId(Long productId);
+    Integer findTotalProductQuantityByProductIdAndStatus(Long productId, OrderStatus orderStatus);
 
     Buyer getBuyerReferenceById(Long buyerId);
 

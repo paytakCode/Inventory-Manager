@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.paytakcode.inventorymanager.api.v1.data.dao.SalesDao;
+import com.paytakcode.inventorymanager.api.v1.data.emum.OrderStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Buyer;
 import com.paytakcode.inventorymanager.api.v1.data.entity.SalesOrder;
 import com.paytakcode.inventorymanager.api.v1.data.repository.BuyerRepository;
@@ -17,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  *
  * @Author 김태산
- * @Version 0.4.0
+ * @Version 0.4.1
  * @Since 2023-05-26 오후 3:17
  */
 
@@ -69,14 +70,16 @@ public class SalesDaoImpl implements SalesDao {
 	}
 
 	@Override
-	public Integer findTotalSalesOrderQuantityByProductId(Long productId) {
-		log.info("[findTotalSalesOrderQuantityByBuyerId] param - productId: {}", productId);
+	public Integer findTotalProductQuantityByProductIdAndStatus(Long productId, OrderStatus orderStatus) {
+		log.info("[findTotalProductQuantityByProductIdAndStatus] param - productId: {}, orderStatus: {}", productId,
+			orderStatus);
 
-		Integer totalSalesOrderQuantity = salesOrderRepository.findTotalSalesOrderQuantityByProductId(productId);
+		Integer foundTotalProductQuantity = salesOrderRepository.findTotalProductQuantityByProductIdAndStatus(productId,
+			orderStatus);
 
-		log.info("[findTotalSalesOrderQuantityByProductId] param - totalSalesOrderQuantity: {}",
-			totalSalesOrderQuantity);
-		return totalSalesOrderQuantity;
+		log.info("[findTotalProductQuantityByProductIdAndStatus] param - foundTotalProductQuantity: {}",
+			foundTotalProductQuantity);
+		return foundTotalProductQuantity;
 	}
 
     @Override
