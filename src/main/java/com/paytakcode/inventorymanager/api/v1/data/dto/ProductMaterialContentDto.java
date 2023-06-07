@@ -1,32 +1,30 @@
 package com.paytakcode.inventorymanager.api.v1.data.dto;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 /**
- * Product Content DTO
+ * Product Material Content DTO
  * @Author 김태산
  * @Version 0.1.0
- * @Since 2023-06-06 오후 10:07
+ * @Since 2023-06-07 오후 8:33
  */
 
 @Getter
 @Setter
 @ToString
-public class ProductContentDto extends ProductDto {
+@Builder
+public class ProductMaterialContentDto {
 
 	@NotNull
-	Integer currentQuantity;
+	private ProductDto productDto;
 
 	@NotNull
-	Integer inProductionQuantity;
-
-	@NotNull
-	Integer plannedOutboundQuantity;
-
-	@NotNull
-	Integer actualQuantity;
+	private List<ProductMaterialDto> productMaterialDtoList;
 }

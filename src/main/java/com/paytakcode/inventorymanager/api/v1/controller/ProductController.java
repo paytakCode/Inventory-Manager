@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paytakcode.inventorymanager.api.v1.config.ApiBaseUrlConfig;
+import com.paytakcode.inventorymanager.api.v1.data.dto.MaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialIdDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionContentDto;
@@ -31,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product Controller
  * @Author 김태산
- * @Version 0.4.0
+ * @Version 0.5.0
  * @Since 2023-05-25 오전 8:59
  */
 
@@ -136,10 +138,7 @@ public class ProductController {
 		@PathVariable Long materialId) {
 		log.info("[productMaterialById] param - productId: {}, materialId: {}", productId, materialId);
 
-		ProductMaterialIdDto productMaterialIdDto = ProductMaterialIdDto.builder()
-			.productId(productId)
-			.materialId(materialId)
-			.build();
+		ProductMaterialIdDto productMaterialIdDto = getProductMaterialIdDto(productId, materialId);
 
 		ProductMaterialDto productMaterialDto = productService.getProductMaterialById(productMaterialIdDto);
 
@@ -155,10 +154,7 @@ public class ProductController {
 		log.info("[productMaterialUpdate] param - productId: {}, materialId: {}, requiredQuantityDto: {}", productId,
 			materialId, requiredQuantityDto);
 
-		ProductMaterialIdDto productMaterialIdDto = ProductMaterialIdDto.builder()
-			.productId(productId)
-			.materialId(materialId)
-			.build();
+		ProductMaterialIdDto productMaterialIdDto = getProductMaterialIdDto(productId, materialId);
 
 		ProductMaterialDto productMaterialDto = ProductMaterialDto.builder()
 			.productMaterialIdDto(productMaterialIdDto)
@@ -177,10 +173,7 @@ public class ProductController {
 	public ResponseEntity<Void> productMaterialDeleteById(@PathVariable Long productId, @PathVariable Long materialId) {
 		log.info("[productMaterialDeleteById] param - productId: {}, materialId: {}", productId, materialId);
 
-		ProductMaterialIdDto productMaterialIdDto = ProductMaterialIdDto.builder()
-			.productId(productId)
-			.materialId(materialId)
-			.build();
+		ProductMaterialIdDto productMaterialIdDto = getProductMaterialIdDto(productId, materialId);
 
 		// productService.deleteProductMaterialById(productMaterialIdDto);
 		productService.updateProductMaterialIsDeletedToTrueById(productMaterialIdDto);
@@ -202,6 +195,17 @@ public class ProductController {
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.body(productMaterialList);
+	}
+
+	private ProductMaterialIdDto getProductMaterialIdDto(Long productId, Long materialId) {
+		return ProductMaterialIdDto.builder()
+			.productDto(ProductDto.builder()
+				.id(productId)
+				.build())
+			.materialDto(MaterialDto.builder()
+				.id(materialId)
+				.build())
+			.build();
 	}
 
 	@PostMapping("/production/productions")
@@ -265,18 +269,6 @@ public class ProductController {
 			.build();
 	}
 
-	@GetMapping("/products/{productId}/stock")
-	public ResponseEntity<Integer> productStockByProductId(@PathVariable Long productId) {
-		log.info("[productStockByProductId] param - productId: {}", productId);
-
-		Integer productStock = productService.getProductStockByProductId(productId);
-
-		log.info("[productStockByProductId] return - productStock: {}", productStock);
-		return ResponseEntity
-			.status(HttpStatus.OK)
-			.body(productStock);
-	}
-
 	@GetMapping("/product-contents")
 	public ResponseEntity<List<ProductContentDto>> productContentList() {
 		log.info("[productContentList] param - none");
@@ -300,5 +292,18 @@ public class ProductController {
 		return ResponseEntity
 			.status(HttpStatus.OK)
 			.body(productionContentList);
+	}
+
+	@GetMapping("/product-material-contents")
+	public ResponseEntity<List<ProductMaterialContentDto>> productMaterialContentList() {
+		log.info("[productMaterialContentList] param - none");
+
+		List<ProductMaterialContentDto> productMaterialContentList = productService.getProductMaterialContentList();
+
+		log.info("[productMaterialContentList] return - HttpStatus.OK(200), productMaterialContentList: {}",
+			productMaterialContentList);
+		return ResponseEntity
+			.status(HttpStatus.OK)
+			.body(productMaterialContentList);
 	}
 }

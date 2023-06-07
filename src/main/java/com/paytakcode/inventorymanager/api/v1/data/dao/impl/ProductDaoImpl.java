@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.paytakcode.inventorymanager.api.v1.data.dao.ProductDao;
+import com.paytakcode.inventorymanager.api.v1.data.emum.ProductionStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Product;
 import com.paytakcode.inventorymanager.api.v1.data.entity.ProductMaterial;
 import com.paytakcode.inventorymanager.api.v1.data.entity.ProductMaterialId;
@@ -22,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product DAO Implementation
  * @Author 김태산
- * @Version 0.4.0
+ * @Version 0.5.0
  * @Since 2023-05-25 오전 9:10
  */
 
@@ -157,17 +158,6 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public Integer findTotalProductionQuantityByProductId(Long productId) {
-		log.info("[findTotalProductionQuantityByProductId] param - productId: {}", productId);
-
-		Integer totalProductionQuantity = productionRepository.findTotalProductionQuantityByProductId(productId);
-
-		log.info("[findTotalProductionQuantityByProductId] result - totalProductionQuantity: {}",
-			totalProductionQuantity);
-		return totalProductionQuantity;
-	}
-
-	@Override
 	public Optional<Production> findProductionById(Long productionId) {
 		log.info("[findProductionById] param - productionId: {}", productionId);
 
@@ -195,4 +185,17 @@ public class ProductDaoImpl implements ProductDao {
 		log.info("[getSupplierReferenceById] return - gotSupplier: {}", gotSupplier);
 		return gotSupplier;
 	}
+
+	@Override
+	public Integer findTotalProductQuantityByProductIdAndStatus(Long productId, ProductionStatus status) {
+		log.info("[findTotalProductQuantityByProductIdAndStatus] param - productId: {}, status: {}", productId, status);
+
+		Integer foundTotalProductQuantity = productionRepository.findTotalProductQuantityByProductIdAndStatus(productId,
+			status);
+
+		log.info("[findTotalProductQuantityByProductIdAndStatus] return - foundTotalProductQuantity: {}",
+			foundTotalProductQuantity);
+		return foundTotalProductQuantity;
+	}
+
 }

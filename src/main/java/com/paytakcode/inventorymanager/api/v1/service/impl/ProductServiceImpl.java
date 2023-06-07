@@ -3,6 +3,7 @@ package com.paytakcode.inventorymanager.api.v1.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -15,15 +16,18 @@ import com.paytakcode.inventorymanager.api.v1.data.dao.ProductDao;
 import com.paytakcode.inventorymanager.api.v1.data.dao.SalesDao;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialIdDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
+import com.paytakcode.inventorymanager.api.v1.data.emum.OrderStatus;
 import com.paytakcode.inventorymanager.api.v1.data.emum.ProductionStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Product;
 import com.paytakcode.inventorymanager.api.v1.data.entity.ProductMaterial;
 import com.paytakcode.inventorymanager.api.v1.data.entity.ProductMaterialId;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Production;
+import com.paytakcode.inventorymanager.api.v1.service.MaterialService;
 import com.paytakcode.inventorymanager.api.v1.service.ProductService;
 import com.paytakcode.inventorymanager.api.v1.util.DtoToEntityMapper;
 import com.paytakcode.inventorymanager.api.v1.util.EntityToDtoMapper;
@@ -34,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Product Service Implementation
  * @Author 김태산
- * @Version 0.5.0
+ * @Version 0.5.1
  * @Since 2023-05-25 오전 9:02
  */
 @Service
@@ -46,6 +50,7 @@ public class ProductServiceImpl implements ProductService {
 	private final DtoToEntityMapper dtoToEntityMapper;
 	private final ProductDao productDao;
 	private final SalesDao salesDao;
+	private final MaterialService materialService;
 
 	@Override
 	public ProductDto addProduct(ProductDto productDto) {
@@ -67,11 +72,10 @@ public class ProductServiceImpl implements ProductService {
 
 		List<Product> foundProductList = productDao.findProductList();
 
-		List<ProductDto> foundProductDtoList = new ArrayList<>();
-
-		for (Product product : foundProductList) {
-			foundProductDtoList.add(EntityToDtoMapper.convertProductToDto(product));
-		}
+		List<ProductDto> foundProductDtoList = foundProductList.stream()
+			.filter(product -> !product.getIsDeleted())
+			.map(EntityToDtoMapper::convertProductToDto)
+			.collect(Collectors.toList());
 
 		log.info("[getProductList] return - foundProductDtoList: {}", foundProductDtoList);
 		return foundProductDtoList;
@@ -83,6 +87,10 @@ public class ProductServiceImpl implements ProductService {
 
 		Product foundProduct = productDao.findProductById(productId)
 			.orElseThrow(() -> new EntityNotFoundException("Product not found for ID: " + productId));
+
+		if (foundProduct.getIsDeleted()) {
+			throw new NoSuchElementException();
+		}
 
 		ProductDto foundProductDto = EntityToDtoMapper.convertProductToDto(
 			foundProduct);
@@ -154,11 +162,10 @@ public class ProductServiceImpl implements ProductService {
 
 		List<ProductMaterial> foundProductMaterialList = productDao.findProductMaterialList();
 
-		List<ProductMaterialDto> foundProductMaterialDtoList = new ArrayList<>();
-
-		for (ProductMaterial productMaterial : foundProductMaterialList) {
-			foundProductMaterialDtoList.add(EntityToDtoMapper.convertProductMaterialToDto(productMaterial));
-		}
+		List<ProductMaterialDto> foundProductMaterialDtoList = foundProductMaterialList.stream()
+			.filter(productMaterial -> !productMaterial.getIsDeleted())
+			.map(EntityToDtoMapper::convertProductMaterialToDto)
+			.collect(Collectors.toList());
 
 		log.info("[getProductMaterialList] return - foundProductMaterialDtoList: {}", foundProductMaterialDtoList);
 		return foundProductMaterialDtoList;
@@ -173,6 +180,10 @@ public class ProductServiceImpl implements ProductService {
 
 		ProductMaterial foundProductMaterial = productDao.findProductMaterialById(productMaterialId)
 			.orElseThrow(() -> new EntityNotFoundException("ProductMaterial not found for ID: " + productMaterialId));
+
+		if (foundProductMaterial.getIsDeleted()) {
+			throw new NoSuchElementException();
+		}
 
 		ProductMaterialDto foundProductMaterialDto = EntityToDtoMapper.convertProductMaterialToDto(
 			foundProductMaterial);
@@ -240,11 +251,10 @@ public class ProductServiceImpl implements ProductService {
 
 		List<ProductMaterial> productMaterialList = productDao.findProductMaterialListByProductId(productId);
 
-		List<ProductMaterialDto> productMaterialDtoList = new ArrayList<>();
-
-		for (ProductMaterial productMaterial : productMaterialList) {
-			productMaterialDtoList.add(EntityToDtoMapper.convertProductMaterialToDto(productMaterial));
-		}
+		List<ProductMaterialDto> productMaterialDtoList = productMaterialList.stream()
+			.filter(productMaterial -> !productMaterial.getIsDeleted())
+			.map(EntityToDtoMapper::convertProductMaterialToDto)
+			.collect(Collectors.toList());
 
 		log.info("[getProductMaterialListByProductId] param - productMaterialDtoList: {}", productMaterialDtoList);
 		return productMaterialDtoList;
@@ -270,11 +280,10 @@ public class ProductServiceImpl implements ProductService {
 
 		List<Production> foundProductionList = productDao.findProductionList();
 
-		List<ProductionDto> foundProductionDtoList = new ArrayList<>();
-
-		for (Production production : foundProductionList) {
-			foundProductionDtoList.add(EntityToDtoMapper.convertProductionToDto(production));
-		}
+		List<ProductionDto> foundProductionDtoList = foundProductionList.stream()
+			.filter(production -> !production.getIsDeleted())
+			.map(EntityToDtoMapper::convertProductionToDto)
+			.collect(Collectors.toList());
 
 		log.info("[getProductionList] return - foundProductionDtoList: {}", foundProductionDtoList);
 		return foundProductionDtoList;
@@ -286,6 +295,10 @@ public class ProductServiceImpl implements ProductService {
 
 		Production foundProduction = productDao.findProductionById(productionId)
 			.orElseThrow(() -> new EntityNotFoundException("Production not found for ID: " + productionId));
+
+		if (foundProduction.getIsDeleted()) {
+			throw new NoSuchElementException();
+		}
 
 		ProductionDto foundProductionDto = EntityToDtoMapper.convertProductionToDto(
 			foundProduction);
@@ -346,22 +359,6 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Integer getProductStockByProductId(Long productId) {
-		log.info("[getProductStockByProductId] param - productId: {}", productId);
-
-		Integer totalProductionQuantity = Optional.ofNullable(
-				productDao.findTotalProductionQuantityByProductId(productId))
-			.orElse(0);
-		Integer totalSalesQuantity = Optional.ofNullable(salesDao.findTotalSalesOrderQuantityByProductId(productId))
-			.orElse(0);
-
-		Integer productStock = totalProductionQuantity - totalSalesQuantity;
-
-		log.info("[getProductStockByProductId] return - productStock: {}", productStock);
-		return productStock;
-	}
-
-	@Override
 	public List<ProductContentDto> getProductContentList() {
 		log.info("[getProductContentList] param - none");
 
@@ -376,11 +373,40 @@ public class ProductServiceImpl implements ProductService {
 		for (Product product : notDeletedProductList) {
 			ProductDto productDto = EntityToDtoMapper.convertProductToDto(product);
 
+			Integer totalProductionQuantity = Optional.ofNullable(
+					productDao.findTotalProductQuantityByProductIdAndStatus(productDto.getId(), ProductionStatus.COMPLETED))
+				.orElse(0);
+			Integer totalSalesQuantity = Optional.ofNullable(
+					salesDao.findTotalProductQuantityByProductIdAndStatus(productDto.getId(), OrderStatus.COMPLETED))
+				.orElse(0)
+				+ Optional.ofNullable(
+					salesDao.findTotalProductQuantityByProductIdAndStatus(productDto.getId(), OrderStatus.SHIPPED))
+				.orElse(0)
+				+ Optional.ofNullable(
+					salesDao.findTotalProductQuantityByProductIdAndStatus(productDto.getId(), OrderStatus.DELIVERED))
+				.orElse(0);
+
+			Integer currentQuantity = totalProductionQuantity - totalSalesQuantity;
+			Integer inProductionQuantity = Optional.ofNullable(
+				productDao.findTotalProductQuantityByProductIdAndStatus(productDto.getId(),
+					ProductionStatus.INPRODUCTION)).orElse(0);
+			Integer plannedOutboundQuantity = Optional.ofNullable(
+					salesDao.findTotalProductQuantityByProductIdAndStatus(productDto.getId(), OrderStatus.ORDER_CONFIRMED))
+				.orElse(0)
+				+ Optional.ofNullable(
+					salesDao.findTotalProductQuantityByProductIdAndStatus(productDto.getId(), OrderStatus.READY_SHIPMENT))
+				.orElse(0);
+			Integer actualQuantity = currentQuantity + inProductionQuantity - plannedOutboundQuantity;
+
 			ProductContentDto productContentDto = new ProductContentDto();
 			productContentDto.setId(productDto.getId());
 			productContentDto.setName(productDto.getName());
 			productContentDto.setSpec(productDto.getSpec());
 			productContentDto.setDetails(productDto.getDetails());
+			productContentDto.setCurrentQuantity(currentQuantity);
+			productContentDto.setInProductionQuantity(inProductionQuantity);
+			productContentDto.setPlannedOutboundQuantity(plannedOutboundQuantity);
+			productContentDto.setActualQuantity(actualQuantity);
 
 			productContentDtoList.add(productContentDto);
 		}
@@ -420,5 +446,25 @@ public class ProductServiceImpl implements ProductService {
 
 		log.info("[getProductionContentList] return - productionContentDtoList: {}", productionContentDtoList);
 		return productionContentDtoList;
+	}
+
+	@Override
+	public List<ProductMaterialContentDto> getProductMaterialContentList() {
+		log.info("[getProductMaterialContentList] param - none");
+
+		List<ProductMaterialContentDto> productMaterialContentList = new ArrayList<>();
+
+		List<ProductDto> productDtoList = getProductList();
+
+		for (ProductDto productDto : productDtoList) {
+			List<ProductMaterialDto> productMaterialDtoList = getProductMaterialList();
+			productMaterialContentList.add(ProductMaterialContentDto.builder()
+				.productDto(productDto)
+				.productMaterialDtoList(productMaterialDtoList)
+				.build());
+		}
+
+		log.info("[getProductMaterialContentList] return - productMaterialContentList: {}", productMaterialContentList);
+		return productMaterialContentList;
 	}
 }

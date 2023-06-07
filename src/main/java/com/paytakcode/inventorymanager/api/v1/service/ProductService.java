@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialIdDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionContentDto;
@@ -12,7 +13,7 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
 /**
  * Product Service
  * @Author 김태산
- * @Version 0.4.0
+ * @Version 0.4.1
  * @Since 2023-05-25 오전 9:02
  */
 public interface ProductService {
@@ -55,9 +56,9 @@ public interface ProductService {
 
 	void updateProductionIsDeletedToTrueById(Long productionId);
 
-	Integer getProductStockByProductId(Long productId);
-
 	List<ProductContentDto> getProductContentList();
 
 	List<ProductionContentDto> getProductionContentList();
+
+	List<ProductMaterialContentDto> getProductMaterialContentList();
 }

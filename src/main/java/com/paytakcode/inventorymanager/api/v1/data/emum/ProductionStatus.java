@@ -7,12 +7,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Production Status Enum
  * 생산 상태 목록
  * @Author 김태산
- * @Version 0.1.0
+ * @Version 0.1.1
  * @Since 2023-05-21 오후 11:49
  */
 public enum ProductionStatus {
 	PLANNED("생산예정"),
-	PRODUCTION("생산중"),
+	INPRODUCTION("생산중"),
 	COMPLETED("생산완료"),
 	CANCELED("취소");
 
