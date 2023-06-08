@@ -193,6 +193,7 @@ public class EntityToDtoMapper {
             .productDto(productDto)
             .buyerDto(buyerDto)
             .managerDto(managerDto)
+            .regDate(salesOrder.getCreatedDate())
             .dueDate(salesOrder.getDueDate())
             .quantity(salesOrder.getQuantity())
             .completionDate(salesOrder.getCompletionDate())

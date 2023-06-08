@@ -273,6 +273,7 @@ public class SalesServiceImpl implements SalesService {
 			salesOrderContentDto.setQuantity(salesOrderDto.getQuantity());
 			salesOrderContentDto.setBuyerDto(salesOrderDto.getBuyerDto());
 			salesOrderContentDto.setManagerDto(salesOrderDto.getManagerDto());
+			salesOrderContentDto.setRegDate(salesOrderDto.getRegDate());
 			salesOrderContentDto.setDueDate(salesOrderDto.getDueDate());
 			salesOrderContentDto.setCompletionDate(salesOrderDto.getCompletionDate());
 			salesOrderContentDto.setStatus(salesOrderDto.getStatus());

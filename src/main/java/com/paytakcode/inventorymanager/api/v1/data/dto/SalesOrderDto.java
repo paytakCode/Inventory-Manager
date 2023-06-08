@@ -44,6 +44,9 @@ public class SalesOrderDto {
 	@NotNull
 	private BuyerDto buyerDto;
 
+	@Nullable
+	private LocalDateTime regDate;
+
 	@NotNull
 	private LocalDateTime dueDate;
 
