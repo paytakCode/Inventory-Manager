@@ -60,6 +60,9 @@ public class SalesOrder extends BaseEntity {
 	private Integer quantity;
 
 	@NotNull
+	private Integer price;
+
+	@NotNull
 	private LocalDateTime dueDate;
 
 	@Nullable

@@ -1,31 +1,26 @@
 package com.paytakcode.inventorymanager.api.v1.service.impl;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityNotFoundException;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.paytakcode.inventorymanager.api.v1.data.dao.ProductDao;
 import com.paytakcode.inventorymanager.api.v1.data.dao.SalesDao;
 import com.paytakcode.inventorymanager.api.v1.data.dto.BuyerContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.BuyerDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
-import com.paytakcode.inventorymanager.api.v1.data.emum.OrderStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Buyer;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Product;
 import com.paytakcode.inventorymanager.api.v1.data.entity.SalesOrder;
 import com.paytakcode.inventorymanager.api.v1.service.SalesService;
 import com.paytakcode.inventorymanager.api.v1.util.DtoToEntityMapper;
 import com.paytakcode.inventorymanager.api.v1.util.EntityToDtoMapper;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Sales Service Implementation
@@ -181,18 +176,13 @@ public class SalesServiceImpl implements SalesService {
 		Product product = productDao.getProductReferenceById(salesOrderDto.getProductDto().getId());
 		Buyer buyer = salesDao.getBuyerReferenceById(salesOrderDto.getBuyerDto().getId());
 
-		if (salesOrderDto.getStatus() == OrderStatus.COMPLETED
-			&& salesOrder.getStatus() != OrderStatus.COMPLETED) {
-			salesOrder.setCompletionDate(LocalDateTime.now());
-		} else {
-			salesOrder.setCompletionDate(null);
-		}
-
 		salesOrder.setProduct(product);
 		salesOrder.setQuantity(salesOrderDto.getQuantity());
 		salesOrder.setBuyer(buyer);
+		salesOrder.setPrice(salesOrderDto.getPrice());
 		salesOrder.setDueDate(salesOrderDto.getDueDate());
 		salesOrder.setStatus(salesOrderDto.getStatus());
+		salesOrder.setCompletionDate(salesOrderDto.getCompletionDate());
 
 		SalesOrder updatedSalesOrder = salesDao.saveSalesOrder(salesOrder);
 
@@ -274,6 +264,7 @@ public class SalesServiceImpl implements SalesService {
 			salesOrderContentDto.setBuyerDto(salesOrderDto.getBuyerDto());
 			salesOrderContentDto.setManagerDto(salesOrderDto.getManagerDto());
 			salesOrderContentDto.setRegDate(salesOrderDto.getRegDate());
+			salesOrderContentDto.setPrice(salesOrderDto.getPrice());
 			salesOrderContentDto.setDueDate(salesOrderDto.getDueDate());
 			salesOrderContentDto.setCompletionDate(salesOrderDto.getCompletionDate());
 			salesOrderContentDto.setStatus(salesOrderDto.getStatus());
