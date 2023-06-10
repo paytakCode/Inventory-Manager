@@ -196,6 +196,7 @@ public class EntityToDtoMapper {
             .regDate(salesOrder.getCreatedDate())
             .dueDate(salesOrder.getDueDate())
             .quantity(salesOrder.getQuantity())
+            .price(salesOrder.getPrice())
             .completionDate(salesOrder.getCompletionDate())
             .status(salesOrder.getStatus())
             .build();

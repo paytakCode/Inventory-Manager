@@ -39,6 +39,9 @@ public class SalesOrderDto {
 	private Integer quantity;
 
 	@NotNull
+	private Integer price;
+
+	@NotNull
 	private UserInfoDto managerDto;
 
 	@NotNull

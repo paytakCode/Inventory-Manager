@@ -163,6 +163,7 @@ public class DtoToEntityMapper {
         return SalesOrder.builder()
             .product(product)
             .quantity(salesOrderDto.getQuantity())
+            .price(salesOrderDto.getPrice())
             .manager(manager)
             .buyer(buyer)
             .dueDate(salesOrderDto.getDueDate())
