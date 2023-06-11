@@ -456,11 +456,16 @@ public class ProductServiceImpl implements ProductService {
 
 		List<ProductDto> productDtoList = getProductList();
 
+		List<ProductMaterialDto> productMaterialDtoList = getProductMaterialList();
+
 		for (ProductDto productDto : productDtoList) {
-			List<ProductMaterialDto> productMaterialDtoList = getProductMaterialList();
+			List<ProductMaterialDto> productMaterialDtoListByProdut = productMaterialDtoList.stream()
+				.filter(productMaterialDto -> productMaterialDto.getProductMaterialIdDto().getProductDto().getId()
+					== productDto.getId())
+				.collect(Collectors.toList());
 			productMaterialContentList.add(ProductMaterialContentDto.builder()
 				.productDto(productDto)
-				.productMaterialDtoList(productMaterialDtoList)
+				.productMaterialDtoList(productMaterialDtoListByProdut)
 				.build());
 		}
 
