@@ -1,6 +1,5 @@
 package com.paytakcode.inventorymanager.api.v1.service.impl;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +15,6 @@ import com.paytakcode.inventorymanager.api.v1.data.dto.BuyerContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.BuyerDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderContentDto;
 import com.paytakcode.inventorymanager.api.v1.data.dto.SalesOrderDto;
-import com.paytakcode.inventorymanager.api.v1.data.emum.OrderStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Buyer;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Product;
 import com.paytakcode.inventorymanager.api.v1.data.entity.SalesOrder;
@@ -181,18 +179,12 @@ public class SalesServiceImpl implements SalesService {
 		Product product = productDao.getProductReferenceById(salesOrderDto.getProductDto().getId());
 		Buyer buyer = salesDao.getBuyerReferenceById(salesOrderDto.getBuyerDto().getId());
 
-		if (salesOrderDto.getStatus() == OrderStatus.COMPLETED
-			&& salesOrder.getStatus() != OrderStatus.COMPLETED) {
-			salesOrder.setCompletionDate(LocalDateTime.now());
-		} else {
-			salesOrder.setCompletionDate(null);
-		}
-
 		salesOrder.setProduct(product);
 		salesOrder.setQuantity(salesOrderDto.getQuantity());
 		salesOrder.setBuyer(buyer);
 		salesOrder.setDueDate(salesOrderDto.getDueDate());
 		salesOrder.setStatus(salesOrderDto.getStatus());
+		salesOrder.setCompletionDate(salesOrderDto.getCompletionDate());
 
 		SalesOrder updatedSalesOrder = salesDao.saveSalesOrder(salesOrder);
 

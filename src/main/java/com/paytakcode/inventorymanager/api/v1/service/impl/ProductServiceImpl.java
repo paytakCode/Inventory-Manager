@@ -1,6 +1,5 @@
 package com.paytakcode.inventorymanager.api.v1.service.impl;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -315,19 +314,13 @@ public class ProductServiceImpl implements ProductService {
 			.orElseThrow(() -> new EntityNotFoundException("Production not found for ID: " + productionId));
 		Product product = productDao.getProductReferenceById(productionDto.getProductDto().getId());
 
-		if (productionDto.getStatus() == ProductionStatus.COMPLETED
-			&& production.getStatus() != ProductionStatus.COMPLETED){
-			production.setCompletionDate(LocalDateTime.now());
-		} else {
-			production.setCompletionDate(null);
-		}
-
 		production.setDetails(productionDto.getDetails());
 		production.setProduct(product);
 		production.setQuantity(productionDto.getQuantity());
 		production.setLotNo(productionDto.getLotNo());
 		production.setTargetDate(productionDto.getTargetDate());
 		production.setStatus(productionDto.getStatus());
+		production.setCompletionDate(productionDto.getCompletionDate());
 
 		Production updatedProduction = productDao.saveProduction(production);
 
