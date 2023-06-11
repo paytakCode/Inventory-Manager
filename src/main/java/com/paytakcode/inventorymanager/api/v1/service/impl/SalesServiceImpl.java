@@ -182,6 +182,7 @@ public class SalesServiceImpl implements SalesService {
 		salesOrder.setProduct(product);
 		salesOrder.setQuantity(salesOrderDto.getQuantity());
 		salesOrder.setBuyer(buyer);
+		salesOrder.setPrice(salesOrderDto.getPrice());
 		salesOrder.setDueDate(salesOrderDto.getDueDate());
 		salesOrder.setStatus(salesOrderDto.getStatus());
 		salesOrder.setCompletionDate(salesOrderDto.getCompletionDate());
@@ -266,6 +267,7 @@ public class SalesServiceImpl implements SalesService {
 			salesOrderContentDto.setBuyerDto(salesOrderDto.getBuyerDto());
 			salesOrderContentDto.setManagerDto(salesOrderDto.getManagerDto());
 			salesOrderContentDto.setRegDate(salesOrderDto.getRegDate());
+			salesOrderContentDto.setPrice(salesOrderDto.getPrice());
 			salesOrderContentDto.setDueDate(salesOrderDto.getDueDate());
 			salesOrderContentDto.setCompletionDate(salesOrderDto.getCompletionDate());
 			salesOrderContentDto.setStatus(salesOrderDto.getStatus());
