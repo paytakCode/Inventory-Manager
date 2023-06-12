@@ -1,26 +1,8 @@
 package com.paytakcode.inventorymanager.api.v1.service.impl;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityNotFoundException;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.paytakcode.inventorymanager.api.v1.data.dao.ProductDao;
 import com.paytakcode.inventorymanager.api.v1.data.dao.SalesDao;
-import com.paytakcode.inventorymanager.api.v1.data.dto.ProductContentDto;
-import com.paytakcode.inventorymanager.api.v1.data.dto.ProductDto;
-import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialContentDto;
-import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialDto;
-import com.paytakcode.inventorymanager.api.v1.data.dto.ProductMaterialIdDto;
-import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionContentDto;
-import com.paytakcode.inventorymanager.api.v1.data.dto.ProductionDto;
+import com.paytakcode.inventorymanager.api.v1.data.dto.*;
 import com.paytakcode.inventorymanager.api.v1.data.emum.OrderStatus;
 import com.paytakcode.inventorymanager.api.v1.data.emum.ProductionStatus;
 import com.paytakcode.inventorymanager.api.v1.data.entity.Product;
@@ -31,9 +13,17 @@ import com.paytakcode.inventorymanager.api.v1.service.MaterialService;
 import com.paytakcode.inventorymanager.api.v1.service.ProductService;
 import com.paytakcode.inventorymanager.api.v1.util.DtoToEntityMapper;
 import com.paytakcode.inventorymanager.api.v1.util.EntityToDtoMapper;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Product Service Implementation
@@ -315,19 +305,13 @@ public class ProductServiceImpl implements ProductService {
 			.orElseThrow(() -> new EntityNotFoundException("Production not found for ID: " + productionId));
 		Product product = productDao.getProductReferenceById(productionDto.getProductDto().getId());
 
-		if (productionDto.getStatus() == ProductionStatus.COMPLETED
-			&& production.getStatus() != ProductionStatus.COMPLETED){
-			production.setCompletionDate(LocalDateTime.now());
-		} else {
-			production.setCompletionDate(null);
-		}
-
 		production.setDetails(productionDto.getDetails());
 		production.setProduct(product);
 		production.setQuantity(productionDto.getQuantity());
 		production.setLotNo(productionDto.getLotNo());
 		production.setTargetDate(productionDto.getTargetDate());
 		production.setStatus(productionDto.getStatus());
+		production.setCompletionDate(productionDto.getCompletionDate());
 
 		Production updatedProduction = productDao.saveProduction(production);
 
@@ -456,12 +440,17 @@ public class ProductServiceImpl implements ProductService {
 
 		List<ProductDto> productDtoList = getProductList();
 
+		List<ProductMaterialDto> productMaterialDtoList = getProductMaterialList();
+
 		for (ProductDto productDto : productDtoList) {
-			List<ProductMaterialDto> productMaterialDtoList = getProductMaterialList();
+			List<ProductMaterialDto> productMaterialDtoListByProduct = productMaterialDtoList.stream()
+					.filter(productMaterialDto -> productMaterialDto.getProductMaterialIdDto().getProductDto().getId()
+							.equals(productDto.getId()))
+					.collect(Collectors.toList());
 			productMaterialContentList.add(ProductMaterialContentDto.builder()
-				.productDto(productDto)
-				.productMaterialDtoList(productMaterialDtoList)
-				.build());
+					.productDto(productDto)
+					.productMaterialDtoList(productMaterialDtoListByProduct)
+					.build());
 		}
 
 		log.info("[getProductMaterialContentList] return - productMaterialContentList: {}", productMaterialContentList);
