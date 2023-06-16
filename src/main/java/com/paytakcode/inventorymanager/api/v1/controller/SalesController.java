@@ -93,7 +93,6 @@ public class SalesController {
     public ResponseEntity<Void> buyerDeleteById(@PathVariable Long buyerId) {
         log.info("[buyerDeleteById] param - buyerId: {}", buyerId);
 
-        // salesService.deleteBuyerById(buyerId);
         salesService.updateBuyerIsDeletedToTrueById(buyerId);
 
         log.info("[buyerDeleteById] return - HttpStatus.NO_CONTENT(204)");
@@ -154,7 +153,6 @@ public class SalesController {
     public ResponseEntity<Void> salesOrderDeleteById(@PathVariable Long salesOrderId) {
         log.info("[salesOrderDeleteById] param - salesOrderId: {}", salesOrderId);
 
-        // salesService.deleteSalesOrderById(salesOrderId);
         salesService.updateSalesOrderIsDeletedToTrueById(salesOrderId);
 
         log.info("[salesOrderDeleteById] return - HttpStatus.NO_CONTENT(204)");

@@ -85,7 +85,6 @@ public class MaterialController {
 	public ResponseEntity<Void> materialDeleteById(@PathVariable Long materialId) {
 		log.info("[materialDeleteById] param - materialId: {}", materialId);
 
-		// materialService.deleteMaterialById(materialId);
 		materialService.updateMaterialIsDeletedToTrueById(materialId);
 
 		log.info("[materialDeleteById] return - HttpStatus.NO_CONTENT(204)");
@@ -149,7 +148,6 @@ public class MaterialController {
 	public ResponseEntity<Void> materialRequestDeleteById(@PathVariable Long materialRequestId) {
 		log.info("[materialRequestDeleteById] param - materialRequestId: {}", materialRequestId);
 
-		// materialService.deleteMaterialRequestById(materialRequestId);
 		materialService.updateMaterialRequestIsDeletedToTrueById(materialRequestId);
 
 		log.info("[materialRequestDeleteById] return - HttpStatus.NO_CONTENT(204)");
@@ -213,7 +211,6 @@ public class MaterialController {
 	public ResponseEntity<Void> materialPurchaseDeleteById(@PathVariable Long materialPurchaseId) {
 		log.info("[materialPurchaseDeleteById] param - materialPurchaseId: {}", materialPurchaseId);
 
-		// materialService.deleteMaterialPurchaseById(materialPurchaseId);
 		materialService.updateMaterialPurchaseIsDeletedToTrueById(materialPurchaseId);
 		log.info("[materialPurchaseDeleteById] return - HttpStatus.NO_CONTENT(204)");
 		return ResponseEntity
@@ -275,7 +272,6 @@ public class MaterialController {
 	public ResponseEntity<Void> supplierDeleteById(@PathVariable Long supplierId) {
 		log.info("[supplierDeleteById] param - supplierId: {}", supplierId);
 
-		// materialService.deleteSupplierById(supplierId);
 		materialService.updateSupplierIsDeletedToTrueById(supplierId);
 
 		log.info("[supplierDeleteById] return - HttpStatus.NO_CONTENT(204)");
