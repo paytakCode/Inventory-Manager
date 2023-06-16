@@ -99,7 +99,6 @@ public class ProductController {
 	public ResponseEntity<Void> productDeleteById(@PathVariable Long productId) {
 		log.info("[productDeleteById] param - productId: {}", productId);
 
-		// productService.deleteProductById(productId);
 		productService.updateProductIsDeletedToTrueById(productId);
 
 		log.info("[productDeleteById] return - HttpStatus.NO_CONTENT(204)");
@@ -175,7 +174,6 @@ public class ProductController {
 
 		ProductMaterialIdDto productMaterialIdDto = getProductMaterialIdDto(productId, materialId);
 
-		// productService.deleteProductMaterialById(productMaterialIdDto);
 		productService.updateProductMaterialIsDeletedToTrueById(productMaterialIdDto);
 
 		log.info("[productMaterialDeleteById] return - HttpStatus.NO_CONTENT(204)");
@@ -260,7 +258,6 @@ public class ProductController {
 	public ResponseEntity<Void> productionDeleteById(@PathVariable Long productionId) {
 		log.info("[productionDeleteById] param - productionId: {}", productionId);
 
-		// productService.deleteProductionById(productionId);
 		productService.updateProductionIsDeletedToTrueById(productionId);
 
 		log.info("[productionDeleteById] return - HttpStatus.NO_CONTENT(204)");
