@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * User DAO Implementation
  * @Author 김태산
- * @Version 0.2.1
+ * @Version 0.2.2
  * @Since 2023-05-18 오후 3:45
  */
 
@@ -63,16 +63,6 @@ public class UserDaoImpl implements UserDao {
 
 		log.info("[findUserByEmail] return - foundUserEntity: {}", foundUserEntity);
 		return foundUserEntity;
-	}
-
-	@Override
-	public UserEntity getUserReferenceByEmail(String email) {
-		log.info("[getUserReferenceByEmail] param - email: {}", email);
-
-		UserEntity gotUserEntity = userRepository.getReferenceByEmail(email);
-
-		log.info("[getUserReferenceByEmail] return - gotUserEntity: {}", gotUserEntity);
-		return gotUserEntity;
 	}
 
 	@Override
